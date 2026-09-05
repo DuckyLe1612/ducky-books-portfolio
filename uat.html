@@ -159,60 +159,60 @@ a[href^="mailto:"]{color:var(--accent)}
 <div class="khung">
 
 <p class="nhom">Working document · Ducky Books</p>
-<h1>The user acceptance test script, as written</h1>
-<p class="dan"><b>5,987 automated tests were passing when this was written, and it was still not enough.</b> Tests prove the software does what it was told, not whether a day’s work can be finished or the numbers are right. This script asks that: 32 steps on real books, run by her, not me.</p>
+<h1>The acceptance test script</h1>
+<p class="dan"><b>5,987 automated tests were passing, and still not enough.</b> Tests prove the software does what it was told, not that a day’s work finishes or the numbers are right. 32 steps on real books.</p>
 
-<p class="dan">Translated from the Vietnamese original, committed <b>2 August 2026</b> at
-<code>c1b6441</code>. Reproduced as written: blank, not a completed run.</p>
+<p class="dan">Committed <b>2 August 2026</b> at
+<code>c1b6441</code>. Blank, not a completed run.</p>
 
 <div class="the">
-  <p><b>Why it exists.</b> Different questions need different evidence.</p>
-  <p><b>Who runs it.</b> The chief accountant, on real data from a company she keeps
-  books for. <b>Not me.</b> The person who built it should be the last one deciding
-  whether it works.</p>
+
+  <p><b>Who runs it.</b> The chief accountant, on a client's real books.
+  <b>Not me:</b> the builder should be the last to judge whether it works.</p>
+
 </div>
 
-<p class="dan">The dates do not run in textbook order. The software
-went into real use on 29 May, the day after I started it, and grew a screen at a time as the
-accountant used each one. This script came nine weeks later, when &ldquo;she has been using
-it&rdquo; no longer answered &ldquo;does it work&rdquo;. A script written before any code tests a
+<p class="dan">The software
+went into real use on 29 May, the day after I started it, growing screen by screen as she
+used it. Nine weeks later, &ldquo;she has been using
+it&rdquo; no longer answered &ldquo;does it work&rdquo;. A script written before code tests a
 guess; this one tests what was built.</p>
 
-<p class="dan">The record block at the end stays blank here. A signed result would show one company passing on one day; the script shows what I thought was worth checking before anyone could call it ready.</p>
+<p class="dan">A signed result would show one company passing on one day.</p>
 
-<h2>How each step is graded</h2>
+<h2>How steps are graded</h2>
 
-<p>Every step has a measurable criterion, not whether it "seemed fine".</p>
+
 
 <div class="cuon">
 <table>
   <thead><tr><th>Grade</th><th>Means</th></tr></thead>
   <tbody>
-    <tr><td>Pass</td><td>Finished, figures match the criterion, no one had to be asked.</td></tr>
+    <tr><td>Pass</td><td>Finished, figures match, no help needed.</td></tr>
     <tr><td>Pass with friction</td><td>Finished, but hard, slow or confusing. Say which.</td></tr>
-    <tr><td>Fail</td><td>Could not be done, or the figures are wrong, or someone else had to be asked.</td></tr>
+    <tr><td>Fail</td><td>Not done, figures wrong, or help needed.</td></tr>
   </tbody>
 </table>
 </div>
 
 <div class="chan">
-  <p><b>One fail in Group A or B stops the release.</b> Groups C and D do not block, but every result
-  is recorded. A step marked <code>[POSTS]</code> changes real data, so the run starts with a backup.</p>
+  <p><b>One fail in Group A or B stops the release.</b>
+  <code>[POSTS]</code> steps change real data, so the run starts with a backup.</p>
 </div>
 
-<h2>Group A &middot; The life of one invoice <span class="dan">(blocks release)</span></h2>
+<h2>Group A &middot; One invoice <span class="dan">(blocks release)</span></h2>
 
 <div class="cuon">
 <table>
   <thead><tr><th>#</th><th>Task</th><th>Pass criterion</th></tr></thead>
   <tbody>
-    <tr><td>A1</td><td>Load one sales invoice XML file</td><td>Appears in the list; every amount matches the PDF to the dong.</td></tr>
-    <tr><td>A2</td><td>Load the same file again</td><td>Reports a duplicate; does <b>not</b> create a second invoice.</td></tr>
-    <tr><td>A3</td><td>Open the invoice detail</td><td>All present: number, series, date, buyer, tax number, every line item, tax rate, total.</td></tr>
-    <tr><td>A4</td><td>Post that invoice <code>[POSTS]</code></td><td>Entry in the journal, debits equal credits, dated the invoice date.</td></tr>
+    <tr><td>A1</td><td>Load a sales invoice XML</td><td>Listed; every amount matches PDF to the dong.</td></tr>
+    <tr><td>A2</td><td>Load it again</td><td>Duplicate reported; <b>no</b> second invoice.</td></tr>
+    <tr><td>A3</td><td>Open invoice detail</td><td>Shows number, series, date, buyer, tax number, line items, tax rate, total.</td></tr>
+    <tr><td>A4</td><td>Post it <code>[POSTS]</code></td><td>Journal entry, debits equal credits, dated invoice date.</td></tr>
     <tr><td>A5</td><td>Press Post again</td><td>No second entry.</td></tr>
-    <tr><td>A6</td><td>Undo the entry just posted <code>[POSTS]</code></td><td>Entry disappears, invoice returns to unposted. Activity log records the posting and the undo.</td></tr>
-    <tr><td>A7</td><td>Post it again against a project <code>[POSTS]</code></td><td>Project costing shows revenue and cost against that project.</td></tr>
+    <tr><td>A6</td><td>Undo that entry <code>[POSTS]</code></td><td>Entry gone, invoice unposted. Activity log records both.</td></tr>
+    <tr><td>A7</td><td>Repost against a project <code>[POSTS]</code></td><td>Project costing shows revenue and cost.</td></tr>
   </tbody>
 </table>
 </div>
@@ -223,22 +223,22 @@ guess; this one tests what was built.</p>
 <table>
   <thead><tr><th>#</th><th>Task</th><th>Pass criterion</th></tr></thead>
   <tbody>
-    <tr><td>B1</td><td>Raise a cash receipt <code>[POSTS]</code></td><td>Cash book rises by the right amount; statutory receipt form prints.</td></tr>
-    <tr><td>B2</td><td>Print that receipt</td><td>Activity log records the printing.</td></tr>
-    <tr><td>B3</td><td>Load one month of bank statement</td><td>Lines read equals lines in the file; <b>no line is swallowed into a zero</b>.</td></tr>
-    <tr><td>B4</td><td>Match one receipt against an invoice <code>[POSTS]</code></td><td>Invoice moves to Paid; receivable falls by the right amount.</td></tr>
-    <tr><td>B5</td><td>Open Receivables</td><td>Total equals the sum of unpaid invoices; one customer opens to show each invoice.</td></tr>
-    <tr><td>B6</td><td>Add a new stock item</td><td>Cost-of-sales account fills in from the group chosen, still changeable by hand.</td></tr>
-    <tr><td>B7</td><td>Change its group to Finished goods</td><td>Cost-of-sales account changes with it, not left stale.</td></tr>
-    <tr><td>B8</td><td>Receive stock from a purchase invoice <code>[POSTS]</code></td><td>Stock on hand rises by the right quantity; value matches the invoice.</td></tr>
-    <tr><td>B9</td><td>Issue more stock than is on hand</td><td>Warns immediately, not in silence.</td></tr>
-    <tr><td>B10</td><td>Run the period-end cost transfer <code>[POSTS]</code></td><td>Cost-of-sales entry appears and matches the stock movement report.</td></tr>
-    <tr><td>B11</td><td>Try the transfer while a stock item is negative</td><td>Blocked until a written reason is given.</td></tr>
+    <tr><td>B1</td><td>Raise a cash receipt <code>[POSTS]</code></td><td>Cash book rises correctly; statutory receipt prints.</td></tr>
+    <tr><td>B2</td><td>Print that receipt</td><td>Activity log records the print.</td></tr>
+    <tr><td>B3</td><td>Load a month of bank statement</td><td>Lines read equals lines in file; <b>no line swallowed into a zero</b>.</td></tr>
+    <tr><td>B4</td><td>Match a receipt to an invoice <code>[POSTS]</code></td><td>Invoice moves to Paid; receivable falls correctly.</td></tr>
+    <tr><td>B5</td><td>Open Receivables</td><td>Total equals sum of unpaid invoices; a customer opens to each invoice.</td></tr>
+    <tr><td>B6</td><td>Add a stock item</td><td>Cost-of-sales account fills from the group, still hand-editable.</td></tr>
+    <tr><td>B7</td><td>Change its group to Finished goods</td><td>Cost-of-sales account changes too, not left stale.</td></tr>
+    <tr><td>B8</td><td>Receive stock on a purchase invoice <code>[POSTS]</code></td><td>Stock rises by the right quantity; value matches invoice.</td></tr>
+    <tr><td>B9</td><td>Issue more stock than on hand</td><td>Warns immediately, not silently.</td></tr>
+    <tr><td>B10</td><td>Run period-end cost transfer <code>[POSTS]</code></td><td>Cost-of-sales entry matches stock movement report.</td></tr>
+    <tr><td>B11</td><td>Try it with a stock item negative</td><td>Blocked until a written reason.</td></tr>
   </tbody>
 </table>
 </div>
 
-<p class="dan">B11 is not a technical rule but the option the chief accountant chose on 31 July, from three ways of handling negative stock I put to her. The document records it as her call, not mine.</p>
+<p class="dan">B11 is not a technical rule: the chief accountant chose it on 31 July, from three ways of handling negative stock I put to her.</p>
 
 <h2>Group C &middot; Reports and tax returns <span class="dan">(recorded, does not block)</span></h2>
 
@@ -246,30 +246,30 @@ guess; this one tests what was built.</p>
 <table>
   <thead><tr><th>#</th><th>Task</th><th>Pass criterion</th></tr></thead>
   <tbody>
-    <tr><td>C1</td><td>Open the Overview</td><td>Five figures within two seconds. Amber reminder if the cost transfer has not been run.</td></tr>
-    <tr><td>C2</td><td>Open the trial balance</td><td>Debits equal credits; opening balances match last year's closing.</td></tr>
-    <tr><td>C3</td><td>Export the general ledger to Excel</td><td>File opens; activity log records which report was exported.</td></tr>
-    <tr><td>C4</td><td>Export the financial statements</td><td>Total assets equal total equity and liabilities; legal citation printed in the footer.</td></tr>
-    <tr><td>C5</td><td>Export the VAT return</td><td>Figures match the invoice listing for the same period.</td></tr>
-    <tr><td>C6</td><td>Open that return in the real government filing software</td><td>Accepted with no format error.</td></tr>
-    <tr><td>C7</td><td>Export the purchase listing for company tax</td><td>Every required column present; the two that must not appear are absent.</td></tr>
+    <tr><td>C1</td><td>Open Overview</td><td>Five figures within two seconds. Amber reminder if cost transfer not run.</td></tr>
+    <tr><td>C2</td><td>Open trial balance</td><td>Debits equal credits; opening balances match last year's close.</td></tr>
+    <tr><td>C3</td><td>Export general ledger to Excel</td><td>File opens; activity log records which report.</td></tr>
+    <tr><td>C4</td><td>Export financial statements</td><td>Total assets equal equity plus liabilities; legal citation in footer.</td></tr>
+    <tr><td>C5</td><td>Export VAT return</td><td>Figures match the invoice listing for that period.</td></tr>
+    <tr><td>C6</td><td>Open it in the real government filing software</td><td>Accepted, no format error.</td></tr>
+    <tr><td>C7</td><td>Export purchase listing for company tax</td><td>Every required column present; the two forbidden ones absent.</td></tr>
   </tbody>
 </table>
 </div>
 
-<h2>Group D &middot; Running it, and when things go wrong <span class="dan">(recorded, does not block)</span></h2>
+<h2>Group D &middot; Running it, and failures <span class="dan">(recorded, does not block)</span></h2>
 
 <div class="cuon">
 <table>
   <thead><tr><th>#</th><th>Task</th><th>Pass criterion</th></tr></thead>
   <tbody>
-    <tr><td>D1</td><td>Press Back up now</td><td>New file in the backup folder, not empty.</td></tr>
-    <tr><td>D2</td><td>Press Rehearse a restore</td><td>Reports a pass, and how many tables and rows it checked.</td></tr>
-    <tr><td>D3</td><td>Switch to another company and back</td><td>No figures bleed across; the company name on screen always matches the figures.</td></tr>
-    <tr><td>D4</td><td>Open the software on a phone</td><td>Tables scroll sideways, text readable, buttons can be hit.</td></tr>
-    <tr><td>D5</td><td>Pull the network cable, then press a posting button</td><td>Plain error message in the user's own language, not an English crash screen.</td></tr>
-    <tr><td>D6</td><td>Edit the same item in two tabs</td><td>Second person stopped and told to reload; first edit not silently overwritten.</td></tr>
-    <tr><td>D7</td><td>Log in as a staff account</td><td>Only assigned clients visible. Owner-only pages refused with an explanation, not a blank screen.</td></tr>
+    <tr><td>D1</td><td>Press Back up now</td><td>New file in backup folder, not empty.</td></tr>
+    <tr><td>D2</td><td>Press Rehearse a restore</td><td>Reports a pass, with tables and rows checked.</td></tr>
+    <tr><td>D3</td><td>Switch company and back</td><td>No figures bleed across; company name always matches figures.</td></tr>
+    <tr><td>D4</td><td>Open it on a phone</td><td>Tables scroll sideways, text readable, buttons hittable.</td></tr>
+    <tr><td>D5</td><td>Pull the network cable, press a posting button</td><td>Plain message in the user's language, not an English crash screen.</td></tr>
+    <tr><td>D6</td><td>Edit one item in two tabs</td><td>Second tab stopped, told to reload; first edit not silently overwritten.</td></tr>
+    <tr><td>D7</td><td>Log in as staff</td><td>Only assigned clients visible. Owner-only pages refused with a reason, not a blank screen.</td></tr>
   </tbody>
 </table>
 </div>
@@ -281,26 +281,26 @@ Company used : ..............................   Version: c1b6441
 
 Pass ...../32     Pass with friction ...../32     Fail ...../32
 
-Every failed step (number, what happened, and by how much the figure was wrong):
+Every failed step (number, what happened, how wrong the figure was):
 
 Anything hard to use, slow, or confusing:
 
-Things you want the software to do for you:</div>
+Things you want the software to do:</div>
 
-<h2>When this script stops being valid</h2>
+<h2>When this script expires</h2>
 
 <div class="chan">
-  <p>Run it again whenever the posting, inventory or tax code changes, the database structure changes, a tax circular or statutory form changes, it moves to another machine, or it is restored from a backup.</p>
-  <p><b>A result belongs to exactly one version.</b> The commit goes in the box above; old results are never reused for a new build.</p>
+  <p>Run it again on any change to posting, inventory or tax code, database structure, a tax circular or statutory form, the machine it runs on, or a restore from backup.</p>
+  <p><b>A result belongs to exactly one version.</b></p>
 </div>
 
 <div class="the">
-  <p><b>Why I am showing this rather than describing it.</b> My main page is screenshots of software. This is the other half of the job, the half the role is for: deciding what "working" means before anyone can argue, writing it down where someone else can check it, and naming the person whose call it was, not mine.</p>
+  <p><b>Why show this, not describe it.</b> Deciding what "working" means before anyone can argue, writing it down where someone else can check, naming whose call it was: the other half of the job, the half the role is for.</p>
 </div>
 
 <footer>
-  <p>Translated from the Vietnamese original, the working document. One correction: the original counts 32 steps but its record block says 25, and a hiring reviewer caught it here before I did. The steps are unchanged, only the total.
-  Numbering, grading and blocking rules are as committed on 2 August 2026.</p>
+  <p>Translated from the Vietnamese original. One correction: the original counts 32 steps but its record block says 25; a hiring reviewer caught it before I did. Only the total changed.
+  Numbering, grading and blocking are as committed.</p>
   <p><a href="mailto:ledinhduc1612@gmail.com">ledinhduc1612@gmail.com</a></p>
 </footer>
 

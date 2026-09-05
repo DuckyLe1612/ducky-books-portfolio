@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>A rule · Ducky Books</title>
-<meta name="description" content="The five million dong rule, written as a specification: legal basis, trigger, decision table, edge cases, what the software may not do, and the version that was wrong.">
+<meta name="description" content="The five million dong rule as a specification: legal basis, trigger, decision table, edge cases, limits, and the version that was wrong.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
@@ -154,18 +154,18 @@ a[href^="mailto:"]{color:var(--accent)}
 
 <div class="khung">
 
-<p class="nhom">Business rule specification · Ducky Books</p>
+<p class="nhom">Business rule spec · Ducky Books</p>
 <h1>One rule, in full</h1>
 
-<p class="dan">How I write a rule before anyone builds it. I picked this one because every line can be checked against a published decree, and because my first version was wrong in a way worth showing.</p>
+<p class="dan">How I write a rule before anyone builds it. I picked this one because my first version was wrong.</p>
 
 <h2>1. The rule</h2>
 
 <div class="the">
 <dl>
   <dt>Rule</dt>
-  <dd>A purchase invoice at or above the threshold, VAT included, must be paid by a method other
-  than cash. Otherwise its input VAT cannot be deducted.</dd>
+  <dd>A purchase invoice at or above the threshold, VAT included, must not be paid
+  in cash, or its input VAT cannot be deducted.</dd>
 
   <dt>Legal basis</dt>
   <dd>Decree 181/2025/ND-CP, Article 26, under VAT Law 48/2024/QH15.</dd>
@@ -174,47 +174,47 @@ a[href^="mailto:"]{color:var(--accent)}
   <dd>5,000,000 dong, in force from 1 July 2025.</dd>
 
   <dt>Who it affects</dt>
-  <dd>Every company on the system that records purchase invoices. Not sales.</dd>
+  <dd>Every company recording purchase invoices. Not sales.</dd>
 
   <dt>Why it matters</dt>
   <dd>Get it wrong and the company claims VAT it is not entitled to. That is found at audit, not
-  by the books, because the books still balance either way.</dd>
+  in the books: they balance either way.</dd>
 </dl>
 </div>
 
 <h2>2. What triggers it</h2>
 
-<p>Every purchase invoice just before posting, and again when the review screen opens. Three conditions, all required:</p>
+<p>Every purchase invoice, before posting and when the review screen opens. All three required:</p>
 
 <div class="cuon">
 <table>
-  <thead><tr><th>#</th><th>Condition</th><th>Why it is written this way</th></tr></thead>
+  <thead><tr><th>#</th><th>Condition</th><th>Why written this way</th></tr></thead>
   <tbody>
-    <tr><td>T1</td><td>A purchase, not a sale.</td><td>About the buyer's right to deduct.</td></tr>
-    <tr><td>T2</td><td>Total, VAT included, at or above the threshold.</td><td>At or above, not over: a five million invoice is inside.</td></tr>
-    <tr><td>T3</td><td>Nobody has confirmed the payment method yet.</td><td>A person's confirmation ends the check for that invoice.</td></tr>
+    <tr><td>T1</td><td>A purchase, not a sale.</td><td>Buyer's right to deduct.</td></tr>
+    <tr><td>T2</td><td>Total with VAT at or above the threshold.</td><td>At or above, not over: five million is inside.</td></tr>
+    <tr><td>T3</td><td>No confirmed payment method yet.</td><td>Confirmation ends the check.</td></tr>
   </tbody>
 </table>
 </div>
 
 <div class="chan">
-  <p><b>The threshold is read by the invoice's date, not today's.</b> An invoice from before 1 July 2025 uses the value that applied then. One function answers "what was the threshold on this date", and all the software calls it; 5,000,000 is written in one place only, a table with its start date and its decree.</p>
-  <p>Deliberate: a second copy drifts apart the first time the law changes, and nobody finds out until a return is wrong.</p>
+  <p><b>The threshold is read by the invoice's date, not today's.</b> One function answers "what was the threshold on this date"; 5,000,000 sits in one table with its start date and decree.</p>
+  <p>Deliberate: a second copy would drift when the law changes, unnoticed until a return is wrong.</p>
 </div>
 
 <h2>3. What the software does</h2>
 
-<p>It does not decide. It sorts each invoice into one of six groups by strength of evidence and shows the person the result. First matching row wins.</p>
+<p>Six groups by strength of evidence. First matching row wins.</p>
 
 <div class="cuon">
 <table>
   <thead><tr><th>Order</th><th>Group</th><th>What was found</th><th>What it means</th></tr></thead>
   <tbody>
-    <tr><td>1</td><td>Both</td><td>Cash payment and bank payment.</td><td>Open it. Something is not right.</td></tr>
-    <tr><td>2</td><td>Cash present</td><td>Paid out of the cash account.</td><td>Deduction lost.</td></tr>
-    <tr><td>3</td><td>Bank statement</td><td>Posted statement line paying it in full.</td><td>Strongest evidence: the bank's own record.</td></tr>
-    <tr><td>4</td><td>Bank entry</td><td>Paid out of the bank account, no cash.</td><td>Good, weaker than a statement line.</td></tr>
-    <tr><td>5</td><td>Not through the till</td><td>Allocated, not through cash or bank.</td><td>Probably a debt offset. Needs a person.</td></tr>
+    <tr><td>1</td><td>Both</td><td>Cash and bank payment.</td><td>Open it. Something is wrong.</td></tr>
+    <tr><td>2</td><td>Cash present</td><td>From the cash account.</td><td>Deduction lost.</td></tr>
+    <tr><td>3</td><td>Bank statement</td><td>Statement line pays it in full.</td><td>The bank's own record.</td></tr>
+    <tr><td>4</td><td>Bank entry</td><td>From the bank account, no cash.</td><td>Weaker than a statement line.</td></tr>
+    <tr><td>5</td><td>Not through the till</td><td>Allocated, not cash or bank.</td><td>Probably a debt offset. Needs a person.</td></tr>
     <tr><td>6</td><td>Nothing linked</td><td>No payment document.</td><td>Unknown, not innocent. Check when the document exists.</td></tr>
   </tbody>
 </table>
@@ -226,31 +226,31 @@ a[href^="mailto:"]{color:var(--accent)}
 <table>
   <thead><tr><th>#</th><th>Given, when, then</th></tr></thead>
   <tbody>
-    <tr><td>A1</td><td>Exactly 5,000,000 dong, dated after the start date, no payment linked: group 6, not skipped.</td></tr>
-    <tr><td>A2</td><td>4,999,999 dong: does not appear.</td></tr>
-    <tr><td>A3</td><td>Dated before the start date: the earlier value applies, even if entered today.</td></tr>
-    <tr><td>A4</td><td>Paid in cash: group 2, and the reason names the cash account.</td></tr>
-    <tr><td>A5</td><td>Confirmed by a person: leaves the list and does not return on its own.</td></tr>
-    <tr><td>A6</td><td>Undo a confirmation on one invoice without touching any other.</td></tr>
-    <tr><td>A7</td><td>Only a person sets confirmation, never the software.</td></tr>
+    <tr><td>A1</td><td>Exactly 5,000,000 dong, after the start date, nothing linked: group 6, not skipped.</td></tr>
+    <tr><td>A2</td><td>4,999,999 dong: not listed.</td></tr>
+    <tr><td>A3</td><td>Before the start date: earlier value applies, even if entered today.</td></tr>
+    <tr><td>A4</td><td>Paid in cash: group 2, reason names the cash account.</td></tr>
+    <tr><td>A5</td><td>Confirmed by a person: leaves the list, never returns on its own.</td></tr>
+    <tr><td>A6</td><td>Undo one confirmation, no other invoice touched.</td></tr>
+    <tr><td>A7</td><td>Only a person confirms, never the software.</td></tr>
   </tbody>
 </table>
 </div>
 
-<h2>5. Edge cases, and how each was found</h2>
+<h2>5. Edge cases</h2>
 
-<p>All three came from real books, not from thinking about it.</p>
+<p>From real books, not from thought.</p>
 
 <div class="cuon">
 <table>
   <thead><tr><th>#</th><th>Case</th><th>What went wrong</th></tr></thead>
   <tbody>
-    <tr><td>E1</td><td>Settled straight from the bank statement screen.</td>
-        <td>That path creates no allocation record. The check looked only at allocations, so a paid invoice was reported unpaid.</td></tr>
-    <tr><td>E2</td><td>Marked "pay now" in cash while being posted.</td>
-        <td>Its entry credits the cash account with no allocation, so it landed in group 6, not group 2. The cash guard was open where it matters most.</td></tr>
+    <tr><td>E1</td><td>Settled from the bank statement screen.</td>
+        <td>No allocation written, and the check read only allocations: a paid invoice reported unpaid.</td></tr>
+    <tr><td>E2</td><td>Marked "pay now" in cash at posting.</td>
+        <td>Credits cash with no allocation: group 6, not group 2. The cash guard was open where it matters most.</td></tr>
     <tr><td>E3</td><td>Several small purchases, one supplier, one day.</td>
-        <td>The related rule for purchases with no invoice adds up one day per supplier. This one does not. Two rules, two rounding points, and readers assume they match.</td></tr>
+        <td>The rule for purchases with no invoice sums one day per supplier. This one does not. Two rules, two rounding points, assumed to match.</td></tr>
   </tbody>
 </table>
 </div>
@@ -258,33 +258,33 @@ a[href^="mailto:"]{color:var(--accent)}
 <h2>6. The version that was wrong</h2>
 
 <div class="hong">
-  <p><b>The first design asked the wrong question.</b> It read stored warnings instead of asking each invoice its condition now. A warning never written, or written before a payment changed, is no warning.</p>
-  <p>On the real books it left <b>1,341 invoices with no warning, covering 25.34 billion dong</b>. Worst company: 523 invoices inside the rule, 120 warned, <b>403 silent, 21.14 billion dong</b>.</p>
-  <p>Worst kind of defect, because the screen looked calm. A guard that does not fire is worse than no guard: people stop looking.</p>
+  <p><b>The first design asked the wrong question.</b> It read stored warnings instead of asking the invoice its condition now.</p>
+  <p>On the real books: <b>1,341 invoices unwarned, 25.34 billion dong</b>. Worst company: 523 inside the rule, 120 warned, <b>403 silent, 21.14 billion dong</b>.</p>
+  
 </div>
 
-<p><b>What replaced it.</b> The check asks the invoice's condition every time the screen opens.
+<p><b>What replaced it.</b> The condition is asked fresh each time.
 Slower. It cannot go stale.</p>
 
-<h2>7. What the rule may not do</h2>
+<h2>7. What it may not do</h2>
 
 <div class="chan">
   <p>It may not confirm an invoice, post anything, or block a person from posting one they have decided about.</p>
-  <p>Not technical: whoever signs the return carries the liability, so they decide. The software only puts the evidence in front of them first.</p>
+  <p>Not technical: whoever signs the return carries the liability, so they decide; the software only puts the evidence in front of them.</p>
 </div>
 
-<h2>8. When this specification stops being valid</h2>
+<h2>8. When this stops applying</h2>
 
-<p>When the decree or threshold changes, or a new payment path appears that the six groups do not cover. A new threshold does not replace the old: it is added with its own start date, and older periods keep their old value.</p>
+<p>When the decree or threshold changes, or a payment path appears the six groups do not cover.</p>
 
 <div class="the">
-  <p><b>Why this page exists.</b> The rest of my portfolio is screenshots of working software: the
-  output. This is the input, and the part of the work I am applying to do.</p>
-  <p>Section 1 can be checked against a published decree without asking me.</p>
+  <p><b>Why this page exists.</b> My other pages are screenshots of working software: the
+  output. This is the input, the work I am applying to do.</p>
+  <p>Section 1 checks against a published decree without asking me.</p>
 </div>
 
 <footer>
-  <p>Section 6 figures are counts from the working system. The rest is the rule as specified and built. Translated from the Vietnamese working notes.</p>
+  <p>Section 6 figures are counts from the working system; the rest is the rule as specified and built. Translated from Vietnamese notes.</p>
   <p><a href="mailto:ledinhduc1612@gmail.com">ledinhduc1612@gmail.com</a></p>
 </footer>
 
