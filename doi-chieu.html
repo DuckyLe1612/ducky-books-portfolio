@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="en-NZ" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The VAT return · Ducky Books</title>
+<meta name="description" content="One statutory return mapped end to end: the ledger source of every box, the rule applied on the way, the controls that prove the two agree, and the four places where the software deliberately refuses to fill a box.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  
+  --r-hop:14px;
+  --paper:#f1e7d3; --surface:#fffdf6; --ink:#1b140a; --muted:#4a4030; --faint:#6b5c44;
+  --rule:rgba(110,82,25,.30); --rule-strong:#978150;
+  --accent:#965509; --accent-soft:#f7e8c8;
+  --shadow:0 4px 14px rgba(120,90,30,.10);
+  --sans:"Noto Sans",ui-sans-serif,system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#1c1710; --surface:#241f16; --ink:#f4ecdb; --muted:#c7bb9f; --faint:#a2937a;
+    --rule:rgba(200,170,110,.26); --rule-strong:#847651;
+    --accent:#ffce5a; --accent-soft:#352b18; --shadow:0 8px 22px rgba(0,0,0,.34);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#1c1710; --surface:#241f16; --ink:#f4ecdb; --muted:#c7bb9f; --faint:#a2937a;
+  --rule:rgba(200,170,110,.26); --rule-strong:#847651;
+  --accent:#ffce5a; --accent-soft:#352b18; --shadow:0 8px 22px rgba(0,0,0,.34);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; color:var(--ink);
+  background:
+    radial-gradient(1200px 720px at 12% 4%, var(--surface) 0%, transparent 60%),
+    radial-gradient(900px 620px at 92% 42%, var(--accent-soft) 0%, transparent 55%),
+    var(--paper);
+  background-attachment:fixed;
+  font-family:var(--sans); font-size:1.1875rem; line-height:1.62;
+}
+.khung{max-width:min(88ch,calc(100% - 2.5rem)); margin-inline:auto; padding:2.6rem 0 4rem}
+a{color:var(--accent)}
+h1{font-size:2.05rem; line-height:1.2; margin:.2rem 0 .6rem; letter-spacing:-.02em}
+h2{font-size:1.32rem; margin:2.4rem 0 .3rem; letter-spacing:-.01em}
+p{margin:0 0 1rem}
+.quay-lai{display:inline-block; font-size:.95rem; margin-bottom:1.5rem; text-decoration:none}
+.quay-lai:hover{text-decoration:underline}
+.dan{color:var(--muted); font-size:1.03rem}
+.nhom{font-size:.88rem; color:var(--faint); margin:.2rem 0 .1rem; font-weight:600}
+.the{background:var(--surface); border:1px solid var(--rule); border-radius:var(--r-hop);
+     padding:1.1rem 1.25rem; margin:1.4rem 0; box-shadow:var(--shadow)}
+.the p:last-child{margin-bottom:0}
+.ra{font-size:1.02rem; color:var(--muted); margin:.1rem 0 .7rem}
+.ra b{color:var(--accent); font-variant-numeric:tabular-nums}
+pre{
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.86rem; line-height:1.62;
+  background:var(--surface); border-radius:var(--r-hop);
+  padding:.9rem 1.1rem; overflow-x:auto; margin:0 0 1.5rem; color:var(--ink);
+}
+.chan{margin:1.2rem 0; color:var(--muted)}
+footer{margin-top:3rem; padding-top:1.4rem; border-top:1px solid var(--rule); color:var(--faint); font-size:.95rem}
+@media (max-width:40rem){ body{font-size:1.0625rem} h1{font-size:1.6rem} pre{font-size:.8rem} }
+
+.thanh-dinh{
+  position:sticky; top:0; z-index:50;
+  
+  background:var(--surface);
+  border-bottom:1px solid var(--rule);
+  margin:0 0 2rem;
+}
+
+.thanh-trong{
+  position:relative;
+  max-width:min(92ch,calc(100% - 2.5rem)); margin-inline:auto;
+  display:flex; align-items:center; justify-content:center; gap:.35rem 1.1rem; flex-wrap:wrap;
+  padding:.55rem 0;
+}
+.thanh-ten{
+  font-weight:700; font-size:.95rem; letter-spacing:-.01em;
+  color:var(--ink); text-decoration:none; margin-right:.4rem; white-space:nowrap;
+}
+.thanh-ten:hover{color:var(--accent)}
+.thanh-nhan{
+  font-size:.72rem; font-weight:700; letter-spacing:.11em; text-transform:uppercase;
+  color:var(--faint); white-space:nowrap; margin-right:.15rem;
+}
+@media (max-width:46rem){ .thanh-nhan{display:none} }
+.thanh-lk{display:flex; flex-wrap:wrap; gap:.2rem .3rem; align-items:center}
+.thanh-lk a{
+  font-size:.88rem; text-decoration:none; color:var(--muted);
+  padding:.3rem .62rem; border-radius:999px; white-space:nowrap; line-height:1.35;
+}
+.thanh-lk a:hover{color:var(--accent); background:var(--accent-soft)}
+.thanh-lk a[aria-current="page"]{
+  background:var(--accent); color:var(--surface); font-weight:600;
+}
+@media (max-width:40rem){
+  .thanh-trong{padding:.45rem 0}
+  .thanh-ten{font-size:.9rem; width:100%; margin-bottom:.15rem}
+  .thanh-lk{width:100%; flex-wrap:nowrap; overflow-x:auto; scrollbar-width:none}
+  .thanh-lk::-webkit-scrollbar{display:none}
+}
+
+.thanh-len{
+  position:absolute; right:0; top:50%; transform:translateY(-50%); display:inline-flex; align-items:center; gap:.32rem;
+  font-size:.84rem; font-weight:600; color:var(--muted);
+  background:none; border:1px solid transparent; border-radius:999px;
+  padding:.28rem .6rem; cursor:pointer; white-space:nowrap;
+  opacity:0; visibility:hidden; transition:opacity .18s ease, color .18s ease, background .18s ease;
+}
+.thanh-dinh.da-cuon .thanh-len{opacity:1; visibility:visible}
+.thanh-len:hover{color:var(--accent); background:var(--accent-soft)}
+.thanh-len:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+.thanh-len svg{width:.95em; height:.95em}
+@media (max-width:40rem){
+  .thanh-len{margin-left:0; order:-1; align-self:flex-end; position:absolute; right:0; top:.4rem}
+  .thanh-trong{position:relative}
+}
+@media (prefers-reduced-motion:reduce){ .thanh-len{transition:none} }
+
+a[href^="mailto:"]{color:var(--accent)}
+
+.cuon th:first-child, .cuon td:first-child{padding-left:1rem}
+.cuon th:last-child,  .cuon td:last-child{padding-right:1rem}
+</style>
+<style>
+table.bd{border-collapse:collapse; width:100%; font-size:.93rem; margin:0}
+
+.bd th,.bd td{text-align:left; padding:.32rem .8rem .32rem 0; border-bottom:1px solid var(--rule);
+  vertical-align:top}
+.bd th{font-size:.78rem; letter-spacing:.06em; text-transform:uppercase; color:var(--faint);
+  font-weight:600; white-space:nowrap; border-bottom:2px solid var(--rule-strong)}
+.bd td.o{font-weight:600; color:var(--accent); white-space:nowrap; font-variant-numeric:tabular-nums}
+.bd td.tk{font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.86rem; white-space:nowrap}
+.cuon{overflow-x:auto; margin:1.2rem 0 1.6rem; border:1px solid var(--rule);
+  border-radius:var(--r-hop); background:var(--surface)}
+.ct{font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-weight:600; color:var(--accent)}
+
+.hop{border-top:1px solid var(--rule-strong); border-bottom:1px solid var(--rule-strong);
+  padding:1.3rem 0; margin:2.2rem 0}
+.hop p:last-child{margin-bottom:0}
+.hop h3{font-size:1.02rem; margin:0 0 .5rem}
+.canh{background:var(--accent-soft); border-radius:var(--r-hop); padding:1.1rem 1.3rem; margin:1.5rem 0}
+.canh p:last-child{margin-bottom:0}
+.canh h3{font-size:1.02rem; margin:0 0 .5rem}
+</style>
+</head>
+<body>
+<div class="thanh-dinh">
+  <div class="thanh-trong">
+    <span class="thanh-nhan" aria-hidden="true">Portfolio</span>
+    <nav class="thanh-lk" aria-label="Pages of this portfolio">
+      <a href="index.html" title="The main argument">Main page</a>
+      <a href="chi-tiet.html" title="The rest of the main argument: measurements, screens, and what was not mine">The detail</a>
+      <a href="bang-chung.html" title="Measurements and method">The evidence</a>
+      <a href="quy-tac.html" title="One business rule, specified">A rule</a>
+      <a href="uat.html" title="User acceptance test">The test script</a>
+      <a href="so-lieu.html" title="Every figure with its SQL">Six numbers</a>
+      <a href="doi-chieu.html" aria-current="page" title="You are on this page: Source to target mapping">The VAT return</a>
+    </nav>
+    <button type="button" class="thanh-len" data-len-dau>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 19V5M5 12l7-7 7 7"/>
+      </svg>Top
+    </button>
+  </div>
+</div>
+
+<div class="khung">
+
+<p class="nhom">Working document &middot; Ducky Books</p>
+<h1>Where each figure on the VAT return comes from, and what proves it</h1>
+
+<p class="dan">One statutory return, mapped end to end: the ledger account a figure is read
+from, what happens to it on the way, the exact box it lands in, and the check that would
+catch it if the two ever stopped agreeing. This is the document I would want handed to me
+if I inherited someone else's return.</p>
+
+<div class="hop">
+  <p><b>Read this as a specification, not a description.</b> Every row below is implemented and
+  running. The rules were written first, in Vietnamese, with the chief accountant; the code
+  followed. Where the software deliberately refuses to fill a box, that refusal is a rule too,
+  and it is in the table.</p>
+  <p>The return is form <b>01/GTGT</b>, filed monthly or quarterly. Vietnamese tax law numbers each box, and accountants say those numbers out loud: "box 43", not "closing credit". I have kept them.</p>
+</div>
+
+<h2>1. The mapping</h2>
+
+<p class="ra">Sales are classified by the tax rate on each invoice line, not by the invoice.
+One invoice can land in three different boxes.</p>
+
+<div class="cuon">
+<table class="bd">
+  <thead><tr>
+    <th>Box</th><th>What it holds</th><th>Read from</th><th>Rule on the way</th>
+  </tr></thead>
+  <tbody>
+    <tr><td class="o">[23]</td><td>Purchases, net of VAT</td><td class="tk">invoices, direction = input</td>
+      <td>Sum of the net amount on every purchase invoice in the period, plus the customs value in [23a].</td></tr>
+    <tr><td class="o">[24]</td><td>Input VAT</td><td class="tk">invoices, direction = input</td>
+      <td>Sum of VAT on the same invoices, plus import VAT in [24a].</td></tr>
+    <tr><td class="o">[23a] [24a]</td><td>Imports</td><td class="tk">typed by the accountant</td>
+      <td>From the customs declaration, which this system does not hold. Not guessed.</td></tr>
+    <tr><td class="o">[25]</td><td>Input VAT actually deductible</td><td class="tk">derived from [24]</td>
+      <td>Defaults to all of [24]. Input VAT the accountant booked to an account other than 133 is subtracted here but <b>left in [24]</b>. The invoice is still declared in full; only the deduction narrows.</td></tr>
+    <tr><td class="o">[26]</td><td>Sales not subject to VAT</td><td class="tk">invoices, direction = output</td>
+      <td>Net amount only; there is no VAT column.</td></tr>
+    <tr><td class="o">[29]</td><td>Sales at 0%</td><td class="tk">invoices, direction = output</td><td>Net amount only.</td></tr>
+    <tr><td class="o">[30] [31]</td><td>Sales at 5%, net and VAT</td><td class="tk">invoices, direction = output</td><td>Split per line.</td></tr>
+    <tr><td class="o">[32] [33]</td><td>Sales at 10%, net and VAT</td><td class="tk">invoices, direction = output</td>
+      <td>The temporarily reduced rate is declared in the 10% boxes: the form has no separate box for it. A reduction annex is required alongside, and the software says so.</td></tr>
+    <tr><td class="o">[32a]</td><td>Sales not required to be declared</td><td class="tk">invoices, direction = output</td>
+      <td>Net amount, no VAT column. Still counts toward the revenue boxes below. See section 4: this one was wrong once.</td></tr>
+    <tr><td class="o">[22]</td><td>Credit carried forward</td><td class="tk"><b>typed by the accountant</b></td>
+      <td>The software will not fill this. Section 3 explains why, and what it shows instead.</td></tr>
+    <tr><td class="o">[37] [38] [39a] [40b] [42]</td><td>Adjustments, credits handled elsewhere, refund claimed</td>
+      <td class="tk">typed by the accountant</td>
+      <td>These record decisions and correspondence, not transactions. Nothing in the ledger determines them.</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>2. The boxes the form calculates for itself</h2>
+
+<p class="ra">These are not read from anywhere. They are arithmetic on the boxes above, and the
+tax office's own software computes them the same way. That is the point: if my figure and
+theirs differ, one of us has a bug, and it is worth finding out which.</p>
+
+<pre>[27] = [29] + [30] + [32] + [32a]     revenue subject to VAT
+[28] = [31] + [33]                    output VAT
+[34] = [26] + [27]                    total revenue
+[35] = [28]                           total output VAT
+[36] = [35] - [25]                    VAT due before carry-forward
+
+net  = [36] - [22] + [37] - [38] - [39a]
+
+[40a] = max(0, net)                   payable this period
+[40]  = [40a] - [40b]
+[41]  = max(0, -net)                  credit not yet used
+[43]  = [41] - [42]                   credit carried to next period</pre>
+
+<div class="hop">
+  <h3>Two invariants that are checked, not hoped for</h3>
+  <p><b>[25] can never exceed [24].</b> Box 25 holds only VAT that qualifies for deduction, so it is a subset of box 24 by definition. The code enforces a floor at zero and a cap at [24]; a formula that could produce more deduction than tax paid files a false return.</p>
+  <p><b>[40a] and [41] cannot both be positive.</b> A period either owes VAT or carries credit forward. Both come from the same signed figure, so the form cannot say both.</p>
+</div>
+
+<h2>3. Box [22]: the one the machine refuses to fill</h2>
+
+<p class="ra">This is the row I would defend hardest in an interview, because the correct behaviour
+is to do less.</p>
+
+<p>Box [22] is the credit carried forward from last period. Arithmetically it should equal box [43]
+of the previous return, and a system that files returns already knows that number. Filling it in
+automatically is a two-line change.</p>
+
+<p>The software does not do it. The chief accountant types it, every period.</p>
+
+<div class="hop">
+  <h3>Why</h3>
+  <p><b>The previous return may have been amended by hand after it was filed.</b> What matters is the figure as lodged with the tax office, not the one this system last calculated. Usually they match. When they do not, auto-filling would silently push a stale number into a filed document, and the person who signs it carries that.</p>
+  <p>So the software shows a <b>reference figure</b> next to the empty box: the closing debit balance of the input VAT account for the previous period. The accountant compares, then types.</p>
+</div>
+
+<div class="canh">
+  <h3>The reference has its own precondition. The part I am proudest of</h3>
+  <p>That balance is only meaningful if the previous period's VAT was cleared to the payable account. Without that entry, the input VAT account still carries the whole period's tax and the balance is inflated: a plausible number that is wrong.</p>
+  <p>So the software checks first. If the clearing entry is missing it shows <b>no figure at all</b> and says the entry is outstanding for that month or quarter. A reference that might be wrong is worse than none: the accountant cannot tell by looking.</p>
+</div>
+
+<h2>4. The control that found a real error</h2>
+
+<p class="ra">Box [32a] holds sales that do not have to be declared for VAT, so it has no tax column. That is easy to read as "does not count", and the first version did exactly that.</p>
+
+<p>The result: the revenue totals [27] and [34] came out short by whatever sat in [32a]. Tax payable was still right, because [32a] carries no VAT. Nothing looked broken; every internal check passed.</p>
+
+<div class="hop">
+  <p><b>How it was caught.</b> The chief accountant opened the tax office's own filing software,
+  typed a figure into box [32a], and watched boxes [27] and [34] increase by exactly that amount.
+  That settled it in about a minute. The formula was corrected to
+  <span class="ct">[27] = [29] + [30] + [32] + [32a]</span>.</p>
+  <p><b>Why it mattered even though the tax was right.</b> This revenue figure is cross-checked against the invoice records and the corporate income tax return. A total that is quietly short is the kind of discrepancy an audit opens with.</p>
+  <p>The lesson: <b>a check that only asks "does the return balance" cannot see this class of error.</b> The return balanced perfectly while being wrong. Only a comparison against an independent implementation of the same rules caught it.</p>
+</div>
+
+<h2>5. What happens when a figure will not classify</h2>
+
+<p class="ra">Real invoices arrive with rates that match no standard band, imported from a tax office listing that merged several rates into one row, or entered oddly.</p>
+
+<p>The form has no "other rate" box, so something must be decided. Three options:</p>
+
+<div class="cuon">
+<table class="bd">
+  <thead><tr><th>Option</th><th>Effect</th><th>Verdict</th></tr></thead>
+  <tbody>
+    <tr><td>Drop the line</td><td>Output VAT under-declared</td>
+      <td><b>Rejected.</b> Under-declaring tax is the one failure with a legal consequence attached.</td></tr>
+    <tr><td>Block the return</td><td>Nothing can be filed until every oddity is resolved</td>
+      <td><b>Rejected.</b> Deadlines are fixed. A system that cannot file is not safer, just unusable in the last week of the month.</td></tr>
+    <tr><td>Group into the standard band and warn loudly</td><td>Totals stay complete; the individual box may be wrong</td>
+      <td><b>Chosen.</b> The total is never short, and the warning names the invoice number and the rate it could not read.</td></tr>
+  </tbody>
+</table>
+</div>
+
+<p>The rate is inferred by testing the VAT against the net amount at each standard band, accepting a match within <b>one đồng</b>. That tolerance is not decoration: invoices are rounded to whole đồng at the line, so an exact equality test fails on ordinary documents.</p>
+
+<h2>6. What is deliberately not built</h2>
+
+<p class="ra">A newer box exists on the current form. This software does not populate it.</p>
+
+<p>Not an oversight; the code records why: there is no verified sample of the new file format to check against, and inventing a schema for a document that goes to a government system is not a risk worth taking to close a gap. The box stays empty with the limitation stated, rather than a guess that would look complete.</p>
+
+<div class="hop">
+  <p><b>The pattern across this page.</b> Four times, the right answer was for the software to do less: not to fill box [22], not to show a reference it cannot vouch for, not to drop a line it cannot classify, not to populate a box it cannot verify. Four places where automation was available and was turned down, each with a named reason someone can argue with.</p>
+  <p>That is what I would bring to a role like this: not the ability to make a system do more, but
+  a defensible account of where it should stop.</p>
+</div>
+
+<footer>
+  <p>Boxes and formulas read from the software's own return builder. No figures, client names or tax numbers belonging to real businesses appear on this page. Legal references are quoted as the system records them, and were verified against the signed source documents when the rules were written; I would re-check them before relying on them today rather than quote from memory.</p>
+  <p><a href="mailto:ledinhduc1612@gmail.com">ledinhduc1612@gmail.com</a></p>
+</footer>
+
+</div>
+
+<script>
+
+(function () {
+  var thanh = document.querySelector('.thanh-dinh')
+  var nut = document.querySelector('[data-len-dau]')
+  if (!thanh || !nut) return
+  var itChuyenDong = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  var cho = false
+  function xet() {
+    cho = false
+    thanh.classList.toggle('da-cuon', window.scrollY > window.innerHeight * 0.6)
+  }
+  window.addEventListener('scroll', function () {
+    if (!cho) { cho = true; window.requestAnimationFrame(xet) }
+  }, { passive: true })
+  xet()
+  nut.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: itChuyenDong ? 'auto' : 'smooth' })
+    var dau = document.querySelector('h1')
+    if (dau) { dau.setAttribute('tabindex', '-1'); dau.focus({ preventScroll: true }) }
+  })
+})()
+</script>
+</body>
+</html>

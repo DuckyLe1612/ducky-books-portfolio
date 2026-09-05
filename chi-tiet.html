@@ -1,0 +1,821 @@
+<!doctype html>
+<html lang="en-NZ" data-theme="light">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="color-scheme" content="light" />
+<title>The detail &middot; Ducky Books</title>
+<meta name="description" content="Accounting software a small practice uses to keep the books for 43 client businesses. Specified, directed and checked by Dinh Duc Le. Screens show generated demo data only." />
+<meta property="og:title" content="Dinh Duc Le · Ducky Books" />
+<meta property="og:description" content="42,655 invoices went into these books. A person typed 93 of them. What was measured, and what was not." />
+<meta property="og:type" content="website" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  
+  --r-hop:14px;
+  --paper:#f1e7d3;        
+  --surface:#fffdf6;      
+  --ink:#1b140a;          
+  --muted:#4a4030;        
+  --faint:#6b5c44;
+  --rule:rgba(110,82,25,.30);   
+  --rule-strong:#978150;        
+  --accent:#965509;             
+  --accent-fill:#965509;        
+  --accent-soft:#f7e8c8;        
+  --dot:#948a78;                
+  --shadow:0 4px 14px rgba(120,90,30,.10);  
+  --kinh-vien:rgba(255,255,255,.7);
+  --kinh-sang:rgba(255,255,255,.85);
+  --sans:"Noto Sans",ui-sans-serif,system-ui,sans-serif;   
+  --bong-logo:0 4px 12px rgba(150,85,9,.32);   
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#1c1710; --surface:#241f16; --ink:#f4ecdb; --muted:#c7bb9f; --faint:#a2937a;
+    --rule:rgba(200,170,110,.26); --rule-strong:#847651;
+    --accent:#ffce5a; --accent-fill:#e0a552; --accent-soft:#352b18;
+    --dot:#7a7361; --shadow:0 8px 22px rgba(0,0,0,.34); --bong-logo:0 4px 12px rgba(0,0,0,.45);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#1c1710; --surface:#241f16; --ink:#f4ecdb; --muted:#c7bb9f; --faint:#a2937a;
+  --rule:rgba(200,170,110,.26); --rule-strong:#847651;
+  --accent:#ffce5a; --accent-fill:#e0a552; --accent-soft:#352b18;
+  --dot:#7a7361; --shadow:0 8px 22px rgba(0,0,0,.34); --bong-logo:0 4px 12px rgba(0,0,0,.45);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; color:var(--ink);
+  
+  background:
+    radial-gradient(1200px 720px at 12% 4%, var(--surface) 0%, transparent 60%),
+    radial-gradient(900px 620px at 92% 42%, var(--accent-soft) 0%, transparent 55%),
+    var(--paper);
+  background-attachment:fixed;
+  font-family:var(--sans); font-size:1.1875rem; line-height:1.62;
+  font-feature-settings:"kern" 1;
+  -webkit-font-smoothing:antialiased;
+}
+
+.page{
+  --gap:clamp(1rem,3.4vw,2.5rem);
+  --content:min(88ch,100% - var(--gap) * 2);
+  --popout:minmax(0,5rem);
+  --feature:minmax(0,10rem);
+  --full:minmax(var(--gap),1fr);
+  display:grid;
+  grid-template-columns:
+    [full-start] var(--full)
+    [feature-start] var(--feature)
+    [popout-start] var(--popout)
+    [content-start] var(--content) [content-end]
+    var(--popout) [popout-end]
+    var(--feature) [feature-end]
+    var(--full) [full-end];
+}
+.page > *{grid-column:content}
+.popout{grid-column:popout}
+.feature{grid-column:feature}
+.full{grid-column:full}
+
+a{color:inherit; text-decoration:underline; text-decoration-thickness:1px; text-underline-offset:.18em; text-decoration-color:var(--accent)}
+a:hover{text-decoration-thickness:2px}
+a:focus-visible{outline:2px solid var(--accent); outline-offset:3px}
+b,strong{font-weight:600}
+p{margin:0 0 1.2rem; max-width:none}
+
+.card p, .card li{max-width:none}
+li{max-width:none}
+
+html{scroll-behavior:smooth}
+.kicker{scroll-margin-top:4.75rem}   
+
+.mucluc{
+  position:static;
+  grid-column:content;
+  margin:-1.4rem 0 2.4rem;
+  padding:.55rem 0;
+  background:none; border:0;
+  
+  pointer-events:none;
+}
+
+.mucluc-trong{
+  pointer-events:auto; position:relative;
+  width:max-content; max-width:100%; margin-inline:0;
+  display:flex; flex-wrap:nowrap;
+  padding:.35rem .5rem;
+  background:var(--surface);
+  border:1px solid var(--rule);
+  border-radius:999px;
+  
+  box-shadow:0 1px 2px rgba(120,90,30,.06), 0 4px 12px rgba(120,90,30,.05);
+  transition:box-shadow .3s ease;
+  line-height:1.45;
+}
+.mucluc.roi-dinh .mucluc-trong{box-shadow:0 1px 2px rgba(120,90,30,.08), 0 10px 28px rgba(120,90,30,.13)}
+
+.mucluc .vet{
+  position:absolute; top:50%; left:0; height:1.85em; margin-top:-0.925em;
+  border-radius:999px; background:var(--accent-soft);
+  opacity:0; transform:translateX(0); width:0;
+  transition:transform .34s cubic-bezier(.22,1,.36,1), width .34s cubic-bezier(.22,1,.36,1), opacity .2s ease;
+  pointer-events:none;
+}
+.mucluc-nhan{
+  align-self:center; padding:0 .55rem 0 .45rem; font-size:.78rem; font-weight:600;
+  letter-spacing:.05em; text-transform:uppercase; color:var(--faint); white-space:nowrap;
+}
+@media (max-width:52rem){ .mucluc-nhan{display:none} }
+.mucluc a{position:relative}
+.mucluc a{
+  color:var(--muted); text-decoration:none;
+  font-size:.875rem; white-space:nowrap;
+  padding:.34rem .7rem; border-radius:999px;
+  transition:color .15s ease, background-color .15s ease;
+}
+
+.mucluc a:hover{color:var(--accent); background:color-mix(in srgb, var(--accent-soft) 45%, transparent)}
+.mucluc a:active{background:var(--accent-soft)}
+.mucluc a:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+
+.mucluc a[aria-current="true"]{color:var(--accent); font-weight:600}
+
+@media (max-width:1100px){
+  .mucluc{padding:.5rem 0}
+  .mucluc-trong{
+    width:auto; max-width:none; margin-inline:.75rem;
+    overflow-x:auto; scrollbar-width:none;
+    -webkit-mask-image:linear-gradient(to right, #000 calc(100% - 1.6rem), transparent);
+    mask-image:linear-gradient(to right, #000 calc(100% - 1.6rem), transparent);
+  }
+  .mucluc-trong::-webkit-scrollbar{display:none}
+}
+@media (prefers-reduced-motion:reduce){.mucluc-trong,.mucluc a,.mucluc .vet{transition:none}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+.masthead{
+  border-bottom:1px solid var(--rule-strong);
+  padding:.4rem 0 1.1rem; margin-bottom:3.4rem;
+  display:flex; justify-content:space-between; align-items:flex-end; gap:1.5rem 2rem;
+  flex-wrap:wrap;
+}
+.masthead .ten{
+  font-size:clamp(1.75rem,3.2vw,2.4rem); font-weight:700; letter-spacing:-.02em;
+  line-height:1.1; margin:0;
+}
+.masthead .nghe{font-size:1.1875rem; color:var(--muted); margin:.3rem 0 0; max-width:none}
+.masthead .lienhe{display:flex; flex-direction:column; align-items:flex-end; gap:.15rem; text-align:right; font-size:.9375rem; color:var(--faint); line-height:1.5}
+.masthead .lienhe .dumuc{color:var(--accent); font-weight:600}
+@media (max-width:44rem){
+  .masthead{align-items:flex-start}
+  .masthead .lienhe{align-items:flex-start; text-align:left; margin-top:.4rem}
+}
+
+.card{
+  background:color-mix(in srgb, var(--surface) 78%, transparent);
+  -webkit-backdrop-filter:blur(22px) saturate(1.35);
+  backdrop-filter:blur(22px) saturate(1.35);
+  border:1px solid var(--kinh-vien);
+  border-radius:var(--r-hop);
+  box-shadow:
+    inset 0 1px 0 var(--kinh-sang),
+    inset 0 -1px 0 rgba(150,85,9,.06),
+    var(--shadow);
+}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .card{background:var(--surface)}
+}
+
+.plate > a:has(img){
+  background:color-mix(in srgb, var(--surface) 78%, transparent);
+  -webkit-backdrop-filter:blur(22px) saturate(1.35);
+  backdrop-filter:blur(22px) saturate(1.35);
+}
+.card-chart{padding:1.6rem 1.8rem 1.8rem}
+.card-rule{padding:1.4rem 1.6rem}
+.card-table{padding:.4rem 1.4rem 1rem}
+.card-vs{padding:1.8rem 2rem 1.2rem}
+.masthead .who{font-weight:500}
+.masthead .where{color:var(--faint)}
+
+.brand{display:flex; align-items:center; gap:.7rem}
+.brand .mark{
+  width:38px; height:38px; border-radius:8px; flex:none;
+  display:flex; align-items:center; justify-content:center;
+  background:linear-gradient(135deg,#C68A33 0%,#965509 100%); color:#FFFAF0;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.4), var(--bong-logo);
+}
+.brand .nm{font-weight:700; font-size:1.0625rem; letter-spacing:-.01em; white-space:nowrap}
+.brand .sub{display:block; font-weight:400; font-size:.8rem; color:var(--faint); letter-spacing:0}
+
+h1{
+  font-weight:700; font-size:clamp(2rem,4.4vw,3rem); line-height:1.12;
+  letter-spacing:-.022em; margin:0 0 1.5rem; max-width:none; text-wrap:balance;
+}
+h1 em{font-style:normal; color:var(--accent)}
+.standfirst{font-size:clamp(1.125rem,1.9vw,1.375rem); line-height:1.5; color:var(--muted); max-width:none; margin:0 0 1.75rem}
+.credential{font-size:.9375rem; color:var(--faint); max-width:none; margin:0; line-height:1.6}
+
+h2{
+  font-weight:700; font-size:clamp(1.5rem,2.8vw,2.05rem); line-height:1.2;
+  letter-spacing:-.015em; margin:0 0 1.3rem; max-width:none;
+}
+h3{font-weight:700; font-size:1.375rem; margin:2.1rem 0 .4rem; letter-spacing:-.005em}
+.kicker{
+  font-size:1.0625rem; font-weight:600; letter-spacing:0; color:var(--accent);
+  margin:0 0 .7rem; display:flex; align-items:center; gap:.6rem;
+}
+.kicker::before{content:""; width:1.7rem; height:2px; background:var(--accent); border-radius:1px; flex:none}
+.big{font-size:1.375rem; line-height:1.55; max-width:none}
+
+.blk{padding:3.2rem 0}
+
+.blk-lead{padding:.6rem 0 3.6rem}
+
+.blk-lead > h1{text-align:center}
+
+.blk-lead h1{margin-inline:auto; max-width:34ch}
+@media (max-width:34rem){ .blk-lead h1 br{display:none} }
+
+@media (max-width:40rem){ .blk-lead{text-align:left} .blk-lead h1,.blk-lead > p{max-width:none} }
+.blk-turn{padding:3.6rem 0 3.2rem; border-top:1px solid var(--rule-strong)}
+.blk-quiet{padding:2.4rem 0}
+.blk-wide{padding:3.6rem 0; border-top:1px solid var(--rule)}
+.blk-close{padding:3.6rem 0 1rem; border-top:1px solid var(--rule-strong)}
+
+.two{display:grid; grid-template-columns:repeat(auto-fit,minmax(15rem,1fr)); gap:1.5rem 3rem; margin:2.6rem 0 1rem; align-items:start}
+.two .n{font-weight:700; font-size:clamp(1.9rem,3.8vw,2.8rem); line-height:1; letter-spacing:-.02em; font-variant-numeric:tabular-nums lining-nums; display:block; margin-bottom:.5rem}
+.two .d{font-size:.9375rem; line-height:1.45; color:var(--muted); max-width:32ch; display:block}
+.two .hi .n{color:var(--accent)}
+.asof{font-size:.9375rem; color:var(--faint); margin:1.4rem 0 0; max-width:none; line-height:1.6}
+
+.tomtat{
+  margin:2rem 0 0; padding:1.1rem 1.3rem;
+  background:var(--surface); border:1px solid var(--rule); border-radius:var(--r-hop);
+}
+.tomtat dl{display:grid; grid-template-columns:auto 1fr; gap:.5rem 1.1rem; margin:0}
+.tomtat dt{font-weight:600; color:var(--accent); white-space:nowrap}
+.tomtat dd{margin:0}
+@media (max-width:34rem){
+  .tomtat dl{grid-template-columns:1fr; gap:.15rem}
+  .tomtat dd{margin:0 0 .5rem}
+}
+
+.loi{margin:1.6rem 0 1.6rem 1.75rem; padding:0; border:0}
+.loi p{font-size:1.375rem; line-height:1.55; margin:0 0 .7rem}
+.loi p:last-of-type{margin-bottom:0}
+
+.loi .ai{
+  display:block; font-size:.9375rem; font-weight:600;
+  color:var(--accent); margin:0 0 .5rem; line-height:1.45;
+}
+
+.loi .them{
+  display:block; font-size:.9375rem; color:var(--faint); margin-top:.7rem; line-height:1.5;
+}
+
+.solieu{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(17rem,1fr));
+  gap:1.8rem 2.4rem; margin:2.2rem 0 .6rem;
+}
+
+.solieu > div{border-top:1px solid var(--rule); padding-top:.9rem}
+.solieu .n{
+  display:block; font-weight:700; font-size:clamp(1.6rem,3vw,2.15rem); line-height:1;
+  letter-spacing:-.02em; font-variant-numeric:tabular-nums lining-nums; color:var(--accent);
+  margin-bottom:.45rem;
+}
+.solieu .d{display:block; font-size:1rem; line-height:1.4; margin-bottom:.35rem}
+.solieu .c{display:block; font-size:.875rem; line-height:1.45; color:var(--faint)}
+
+.annotated{display:block}
+
+.annotated > .side{
+  font-size:1.1875rem; line-height:1.6; color:var(--muted); max-width:none;
+  border-left:2px solid var(--rule); padding-left:1rem; margin:1.2rem 0 0;
+}
+.annotated > .side b{color:var(--ink); font-weight:600}
+.annotated > .side b{color:var(--muted); font-weight:500; display:block; margin-bottom:.15rem}
+
+.tw{overflow-x:auto; margin:2rem 0 0}
+table{border-collapse:collapse; width:100%; min-width:42rem; font-size:1rem}
+caption{text-align:left; font-size:.8rem; color:var(--faint); padding-bottom:.7rem}
+th{text-align:left; font-weight:600; font-size:.8rem; color:var(--faint); padding:0 1.2rem .6rem 0; border-bottom:1px solid var(--rule-strong)}
+td{padding:.9rem 1.2rem .9rem 0; border-bottom:1px solid var(--rule); vertical-align:top; line-height:1.5}
+tr:last-child td{border-bottom:none}
+td.method{color:var(--faint); font-size:.8rem; line-height:1.45}
+.num{font-variant-numeric:tabular-nums lining-nums}
+
+.phim{margin:2.4rem 0 0}
+.phim video{
+  display:block; width:100%; height:auto; border-radius:var(--r-hop);
+  background:var(--surface); border:1px solid var(--rule-strong); box-shadow:var(--shadow);
+}
+.phim figcaption{font-size:1.1875rem; color:var(--muted); margin-top:.9rem; line-height:1.5}
+
+.plates{display:grid; grid-template-columns:1fr 1fr; gap:2.4rem 2rem; margin-top:2.4rem}
+@media (max-width:60rem){.plates{grid-template-columns:1fr}}
+.plate{margin:0}
+
+.plate > a:has(img){
+  display:block; text-decoration:none; padding:10px; border-radius:var(--r-hop);
+  background:var(--surface); border:1px solid var(--rule-strong); box-shadow:var(--shadow);
+}
+.plate > a:has(img):focus-visible{outline:3px solid var(--accent); outline-offset:3px}
+.plate img{display:block; width:100%; height:auto; border:1px solid var(--rule); border-radius:6px}
+.plate > a:has(img):hover{border-color:var(--accent)}
+.goi-y{font-size:.8rem; color:var(--faint); margin:0 0 .6rem; max-width:none}
+.plate figcaption{font-size:1.1875rem; color:var(--muted); margin-top:.8rem; max-width:none; line-height:1.5}
+.plate figcaption b{color:var(--ink)}
+
+.plate-lead{grid-column:1 / -1}
+.plate-lead figcaption{max-width:none}
+
+.spec{margin-top:1.8rem}
+
+.spec:not(.card){border-top:2px solid var(--rule-strong); padding-top:1.4rem}
+.spec dl{margin:0; font-size:1.1875rem}
+
+.spec dt{
+  font-weight:700; color:var(--accent); font-size:1.0625rem; letter-spacing:0;
+  margin:1.5rem 0 .35rem;
+}
+.spec dt:first-of-type{margin-top:0}
+.spec dd{margin:0; max-width:none}
+
+.callout{border-top:1px solid var(--rule-strong); border-bottom:1px solid var(--rule-strong); padding:1.3rem 0; margin:2.2rem 0; max-width:none}
+.callout p{max-width:none}
+.callout p:last-child{margin-bottom:0}
+
+.sc .khung{overflow-x:auto; -webkit-overflow-scrolling:touch}
+.sc svg{display:block; width:100%; height:auto; min-width:700px}
+.sc .cuon{font-size:.875rem; color:var(--faint); margin:.6rem 0 0}
+@media (min-width:44rem){.sc .cuon{display:none}}
+.sc .ten{font-size:19px; font-weight:600; fill:var(--ink)}
+.sc .truc{font-size:16px; fill:var(--faint)}
+.sc .truc text{font-size:16px; fill:var(--faint)}
+.sc .luoi{stroke:var(--rule); stroke-width:1}
+.sc .moc{font-size:19px; font-weight:700; fill:var(--ink)}
+.sc .net{fill:none; stroke-width:2.5}
+.sc .a.net{stroke:var(--accent-fill)}
+.sc .b.net{stroke:var(--dot)}
+.sc .vung{stroke:none}
+.sc .a.vung{fill:var(--accent-fill); opacity:.13}
+.sc .b.vung{fill:var(--dot); opacity:.13}
+.sc .cham{stroke:var(--surface); stroke-width:2}
+.sc .a.cham{fill:var(--accent-fill)}
+.sc .b.cham{fill:var(--dot)}
+
+.chart{margin:2.4rem 0 0}
+.chart .ct{font-size:1.375rem; font-weight:600; line-height:1.4; margin:0 0 .35rem; max-width:none}
+.chart .cs{font-size:.9375rem; color:var(--faint); margin:0 0 1.4rem; max-width:none; line-height:1.5}
+.chart svg{display:block; width:100%; height:auto}
+
+.chart .legend{display:flex; flex-wrap:wrap; gap:.5rem 2rem; margin-top:1.1rem; font-size:.8rem; color:var(--muted)}
+.chart .legend span{display:inline-flex; align-items:center; gap:.55rem}
+.chart .legend i{width:.75rem; height:.75rem; border-radius:2px; display:inline-block; flex:none}
+.chart .note{font-size:1.1875rem; color:var(--muted); margin-top:1.2rem; max-width:none}
+.chart .note b{color:var(--ink)}
+.bars{display:grid; gap:1.5rem; margin:.5rem 0 0}
+.bar .lab{display:flex; justify-content:space-between; align-items:baseline; gap:1rem; margin-bottom:.45rem}
+.bar .lab .what{font-size:1.1875rem; line-height:1.35}
+.bar .lab .pct{font-weight:700; font-size:1.375rem; font-variant-numeric:tabular-nums lining-nums; white-space:nowrap}
+.bar .track{height:.6rem; background:var(--accent-soft); border-radius:3px; overflow:hidden}
+.bar .fill{height:100%; background:var(--accent-fill); border-radius:3px}
+.bar .of{font-size:.9375rem; color:var(--faint); margin:.4rem 0 0; line-height:1.5; max-width:none}
+
+.vs{display:grid; grid-template-columns:1fr 1fr; gap:0 2.5rem; margin-top:2rem}
+@media (max-width:56rem){.vs{grid-template-columns:1fr; gap:0}}
+.vs .col{padding:.2rem 0 0}
+.vs .col + .col{border-left:1px solid var(--rule); padding-left:2.5rem}
+@media (max-width:56rem){.vs .col + .col{border-left:none; padding-left:0; border-top:1px solid var(--rule); margin-top:1.4rem}}
+.vs h3{margin:0 0 1rem; font-weight:700; font-size:1.1875rem; letter-spacing:0; color:var(--accent)}
+.vs p{font-size:1.1875rem; margin:0 0 1rem; max-width:none}
+.vs p b{color:var(--ink)}
+
+footer{border-top:1px solid var(--rule-strong); padding:2.2rem 0 5rem; font-size:1.1875rem}
+footer .lines{display:flex; flex-wrap:wrap; gap:.4rem 2rem; margin-bottom:1.3rem}
+footer .fine{color:var(--faint); font-size:.9375rem; max-width:none; line-height:1.55}
+
+.thanh-dinh{
+  position:sticky; top:0; z-index:50;
+  
+  background:var(--surface);
+  border-bottom:1px solid var(--rule);
+  margin:0 0 2rem;
+}
+
+.thanh-trong{
+  position:relative;
+  max-width:min(92ch,calc(100% - 2.5rem)); margin-inline:auto;
+  display:flex; align-items:center; justify-content:center; gap:.35rem 1.1rem; flex-wrap:wrap;
+  padding:.55rem 0;
+}
+.thanh-ten{
+  font-weight:700; font-size:.95rem; letter-spacing:-.01em;
+  color:var(--ink); text-decoration:none; margin-right:.4rem; white-space:nowrap;
+}
+.thanh-ten:hover{color:var(--accent)}
+.thanh-nhan{
+  font-size:.72rem; font-weight:700; letter-spacing:.11em; text-transform:uppercase;
+  color:var(--faint); white-space:nowrap; margin-right:.15rem;
+}
+@media (max-width:46rem){ .thanh-nhan{display:none} }
+.thanh-lk{display:flex; flex-wrap:wrap; gap:.2rem .3rem; align-items:center}
+.thanh-lk a{
+  font-size:.88rem; text-decoration:none; color:var(--muted);
+  padding:.3rem .62rem; border-radius:999px; white-space:nowrap; line-height:1.35;
+}
+.thanh-lk a:hover{color:var(--accent); background:var(--accent-soft)}
+.thanh-lk a[aria-current="page"]{
+  background:var(--accent); color:var(--surface); font-weight:600;
+}
+@media (max-width:40rem){
+  .thanh-trong{padding:.45rem 0}
+  .thanh-ten{font-size:.9rem; width:100%; margin-bottom:.15rem}
+  .thanh-lk{width:100%; flex-wrap:nowrap; overflow-x:auto; scrollbar-width:none}
+  .thanh-lk::-webkit-scrollbar{display:none}
+}
+
+.thanh-len{
+  position:absolute; right:0; top:50%; transform:translateY(-50%); display:inline-flex; align-items:center; gap:.32rem;
+  font-size:.84rem; font-weight:600; color:var(--muted);
+  background:none; border:1px solid transparent; border-radius:999px;
+  padding:.28rem .6rem; cursor:pointer; white-space:nowrap;
+  opacity:0; visibility:hidden; transition:opacity .18s ease, color .18s ease, background .18s ease;
+}
+.thanh-dinh.da-cuon .thanh-len{opacity:1; visibility:visible}
+.thanh-len:hover{color:var(--accent); background:var(--accent-soft)}
+.thanh-len:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+.thanh-len svg{width:.95em; height:.95em}
+@media (max-width:40rem){
+  .thanh-len{margin-left:0; order:-1; align-self:flex-end; position:absolute; right:0; top:.4rem}
+  .thanh-trong{position:relative}
+}
+@media (prefers-reduced-motion:reduce){ .thanh-len{transition:none} }
+
+a[href^="mailto:"]{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="thanh-dinh">
+  <div class="thanh-trong">
+    <span class="thanh-nhan" aria-hidden="true">Portfolio</span>
+    <nav class="thanh-lk" aria-label="Pages of this portfolio">
+      <a href="index.html" title="You are on this page: The main argument">Main page</a>
+      <a href="chi-tiet.html" aria-current="page" title="The rest of the main argument: measurements, screens, and what was not mine">The detail</a>
+      <a href="bang-chung.html" title="Measurements and method">The evidence</a>
+      <a href="quy-tac.html" title="One business rule, specified">A rule</a>
+      <a href="uat.html" title="User acceptance test">The test script</a>
+      <a href="so-lieu.html" title="Every figure with its SQL">Six numbers</a>
+      <a href="doi-chieu.html" title="Source to target mapping">The VAT return</a>
+    </nav>
+    <button type="button" class="thanh-len" data-len-dau>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 19V5M5 12l7-7 7 7"/>
+      </svg>Top
+    </button>
+  </div>
+</div>
+
+<div class="page">
+
+<header class="masthead">
+  <div class="danh">
+    <p class="ten">Dinh Duc Le</p>
+    <p class="nghe">Business Analyst · Data Analyst</p>
+  </div>
+  <div class="lienhe">
+    <span>Auckland, New Zealand</span>
+    <span><a href="mailto:ledinhduc1612@gmail.com">ledinhduc1612@gmail.com</a></span>
+    <span class="dumuc">Ducky Books, an accounting system in daily use</span>
+  </div>
+</header>
+
+<div class="blk-lead">
+  <p class="kicker">The detail</p>
+  <h1>The measurements, the screens, and what was not mine</h1>
+  <p class="standfirst">This is the rest of the main page. Nothing here is new: it is the working that sits behind the three figures on the front. Read it if you want to check something, not from beginning to end.</p>
+</div>
+
+  
+
+  
+
+<div class="blk-turn" id="khach">
+  <p><b>Three other companies have bought this software under signed contracts, with me named as the supplier.</b> They came to it through my mother. She introduced them, showed them what it does, and set each of their companies up on it so they could look at their own books running in it before deciding. So they are not strangers who found me, and I am not going to describe them that way.</p>
+  <p>What it is evidence of is narrower, and I think still worth something: a working chief accountant put her professional name behind this software with her own contacts, and three businesses signed and paid after seeing it run on their own data. It is not evidence of an arm’s-length decision by people with no connection to me. I do not have that yet, and I would rather say so than let the word <i>customer</i> do work it has not earned.</p>
+  <p>If you are wondering whether this is a side business that would compete with a job: it is not. I do not sell it, I am not looking for more customers, and I have turned down the work that would come with them. I would tell you on day one.</p>
+
+  <h2>My mother is a chief accountant.</h2>
+  <p class="big">Her accounting practice in Vietnam keeps the books for 43 client businesses. Every sale, every purchase and every line on a bank statement has to be recorded and checked. The totals then go to the tax office on a return.</p>
+  <p>For years the process meant opening invoices and typing what was on them. Type one number wrong and a real business gets the wrong tax bill. In Vietnam the chief accountant signs the accounts by name and answers for what is in them.</p>
+  <p>So I built software that does the reading instead. It went into real use on 29 May 2026, the day after I started, and everything since was written while the practice already relied on it. There was never a safe empty version to get wrong. She corrected me the whole way. She is the qualified accountant here. I am not.</p>
+</div>
+
+<div class="blk full">
+ <div class="page" style="display:grid">
+  <p class="kicker" id="typing">The typing</p>
+  <h2>Somebody used to type all of this by hand.</h2>
+  <p>Every invoice a business receives has to end up in the books: who it was from, what it was for, how much, how much of that was tax. Of the 42,655 invoices now in these books, <b>93</b> were typed by hand.</p>
+
+  <p>The other 42,562 arrived as files. <b>32,158</b> came as electronic invoice files from the supplier. <b>10,404</b> were pulled from its online list. Two routes, neither one typed.</p>
+
+  
+ </div>
+</div>
+
+<div class="blk-wide">
+  <p class="kicker" id="measurements">The measurements</p>
+  <h2>The software does almost all of the typing. It does very little of the deciding.</h2>
+  <p>Three different jobs, three different totals, not meant to add up: 70,320 journal entries came from 42,655 invoices, 1.65 each, and a bank statement line is a third thing again. Each row says what it is a share of, including the weak one.</p>
+
+  <div class="chart card card-chart" style="margin:2rem 0 0">
+        
+    <div class="bars">
+      <div class="bar">
+        <div class="lab"><span class="what">Invoices that arrived as a file, so nobody typed them</span><span class="pct">99.8%</span></div>
+        <div class="track"><div class="fill" style="width:99.8%"></div></div>
+        <p class="of"><b>42,562 of 42,655 invoices.</b> About 1 in 459 was typed by hand, meaning marked manual with no import record attached. Counted on every invoice row.</p>
+      </div>
+      <div class="bar">
+        <div class="lab"><span class="what">Entries where the software worked out which account to use</span><span class="pct">32.3%</span></div>
+        <div class="track"><div class="fill" style="width:32.3%"></div></div>
+        <p class="of"><b>22,680 of 70,320 journal entries.</b> About 1 in 3. A <i>journal entry</i> is one transaction in the books, made of two or more lines: a date, an amount, and which account each side belongs to. Deciding <i>which account</i> is the judgement, and where the accountant still spends most of her time. A person approves every one before it counts: the log names that person on every row and credits the system with the writing. One press, thirty rows.</p>
+      </div>
+      <div class="bar">
+        <div class="lab"><span class="what">Bank lines matched to one particular invoice</span><span class="pct">5.2%</span></div>
+        <div class="track"><div class="fill" style="width:5.2%"></div></div>
+        <p class="of"><b>1,239 of 23,671 statement lines.</b> A <i>statement line</i> is one row on a bank statement: money in or out, with whatever text the bank printed. Matching one to the invoice it paid is the job, and only about 1 in 19 can be. That is expected: the other 22,432 are wages, tax, transfers and fees, with no invoice to match.</p>
+      </div>
+    </div>
+    <p class="note">Counted on the working system on 5 September 2026. Higher means less typing for a person.</p>
+  </div>
+
+  <h3>What one press of a button does</h3>
+  <p>The log records which action came from which press. Two buttons are involved and they count different things. Saving invoices: <b>251 presses took in 4,413 invoices</b>, 17.6 each, and the biggest single press took <b>104 invoices and finished inside the same second</b>. That 251 is not every press ever made: it counts only the period since the log started recording which rows came from which press, which is 4,484 of the 32,356 saving actions. Posting them into the books is a separate button, counted further down.</p>
+
+  <h3>What the person using it says</h3>
+  <p>I asked her four questions in writing on 4 September 2026 and left the answers as they came back. Translated from Vietnamese, cut only for length.</p>
+  <p><b>She is my mother, so take this as an expert user talking, not as a reference.</b> A reference has to be someone with no reason to be kind to me. Seven other people at the firm use it; ask and I will arrange one of them instead.</p>
+
+  <blockquote class="loi">
+    <span class="ai">My mother, the chief accountant, on what the software gives her</span>
+    <p>When it reads the invoices correctly I stop worrying about the company name, the tax number, the goods amount, the tax amount. Receivables and payables come out right and are easy to reconcile. The time saved on typing means I can take on more companies, and get to the other work.</p>
+  </blockquote>
+
+  <blockquote class="loi">
+    <span class="ai">The chief accountant, asked which job still takes the most time</span>
+    <p>Choosing the account for each entry.</p>
+    <span class="them">That is the 32.3% figure above, named by the person it costs.</span>
+  </blockquote>
+
+  <blockquote class="loi">
+    <span class="ai">The chief accountant, on what she still checks by hand</span>
+    <p>Every company posts things differently, so I still open each invoice and read through them once. If they are right, posting the batch is very quick. The bank statement is the same. I read the payment description to see whether the software picked the right party. Then I am at ease, and I only do it once. If I posted the whole batch on its suggestion and one was wrong, redoing it would cost a lot of time.</p>
+  </blockquote>
+
+  <div class="chart card card-chart sc" style="margin-top:2rem">
+    <p class="ct">Ten times the companies. More hours in total.</p>
+    <p class="cs">Both charts share the same weeks. The top line is how many companies had books on the system, counted from the start: 4 in the first full week, 13 by the end of June, 42 by the end of August. The bottom is the hours the three regular users spent on each company that week. Counted on the working system on 5 September 2026.</p>
+<div class="khung"><svg viewBox="0 0 1000 450" role="img" aria-labelledby="sc-t sc-d" preserveAspectRatio="xMidYMid meet">
+  <title id="sc-t">Companies on the system against hours spent on each one</title>
+  <desc id="sc-d">Two small charts sharing one week axis. The top one shows companies with posted books rising from 4 to 42 between June and the end of August 2026. The bottom one shows hours the core team spent per company each week falling from about 4.5 to 0.7 over the same period.</desc>
+  
+  <g class="kh">
+    <text class="ten" x="62" y="14">Companies with books on the system</text>
+    <line class="luoi" x1="62" x2="984" y1="180.0" y2="180.0"/>
+    <text class="truc" x="54" y="184.0">0</text><line class="luoi" x1="62" x2="984" y1="107.0" y2="107.0"/>
+    <text class="truc" x="54" y="111.0">23</text><line class="luoi" x1="62" x2="984" y1="34.0" y2="34.0"/>
+    <text class="truc" x="54" y="38.0">45</text>
+    <path class="a vung" d="M62.0 167.0 L138.8 157.3 L215.7 141.1 L292.5 134.6 L369.3 134.6 L446.2 131.3 L523.0 121.6 L599.8 98.9 L676.7 92.4 L753.5 63.2 L830.3 47.0 L907.2 43.7 L984.0 43.7 L984.0 180.0 L62.0 180.0 Z"/>
+    <path class="a net" d="M62.0 167.0 L138.8 157.3 L215.7 141.1 L292.5 134.6 L369.3 134.6 L446.2 131.3 L523.0 121.6 L599.8 98.9 L676.7 92.4 L753.5 63.2 L830.3 47.0 L907.2 43.7 L984.0 43.7"/>
+    <circle class="a cham" cx="62.0" cy="167.0" r="4.5"/><circle class="a cham" cx="292.5" cy="134.6" r="4.5"/><circle class="a cham" cx="599.8" cy="98.9" r="4.5"/><circle class="a cham" cx="830.3" cy="47.0" r="4.5"/><circle class="a cham" cx="984.0" cy="43.7" r="4.5"/>
+    <text class="moc" x="62.0" y="155.0" text-anchor="start">4</text><text class="moc" x="984.0" y="31.7" text-anchor="end">42</text>
+  </g>
+  <g transform="translate(0,240)">
+    
+  <g class="kh">
+    <text class="ten" x="62" y="14">Hours the core team spent on each company, per week</text>
+    <line class="luoi" x1="62" x2="984" y1="180.0" y2="180.0"/>
+    <text class="truc" x="54" y="184.0">0.0</text><line class="luoi" x1="62" x2="984" y1="107.0" y2="107.0"/>
+    <text class="truc" x="54" y="111.0">2.5</text><line class="luoi" x1="62" x2="984" y1="34.0" y2="34.0"/>
+    <text class="truc" x="54" y="38.0">5.0</text>
+    <path class="b vung" d="M62.0 122.5 L138.8 48.6 L215.7 66.4 L292.5 92.7 L369.3 118.7 L446.2 109.6 L523.0 105.0 L599.8 136.5 L676.7 148.2 L753.5 155.5 L830.3 149.9 L907.2 141.7 L984.0 159.6 L984.0 180.0 L62.0 180.0 Z"/>
+    <path class="b net" d="M62.0 122.5 L138.8 48.6 L215.7 66.4 L292.5 92.7 L369.3 118.7 L446.2 109.6 L523.0 105.0 L599.8 136.5 L676.7 148.2 L753.5 155.5 L830.3 149.9 L907.2 141.7 L984.0 159.6"/>
+    <circle class="b cham" cx="62.0" cy="122.5" r="4.5"/><circle class="b cham" cx="292.5" cy="92.7" r="4.5"/><circle class="b cham" cx="599.8" cy="136.5" r="4.5"/><circle class="b cham" cx="830.3" cy="149.9" r="4.5"/><circle class="b cham" cx="984.0" cy="159.6" r="4.5"/>
+    <text class="moc" x="138.8" y="36.6" text-anchor="middle">4.5 h</text><text class="moc" x="984.0" y="147.6" text-anchor="end">0.7 h</text>
+  </g>
+  </g>
+  <g class="truc">
+    <text x="62.0" y="444.0" text-anchor="start">8 Jun</text><text x="292.5" y="444.0" text-anchor="middle">29 Jun</text><text x="599.8" y="444.0" text-anchor="middle">27 Jul</text><text x="830.3" y="444.0" text-anchor="middle">17 Aug</text><text x="984.0" y="444.0" text-anchor="end">31 Aug</text>
+  </g>
+</svg></div>
+    <p class="cuon">Swipe the chart sideways to see all of it.</p>
+    <p class="note">In mid June the team was putting about <b>4.5 hours a week</b> into each company. By the end of August there were <b>42 companies</b> on the system and it was <b>under an hour a week</b> each. (The 43 quoted elsewhere is today’s count, four days later.) Weekly hours across everyone using it went from 8 in the first week of June to 71 in the busiest week of August. <b>These two lines count different people and do not add up:</b> the per-company figure is the three regular users only, the 8-to-71 is all nine. 42 companies at under an hour each is about 29 hours, not 71. Read them as two separate measurements, not two views of one number.</p>
+    <p class="of" style="margin-top:1rem">Two things this does not say. The same three people did the regular work throughout, so the extra companies were taken on by the same team, not by hiring. And a company takes most of its hours in its first weeks, when its old books are loaded in, so a settled company is always cheaper than a new one.</p>
+  </div>
+
+  <h3>One gap I found that I would fix next</h3>
+  <p>Invoices can be saved one at a time, or a whole batch at once. Both work. On that posting button the log shows the batch way used on <b>22 presses out of 7,967</b>. Everything else went one at a time, even though one batch press once wrote 101 journal entries. The 101 counts entries and the 104 above counts invoices, which is why the two do not match.</p>
+  <p>Nobody was doing anything wrong. The faster way simply was not the habit. I only know because the log records which entry came from which press. That is the kind of work I want my next job to be about.</p>
+
+  <div class="callout">
+    <p><b>What these numbers do not show.</b></p>
+    <p><b>There is nothing to compare against.</b> Nobody measured the years before the software. That work was done in spreadsheets, and no spreadsheet records how long it took. So there is no hours saved figure on this page; any figure I gave you would be invented.</p>
+    <p><b>The work got slower on paper, not faster.</b> Seconds of recorded activity per journal entry ran 26.5 in June, 23.9 in July, 33.0 in August and 37.4 in September. Recorded hours at the keyboard ran 105, 181 and 236 across those first three full months. The days someone actually worked were 23, 31 and 31, giving 4.6 hours a day rising to 7.6. By week it ran from 8 hours in the first week of June to 71 in the busiest week of August. One measurement, three units, and the division is there so you can do it yourself.</p>
+    <p><b>The root cause, as far as I can tell.</b> The books got bigger, not easier. More companies keep being taken on, and 70% of the entries belong to periods that closed before the software went live. Most of that volume is old books being loaded in. I can measure that the work grew. I cannot prove from this data that each task got quicker, so I do not say it.</p>
+    <p><b>One of these is a rule, not a measurement.</b> Entries whose two sides disagree are refused at the point of saving, enforced in the code and covered by tests. It is not a percentage of anything.</p>
+  </div>
+</div>
+
+<div class="blk-wide full">
+  <div class="page" style="display:grid">
+  <div style="grid-column:content">
+    <p class="kicker" id="screens">What it does</p>
+    <h2>The screens, in the order the work happens.</h2>
+  <div class="callout">
+    <p><b>What these screens leave out.</b> They follow one path: an invoice arrives, it gets an account, it lands in the books, the books balance. That is the path worth showing, but not the whole system: <b>51 screens</b>, behind <b>255 routes</b> and <b>70 tables</b>.</p>
+    <p>The rest covers bank reconciliation, receivables and payables and their
+    ageing, stock with weighted average cost, fixed assets and small tools, cost by project, the
+    VAT and company tax returns with their listings, month-end and year-end close, opening
+    balances when a new company is brought across, backups with a restore rehearsal, and several
+    people working at once with different permissions.</p>
+    <p>I will not walk you through fifty one screens. The point of the number is scale: this is a practice’s whole ledger, not a demo of one feature. Ask me about any of them and I will open it.</p>
+  </div>
+
+    <p>Every screen here is the real product, captured from an isolated copy loaded with made up data. No real client name, tax number or figure appears anywhere. Click any screen to open it at full size.</p>
+    <p>The account names are in Vietnamese. They are not labels I chose: they come from the list the Vietnamese government issues, which nearly every company there uses as issued.</p>
+  </div>
+  <div style="grid-column:feature">
+  <div class="plates">
+    <figure class="plate plate-lead">
+      <a href="images/01-import.webp"><img src="images/01-import.webp" width="2200" height="1375" loading="lazy" alt="Import screen after reading a folder of thirty invoice files" /></a>
+      <figcaption><b>Drop a folder in.</b> The invoices arrive as electronic files from the tax office. The software opens them, works out the file type, checks each one, and says what it found: thirty files, thirty readable. Nothing is saved until the button is pressed. This screen replaced the typing.</figcaption>
+    </figure>
+    <figure class="plate plate-lead">
+      <a href="images/02-review.webp"><img src="images/02-review.webp" width="2200" height="1375" loading="lazy" alt="Review screen showing a suggested account, the reason for it, and both sides of the entry" /></a>
+      <figcaption><b>It suggests, it says why, and it holds back what it is unsure of.</b> In that government list, number 156 means goods held for sale. The software proposes 156 and prints its reason: the standard rule, with the other accounts it could have been. That reason is honest but not plain English yet, and making it plain is on my list. Under it is the entry it would write: three lines, because the tax is split out, two on one side and one on the other, and the two sides must add to the same total. Look at the buttons. Twenty eight invoices are waiting and the software offers to post <i>none</i> of them: twelve are held for the five million rule, <a href="quy-tac.html">specified in full here</a>, and the rest carry warnings of their own. It will not clear its own warnings to look efficient. Then a person presses Post, which is the word for filing it into the books.</figcaption>
+    </figure>
+    <figure class="plate">
+      <a href="images/03-journal.webp"><img src="images/03-journal.webp" width="2200" height="1375" loading="lazy" alt="General journal listing entries with debit and credit columns" /></a>
+      <figcaption><b>The journal.</b> Every transaction, both sides, and the two totals at the foot are equal to the dong. This is the record a tax inspector asks to see. The descriptions stay in Vietnamese because that is the language they will be read in.</figcaption>
+    </figure>
+    <figure class="plate">
+      <a href="images/04-trial-balance.webp"><img src="images/04-trial-balance.webp" width="2200" height="1375" loading="lazy" alt="Trial balance with a badge reading balanced, total debit equals total credit" /></a>
+      <figcaption><b>Proof that it adds up.</b> One column names the account, then three pairs: what it held at the start, what moved through it, and what it holds at the end. The badge only turns green when total debit equals total credit, and here all four totals are the same number. An entry whose two sides disagree cannot be saved at all, so this can only come out green. The account names are in Vietnamese because the Ministry of Finance writes them, number and name together.</figcaption>
+    </figure>
+  </div>
+</div>
+</div>
+</div>
+
+<div class="blk">
+  <p class="kicker">The other half of the job</p>
+  <h2>Everything above is software. Here are the two documents behind it.</h2>
+  <p>Software is what came out. These went in, and they are the part of the work I am applying to do. Both were written before anyone built anything, and the accountant ran the second one herself. I did not run it, and the document says so.</p>
+  <p><a href="quy-tac.html"><b>A business rule, specified</b></a> is the input: legal basis, trigger, the
+  decision table, the edge cases, and the version of it I got wrong.
+  <a href="uat.html"><b>The user acceptance test (UAT) script</b></a> is the output: 32 steps with measurable
+  criteria, and the rule that a failure in the first two groups stops the release.</p>
+  <p><a href="so-lieu.html"><b>Every number, with its query</b></a> is the third: the SQL behind
+  each figure on this page, so you can check the working instead of trusting the number.</p>
+  <p><a href="doi-chieu.html"><b>Where the VAT return comes from</b></a> is the fourth, and the one
+  closest to the job: one statutory return mapped end to end: the ledger source of every box,
+  the rule applied on the way, the control that proves the two agree, and the four places where the
+  software deliberately refuses to fill a box.</p>
+  <p class="dan">The first two are translated from the Vietnamese working documents, and nothing in them was tidied for
+  this page.</p>
+</div>
+
+<div class="blk">
+  <p class="kicker" id="mine">My part</p>
+  <h2>What I did, and what I did not.</h2>
+
+  <p class="big">Mine, end to end: the requirements. The accounting and tax rules, kept current as the law changes. What the software may decide alone, and what a person must confirm. The test strategy. Releases, backups and rollback.</p>
+  <p><b>The decision I am most sure was right is one where I shipped nothing.</b> The bank statement automation on the main page, wrong in 18 of its 2,466 suggestions, is recorded in the project as rejected for now, not as a failure. The measurement is the useful part.</p>
+
+  <p>The subject expert was a qualified chief accountant at the next desk. I turned what she knew into rules a system could follow, then checked every answer back with her. Some decisions the software makes; some a person confirms. Knowing which is which is the whole job.</p>
+
+  <p>Graduate Business Analyst adverts in Auckland usually ask for the same things: gathering requirements, running workshops with the people affected, mapping how work flows, writing it down, and helping test it before go live. That is the list this project ran on.</p>
+
+  <h3>An AI wrote most of the code</h3>
+  <p>I would rather say that plainly than let you find it out. AI coding tools wrote most of the implementation, under my direction.</p>
+  <p>What an AI cannot do is decide which tax rule applies this month, or carry the responsibility when a number is wrong. That part was mine.</p>
+  <p>The finished software calls no AI model to do arithmetic or choose an account. Written rules make those choices, and a test fails the build if anyone adds such a call. The books work whether or not any AI is involved.</p>
+  <p>I am not claiming AI made me faster: I never measured my own speed. The best known trial, run by the research group METR in 2025, has been marked out of date by its own authors, whose 2026 follow up calls the evidence weak. There is no honest number to give, so I will not invent one.</p>
+
+  <h3>What the use of it shows</h3>
+  <p>The firm has used it on 94 of the 100 days since it went live. Of thirteen logins, one is the system’s own machine account. Nine people have actually worked in it: eight at the firm, and me. The chief accountant alone accounts for 55.9% of recorded actions. It holds 70,320 accounting entries and 409,668 recorded actions.</p>
+
+  <p>That shows the practice depends on it. It does not prove every number is right: the <a href="bang-chung.html#loi-cua-toi">rule I got wrong</a> is proof of that.</p>
+</div>
+
+<footer>
+  <div class="lines">
+    <span><a href="mailto:ledinhduc1612@gmail.com">ledinhduc1612@gmail.com</a></span>
+    <span>Auckland, New Zealand</span>
+  </div>
+  <p class="fine">Every screen on this page uses made up data on an isolated copy. No client name, tax number or figure appears anywhere. Written and measured by me, September 2026.</p>
+</footer>
+</div>
+
+<script>
+
+(function () {
+  var thanh = document.querySelector('.mucluc');
+  if (!thanh) return;
+  var lien = Array.prototype.slice.call(thanh.querySelectorAll('a[href^="#"]'));
+  var moc = lien.map(function (a) { return document.getElementById(a.getAttribute('href').slice(1)); });
+
+  lien.forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      var dich = document.getElementById(a.getAttribute('href').slice(1));
+      if (!dich) return;
+      e.preventDefault();
+      dich.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      danhDau(dich.id);
+      history.replaceState(null, '', location.pathname + location.search);
+    });
+  });
+
+  var trongDay = thanh.querySelector('.mucluc-trong');
+  var vet = thanh.querySelector('.vet');
+  function danhDau(id) {
+    var dang = null;
+    lien.forEach(function (a) {
+      if (a.getAttribute('href') === '#' + id) { a.setAttribute('aria-current', 'true'); dang = a; }
+      else a.removeAttribute('aria-current');
+    });
+    
+    if (vet) {
+      if (dang) { vet.style.width = dang.offsetWidth + 'px'; vet.style.transform = 'translateX(' + dang.offsetLeft + 'px)'; vet.style.opacity = '1'; }
+      else { vet.style.opacity = '0'; }
+    }
+    
+    if (dang && trongDay && trongDay.scrollWidth > trongDay.clientWidth) {
+      var t = dang.offsetLeft - (trongDay.clientWidth - dang.offsetWidth) / 2;
+      trongDay.scrollTo({ left: Math.max(0, t), behavior: 'smooth' });
+    }
+  }
+
+  if (!('IntersectionObserver' in window)) return;
+
+  new IntersectionObserver(function (ds) {
+    thanh.classList.toggle('roi-dinh', ds[0].intersectionRatio < 1);
+  }, { threshold: [1], rootMargin: '-1px 0px 0px 0px' }).observe(thanh);
+
+  var dangCho = false;
+  function xetMucDangDoc() {
+    dangCho = false;
+    var chon = null;
+    for (var k = 0; k < moc.length; k++) {
+      if (moc[k] && moc[k].getBoundingClientRect().top <= 80) chon = moc[k];
+    }
+    
+    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) {
+      for (var m = moc.length - 1; m >= 0; m--) { if (moc[m]) { chon = moc[m]; break; } }
+    }
+    danhDau(chon ? chon.id : null);
+  }
+  addEventListener('scroll', function () {
+    if (!dangCho) { dangCho = true; requestAnimationFrame(xetMucDangDoc); }
+  }, { passive: true });
+  addEventListener('resize', xetMucDangDoc, { passive: true });
+  xetMucDangDoc();
+})();
+</script>
+
+<script>
+
+(function () {
+  var thanh = document.querySelector('.thanh-dinh')
+  var nut = document.querySelector('[data-len-dau]')
+  if (!thanh || !nut) return
+  var itChuyenDong = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  var cho = false
+  function xet() {
+    cho = false
+    thanh.classList.toggle('da-cuon', window.scrollY > window.innerHeight * 0.6)
+  }
+  window.addEventListener('scroll', function () {
+    if (!cho) { cho = true; window.requestAnimationFrame(xet) }
+  }, { passive: true })
+  xet()
+  nut.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: itChuyenDong ? 'auto' : 'smooth' })
+    var dau = document.querySelector('h1')
+    if (dau) { dau.setAttribute('tabindex', '-1'); dau.focus({ preventScroll: true }) }
+  })
+})()
+</script>
+</body>
+</html>

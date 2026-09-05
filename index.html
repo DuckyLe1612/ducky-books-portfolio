@@ -1,0 +1,669 @@
+<!doctype html>
+<html lang="en-NZ" data-theme="light">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="color-scheme" content="light" />
+<title>Dinh Duc Le · Ducky Books</title>
+<meta name="description" content="Accounting software a small practice uses to keep the books for 43 client businesses. Specified, directed and checked by Dinh Duc Le. Screens show generated demo data only." />
+<meta property="og:title" content="Dinh Duc Le · Ducky Books" />
+<meta property="og:description" content="42,655 invoices went into these books. A person typed 93 of them. What was measured, and what was not." />
+<meta property="og:type" content="website" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  
+  --r-hop:14px;
+  --paper:#f1e7d3;        
+  --surface:#fffdf6;      
+  --ink:#1b140a;          
+  --muted:#4a4030;        
+  --faint:#6b5c44;
+  --rule:rgba(110,82,25,.30);   
+  --rule-strong:#978150;        
+  --accent:#965509;             
+  --accent-fill:#965509;        
+  --accent-soft:#f7e8c8;        
+  --dot:#948a78;                
+  --shadow:0 4px 14px rgba(120,90,30,.10);  
+  --kinh-vien:rgba(255,255,255,.7);
+  --kinh-sang:rgba(255,255,255,.85);
+  --sans:"Noto Sans",ui-sans-serif,system-ui,sans-serif;   
+  --bong-logo:0 4px 12px rgba(150,85,9,.32);   
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#1c1710; --surface:#241f16; --ink:#f4ecdb; --muted:#c7bb9f; --faint:#a2937a;
+    --rule:rgba(200,170,110,.26); --rule-strong:#847651;
+    --accent:#ffce5a; --accent-fill:#e0a552; --accent-soft:#352b18;
+    --dot:#7a7361; --shadow:0 8px 22px rgba(0,0,0,.34); --bong-logo:0 4px 12px rgba(0,0,0,.45);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#1c1710; --surface:#241f16; --ink:#f4ecdb; --muted:#c7bb9f; --faint:#a2937a;
+  --rule:rgba(200,170,110,.26); --rule-strong:#847651;
+  --accent:#ffce5a; --accent-fill:#e0a552; --accent-soft:#352b18;
+  --dot:#7a7361; --shadow:0 8px 22px rgba(0,0,0,.34); --bong-logo:0 4px 12px rgba(0,0,0,.45);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; color:var(--ink);
+  
+  background:
+    radial-gradient(1200px 720px at 12% 4%, var(--surface) 0%, transparent 60%),
+    radial-gradient(900px 620px at 92% 42%, var(--accent-soft) 0%, transparent 55%),
+    var(--paper);
+  background-attachment:fixed;
+  font-family:var(--sans); font-size:1.1875rem; line-height:1.62;
+  font-feature-settings:"kern" 1;
+  -webkit-font-smoothing:antialiased;
+}
+
+.page{
+  --gap:clamp(1rem,3.4vw,2.5rem);
+  --content:min(88ch,100% - var(--gap) * 2);
+  --popout:minmax(0,5rem);
+  --feature:minmax(0,10rem);
+  --full:minmax(var(--gap),1fr);
+  display:grid;
+  grid-template-columns:
+    [full-start] var(--full)
+    [feature-start] var(--feature)
+    [popout-start] var(--popout)
+    [content-start] var(--content) [content-end]
+    var(--popout) [popout-end]
+    var(--feature) [feature-end]
+    var(--full) [full-end];
+}
+.page > *{grid-column:content}
+.popout{grid-column:popout}
+.feature{grid-column:feature}
+.full{grid-column:full}
+
+a{color:inherit; text-decoration:underline; text-decoration-thickness:1px; text-underline-offset:.18em; text-decoration-color:var(--accent)}
+a:hover{text-decoration-thickness:2px}
+a:focus-visible{outline:2px solid var(--accent); outline-offset:3px}
+b,strong{font-weight:600}
+p{margin:0 0 1.2rem; max-width:none}
+
+.card p, .card li{max-width:none}
+li{max-width:none}
+
+html{scroll-behavior:smooth}
+.kicker{scroll-margin-top:4.75rem}   
+
+.mucluc{
+  position:static;
+  grid-column:content;
+  margin:-1.4rem 0 2.4rem;
+  padding:.55rem 0;
+  background:none; border:0;
+  
+  pointer-events:none;
+}
+
+.mucluc-trong{
+  pointer-events:auto; position:relative;
+  width:max-content; max-width:100%; margin-inline:0;
+  display:flex; flex-wrap:nowrap;
+  padding:.35rem .5rem;
+  background:var(--surface);
+  border:1px solid var(--rule);
+  border-radius:999px;
+  
+  box-shadow:0 1px 2px rgba(120,90,30,.06), 0 4px 12px rgba(120,90,30,.05);
+  transition:box-shadow .3s ease;
+  line-height:1.45;
+}
+.mucluc.roi-dinh .mucluc-trong{box-shadow:0 1px 2px rgba(120,90,30,.08), 0 10px 28px rgba(120,90,30,.13)}
+
+.mucluc .vet{
+  position:absolute; top:50%; left:0; height:1.85em; margin-top:-0.925em;
+  border-radius:999px; background:var(--accent-soft);
+  opacity:0; transform:translateX(0); width:0;
+  transition:transform .34s cubic-bezier(.22,1,.36,1), width .34s cubic-bezier(.22,1,.36,1), opacity .2s ease;
+  pointer-events:none;
+}
+.mucluc-nhan{
+  align-self:center; padding:0 .55rem 0 .45rem; font-size:.78rem; font-weight:600;
+  letter-spacing:.05em; text-transform:uppercase; color:var(--faint); white-space:nowrap;
+}
+@media (max-width:52rem){ .mucluc-nhan{display:none} }
+.mucluc a{position:relative}
+.mucluc a{
+  color:var(--muted); text-decoration:none;
+  font-size:.875rem; white-space:nowrap;
+  padding:.34rem .7rem; border-radius:999px;
+  transition:color .15s ease, background-color .15s ease;
+}
+
+.mucluc a:hover{color:var(--accent); background:color-mix(in srgb, var(--accent-soft) 45%, transparent)}
+.mucluc a:active{background:var(--accent-soft)}
+.mucluc a:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+
+.mucluc a[aria-current="true"]{color:var(--accent); font-weight:600}
+
+@media (max-width:1100px){
+  .mucluc{padding:.5rem 0}
+  .mucluc-trong{
+    width:auto; max-width:none; margin-inline:.75rem;
+    overflow-x:auto; scrollbar-width:none;
+    -webkit-mask-image:linear-gradient(to right, #000 calc(100% - 1.6rem), transparent);
+    mask-image:linear-gradient(to right, #000 calc(100% - 1.6rem), transparent);
+  }
+  .mucluc-trong::-webkit-scrollbar{display:none}
+}
+@media (prefers-reduced-motion:reduce){.mucluc-trong,.mucluc a,.mucluc .vet{transition:none}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+.masthead{
+  border-bottom:1px solid var(--rule-strong);
+  padding:.4rem 0 1.1rem; margin-bottom:3.4rem;
+  display:flex; justify-content:space-between; align-items:flex-end; gap:1.5rem 2rem;
+  flex-wrap:wrap;
+}
+.masthead .ten{
+  font-size:clamp(1.75rem,3.2vw,2.4rem); font-weight:700; letter-spacing:-.02em;
+  line-height:1.1; margin:0;
+}
+.masthead .nghe{font-size:1.1875rem; color:var(--muted); margin:.3rem 0 0; max-width:none}
+.masthead .lienhe{display:flex; flex-direction:column; align-items:flex-end; gap:.15rem; text-align:right; font-size:.9375rem; color:var(--faint); line-height:1.5}
+.masthead .lienhe .dumuc{color:var(--accent); font-weight:600}
+@media (max-width:44rem){
+  .masthead{align-items:flex-start}
+  .masthead .lienhe{align-items:flex-start; text-align:left; margin-top:.4rem}
+}
+
+.card{
+  background:color-mix(in srgb, var(--surface) 78%, transparent);
+  -webkit-backdrop-filter:blur(22px) saturate(1.35);
+  backdrop-filter:blur(22px) saturate(1.35);
+  border:1px solid var(--kinh-vien);
+  border-radius:var(--r-hop);
+  box-shadow:
+    inset 0 1px 0 var(--kinh-sang),
+    inset 0 -1px 0 rgba(150,85,9,.06),
+    var(--shadow);
+}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .card{background:var(--surface)}
+}
+
+.plate > a:has(img){
+  background:color-mix(in srgb, var(--surface) 78%, transparent);
+  -webkit-backdrop-filter:blur(22px) saturate(1.35);
+  backdrop-filter:blur(22px) saturate(1.35);
+}
+.card-chart{padding:1.6rem 1.8rem 1.8rem}
+.card-rule{padding:1.4rem 1.6rem}
+.card-table{padding:.4rem 1.4rem 1rem}
+.card-vs{padding:1.8rem 2rem 1.2rem}
+.masthead .who{font-weight:500}
+.masthead .where{color:var(--faint)}
+
+.brand{display:flex; align-items:center; gap:.7rem}
+.brand .mark{
+  width:38px; height:38px; border-radius:8px; flex:none;
+  display:flex; align-items:center; justify-content:center;
+  background:linear-gradient(135deg,#C68A33 0%,#965509 100%); color:#FFFAF0;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.4), var(--bong-logo);
+}
+.brand .nm{font-weight:700; font-size:1.0625rem; letter-spacing:-.01em; white-space:nowrap}
+.brand .sub{display:block; font-weight:400; font-size:.8rem; color:var(--faint); letter-spacing:0}
+
+h1{
+  font-weight:700; font-size:clamp(2rem,4.4vw,3rem); line-height:1.12;
+  letter-spacing:-.022em; margin:0 0 1.5rem; max-width:none; text-wrap:balance;
+}
+h1 em{font-style:normal; color:var(--accent)}
+.standfirst{font-size:clamp(1.125rem,1.9vw,1.375rem); line-height:1.5; color:var(--muted); max-width:none; margin:0 0 1.75rem}
+.credential{font-size:.9375rem; color:var(--faint); max-width:none; margin:0; line-height:1.6}
+
+h2{
+  font-weight:700; font-size:clamp(1.5rem,2.8vw,2.05rem); line-height:1.2;
+  letter-spacing:-.015em; margin:0 0 1.3rem; max-width:none;
+}
+h3{font-weight:700; font-size:1.375rem; margin:2.1rem 0 .4rem; letter-spacing:-.005em}
+.kicker{
+  font-size:1.0625rem; font-weight:600; letter-spacing:0; color:var(--accent);
+  margin:0 0 .7rem; display:flex; align-items:center; gap:.6rem;
+}
+.kicker::before{content:""; width:1.7rem; height:2px; background:var(--accent); border-radius:1px; flex:none}
+.big{font-size:1.375rem; line-height:1.55; max-width:none}
+
+.blk{padding:3.2rem 0}
+
+.blk-lead{padding:.6rem 0 3.6rem}
+
+.blk-lead > h1{text-align:center}
+
+.blk-lead h1{margin-inline:auto; max-width:34ch}
+@media (max-width:34rem){ .blk-lead h1 br{display:none} }
+
+@media (max-width:40rem){ .blk-lead{text-align:left} .blk-lead h1,.blk-lead > p{max-width:none} }
+.blk-turn{padding:3.6rem 0 3.2rem; border-top:1px solid var(--rule-strong)}
+.blk-quiet{padding:2.4rem 0}
+.blk-wide{padding:3.6rem 0; border-top:1px solid var(--rule)}
+.blk-close{padding:3.6rem 0 1rem; border-top:1px solid var(--rule-strong)}
+
+.two{display:grid; grid-template-columns:repeat(auto-fit,minmax(15rem,1fr)); gap:1.5rem 3rem; margin:2.6rem 0 1rem; align-items:start}
+.two .n{font-weight:700; font-size:clamp(1.9rem,3.8vw,2.8rem); line-height:1; letter-spacing:-.02em; font-variant-numeric:tabular-nums lining-nums; display:block; margin-bottom:.5rem}
+.two .d{font-size:.9375rem; line-height:1.45; color:var(--muted); max-width:32ch; display:block}
+.two .hi .n{color:var(--accent)}
+.asof{font-size:.9375rem; color:var(--faint); margin:1.4rem 0 0; max-width:none; line-height:1.6}
+
+.tomtat{
+  margin:2rem 0 0; padding:1.1rem 1.3rem;
+  background:var(--surface); border:1px solid var(--rule); border-radius:var(--r-hop);
+}
+.tomtat dl{display:grid; grid-template-columns:auto 1fr; gap:.5rem 1.1rem; margin:0}
+.tomtat dt{font-weight:600; color:var(--accent); white-space:nowrap}
+.tomtat dd{margin:0}
+@media (max-width:34rem){
+  .tomtat dl{grid-template-columns:1fr; gap:.15rem}
+  .tomtat dd{margin:0 0 .5rem}
+}
+
+.loi{margin:1.6rem 0 1.6rem 1.75rem; padding:0; border:0}
+.loi p{font-size:1.375rem; line-height:1.55; margin:0 0 .7rem}
+.loi p:last-of-type{margin-bottom:0}
+
+.loi .ai{
+  display:block; font-size:.9375rem; font-weight:600;
+  color:var(--accent); margin:0 0 .5rem; line-height:1.45;
+}
+
+.loi .them{
+  display:block; font-size:.9375rem; color:var(--faint); margin-top:.7rem; line-height:1.5;
+}
+
+.solieu{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(17rem,1fr));
+  gap:1.8rem 2.4rem; margin:2.2rem 0 .6rem;
+}
+
+.solieu > div{border-top:1px solid var(--rule); padding-top:.9rem}
+.solieu .n{
+  display:block; font-weight:700; font-size:clamp(1.6rem,3vw,2.15rem); line-height:1;
+  letter-spacing:-.02em; font-variant-numeric:tabular-nums lining-nums; color:var(--accent);
+  margin-bottom:.45rem;
+}
+.solieu .d{display:block; font-size:1rem; line-height:1.4; margin-bottom:.35rem}
+.solieu .c{display:block; font-size:.875rem; line-height:1.45; color:var(--faint)}
+
+.annotated{display:block}
+
+.annotated > .side{
+  font-size:1.1875rem; line-height:1.6; color:var(--muted); max-width:none;
+  border-left:2px solid var(--rule); padding-left:1rem; margin:1.2rem 0 0;
+}
+.annotated > .side b{color:var(--ink); font-weight:600}
+.annotated > .side b{color:var(--muted); font-weight:500; display:block; margin-bottom:.15rem}
+
+.tw{overflow-x:auto; margin:2rem 0 0}
+table{border-collapse:collapse; width:100%; min-width:42rem; font-size:1rem}
+caption{text-align:left; font-size:.8rem; color:var(--faint); padding-bottom:.7rem}
+th{text-align:left; font-weight:600; font-size:.8rem; color:var(--faint); padding:0 1.2rem .6rem 0; border-bottom:1px solid var(--rule-strong)}
+td{padding:.9rem 1.2rem .9rem 0; border-bottom:1px solid var(--rule); vertical-align:top; line-height:1.5}
+tr:last-child td{border-bottom:none}
+td.method{color:var(--faint); font-size:.8rem; line-height:1.45}
+.num{font-variant-numeric:tabular-nums lining-nums}
+
+.phim{margin:2.4rem 0 0}
+.phim video{
+  display:block; width:100%; height:auto; border-radius:var(--r-hop);
+  background:var(--surface); border:1px solid var(--rule-strong); box-shadow:var(--shadow);
+}
+.phim figcaption{font-size:1.1875rem; color:var(--muted); margin-top:.9rem; line-height:1.5}
+
+.plates{display:grid; grid-template-columns:1fr 1fr; gap:2.4rem 2rem; margin-top:2.4rem}
+@media (max-width:60rem){.plates{grid-template-columns:1fr}}
+.plate{margin:0}
+
+.plate > a:has(img){
+  display:block; text-decoration:none; padding:10px; border-radius:var(--r-hop);
+  background:var(--surface); border:1px solid var(--rule-strong); box-shadow:var(--shadow);
+}
+.plate > a:has(img):focus-visible{outline:3px solid var(--accent); outline-offset:3px}
+.plate img{display:block; width:100%; height:auto; border:1px solid var(--rule); border-radius:6px}
+.plate > a:has(img):hover{border-color:var(--accent)}
+.goi-y{font-size:.8rem; color:var(--faint); margin:0 0 .6rem; max-width:none}
+.plate figcaption{font-size:1.1875rem; color:var(--muted); margin-top:.8rem; max-width:none; line-height:1.5}
+.plate figcaption b{color:var(--ink)}
+
+.plate-lead{grid-column:1 / -1}
+.plate-lead figcaption{max-width:none}
+
+.spec{margin-top:1.8rem}
+
+.spec:not(.card){border-top:2px solid var(--rule-strong); padding-top:1.4rem}
+.spec dl{margin:0; font-size:1.1875rem}
+
+.spec dt{
+  font-weight:700; color:var(--accent); font-size:1.0625rem; letter-spacing:0;
+  margin:1.5rem 0 .35rem;
+}
+.spec dt:first-of-type{margin-top:0}
+.spec dd{margin:0; max-width:none}
+
+.callout{border-top:1px solid var(--rule-strong); border-bottom:1px solid var(--rule-strong); padding:1.3rem 0; margin:2.2rem 0; max-width:none}
+.callout p{max-width:none}
+.callout p:last-child{margin-bottom:0}
+
+.sc .khung{overflow-x:auto; -webkit-overflow-scrolling:touch}
+.sc svg{display:block; width:100%; height:auto; min-width:700px}
+.sc .cuon{font-size:.875rem; color:var(--faint); margin:.6rem 0 0}
+@media (min-width:44rem){.sc .cuon{display:none}}
+.sc .ten{font-size:19px; font-weight:600; fill:var(--ink)}
+.sc .truc{font-size:16px; fill:var(--faint)}
+.sc .truc text{font-size:16px; fill:var(--faint)}
+.sc .luoi{stroke:var(--rule); stroke-width:1}
+.sc .moc{font-size:19px; font-weight:700; fill:var(--ink)}
+.sc .net{fill:none; stroke-width:2.5}
+.sc .a.net{stroke:var(--accent-fill)}
+.sc .b.net{stroke:var(--dot)}
+.sc .vung{stroke:none}
+.sc .a.vung{fill:var(--accent-fill); opacity:.13}
+.sc .b.vung{fill:var(--dot); opacity:.13}
+.sc .cham{stroke:var(--surface); stroke-width:2}
+.sc .a.cham{fill:var(--accent-fill)}
+.sc .b.cham{fill:var(--dot)}
+
+.chart{margin:2.4rem 0 0}
+.chart .ct{font-size:1.375rem; font-weight:600; line-height:1.4; margin:0 0 .35rem; max-width:none}
+.chart .cs{font-size:.9375rem; color:var(--faint); margin:0 0 1.4rem; max-width:none; line-height:1.5}
+.chart svg{display:block; width:100%; height:auto}
+
+.chart .legend{display:flex; flex-wrap:wrap; gap:.5rem 2rem; margin-top:1.1rem; font-size:.8rem; color:var(--muted)}
+.chart .legend span{display:inline-flex; align-items:center; gap:.55rem}
+.chart .legend i{width:.75rem; height:.75rem; border-radius:2px; display:inline-block; flex:none}
+.chart .note{font-size:1.1875rem; color:var(--muted); margin-top:1.2rem; max-width:none}
+.chart .note b{color:var(--ink)}
+.bars{display:grid; gap:1.5rem; margin:.5rem 0 0}
+.bar .lab{display:flex; justify-content:space-between; align-items:baseline; gap:1rem; margin-bottom:.45rem}
+.bar .lab .what{font-size:1.1875rem; line-height:1.35}
+.bar .lab .pct{font-weight:700; font-size:1.375rem; font-variant-numeric:tabular-nums lining-nums; white-space:nowrap}
+.bar .track{height:.6rem; background:var(--accent-soft); border-radius:3px; overflow:hidden}
+.bar .fill{height:100%; background:var(--accent-fill); border-radius:3px}
+.bar .of{font-size:.9375rem; color:var(--faint); margin:.4rem 0 0; line-height:1.5; max-width:none}
+
+.vs{display:grid; grid-template-columns:1fr 1fr; gap:0 2.5rem; margin-top:2rem}
+@media (max-width:56rem){.vs{grid-template-columns:1fr; gap:0}}
+.vs .col{padding:.2rem 0 0}
+.vs .col + .col{border-left:1px solid var(--rule); padding-left:2.5rem}
+@media (max-width:56rem){.vs .col + .col{border-left:none; padding-left:0; border-top:1px solid var(--rule); margin-top:1.4rem}}
+.vs h3{margin:0 0 1rem; font-weight:700; font-size:1.1875rem; letter-spacing:0; color:var(--accent)}
+.vs p{font-size:1.1875rem; margin:0 0 1rem; max-width:none}
+.vs p b{color:var(--ink)}
+
+footer{border-top:1px solid var(--rule-strong); padding:2.2rem 0 5rem; font-size:1.1875rem}
+footer .lines{display:flex; flex-wrap:wrap; gap:.4rem 2rem; margin-bottom:1.3rem}
+footer .fine{color:var(--faint); font-size:.9375rem; max-width:none; line-height:1.55}
+
+.thanh-dinh{
+  position:sticky; top:0; z-index:50;
+  
+  background:var(--surface);
+  border-bottom:1px solid var(--rule);
+  margin:0 0 2rem;
+}
+
+.thanh-trong{
+  position:relative;
+  max-width:min(92ch,calc(100% - 2.5rem)); margin-inline:auto;
+  display:flex; align-items:center; justify-content:center; gap:.35rem 1.1rem; flex-wrap:wrap;
+  padding:.55rem 0;
+}
+.thanh-ten{
+  font-weight:700; font-size:.95rem; letter-spacing:-.01em;
+  color:var(--ink); text-decoration:none; margin-right:.4rem; white-space:nowrap;
+}
+.thanh-ten:hover{color:var(--accent)}
+.thanh-nhan{
+  font-size:.72rem; font-weight:700; letter-spacing:.11em; text-transform:uppercase;
+  color:var(--faint); white-space:nowrap; margin-right:.15rem;
+}
+@media (max-width:46rem){ .thanh-nhan{display:none} }
+.thanh-lk{display:flex; flex-wrap:wrap; gap:.2rem .3rem; align-items:center}
+.thanh-lk a{
+  font-size:.88rem; text-decoration:none; color:var(--muted);
+  padding:.3rem .62rem; border-radius:999px; white-space:nowrap; line-height:1.35;
+}
+.thanh-lk a:hover{color:var(--accent); background:var(--accent-soft)}
+.thanh-lk a[aria-current="page"]{
+  background:var(--accent); color:var(--surface); font-weight:600;
+}
+@media (max-width:40rem){
+  .thanh-trong{padding:.45rem 0}
+  .thanh-ten{font-size:.9rem; width:100%; margin-bottom:.15rem}
+  .thanh-lk{width:100%; flex-wrap:nowrap; overflow-x:auto; scrollbar-width:none}
+  .thanh-lk::-webkit-scrollbar{display:none}
+}
+
+.thanh-len{
+  position:absolute; right:0; top:50%; transform:translateY(-50%); display:inline-flex; align-items:center; gap:.32rem;
+  font-size:.84rem; font-weight:600; color:var(--muted);
+  background:none; border:1px solid transparent; border-radius:999px;
+  padding:.28rem .6rem; cursor:pointer; white-space:nowrap;
+  opacity:0; visibility:hidden; transition:opacity .18s ease, color .18s ease, background .18s ease;
+}
+.thanh-dinh.da-cuon .thanh-len{opacity:1; visibility:visible}
+.thanh-len:hover{color:var(--accent); background:var(--accent-soft)}
+.thanh-len:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+.thanh-len svg{width:.95em; height:.95em}
+@media (max-width:40rem){
+  .thanh-len{margin-left:0; order:-1; align-self:flex-end; position:absolute; right:0; top:.4rem}
+  .thanh-trong{position:relative}
+}
+@media (prefers-reduced-motion:reduce){ .thanh-len{transition:none} }
+
+a[href^="mailto:"]{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="thanh-dinh">
+  <div class="thanh-trong">
+    <span class="thanh-nhan" aria-hidden="true">Portfolio</span>
+    <nav class="thanh-lk" aria-label="Pages of this portfolio">
+      <a href="index.html" aria-current="page" title="You are on this page: The main argument">Main page</a>
+      <a href="chi-tiet.html" title="The rest of the main argument: measurements, screens, and what was not mine">The detail</a>
+      <a href="bang-chung.html" title="Measurements and method">The evidence</a>
+      <a href="quy-tac.html" title="One business rule, specified">A rule</a>
+      <a href="uat.html" title="User acceptance test">The test script</a>
+      <a href="so-lieu.html" title="Every figure with its SQL">Six numbers</a>
+      <a href="doi-chieu.html" title="Source to target mapping">The VAT return</a>
+    </nav>
+    <button type="button" class="thanh-len" data-len-dau>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 19V5M5 12l7-7 7 7"/>
+      </svg>Top
+    </button>
+  </div>
+</div>
+
+<div class="page">
+
+<header class="masthead">
+  <div class="danh">
+    <p class="ten">Dinh Duc Le</p>
+    <p class="nghe">Business Analyst · Data Analyst</p>
+  </div>
+  <div class="lienhe">
+    <span>Auckland, New Zealand</span>
+    <span><a href="mailto:ledinhduc1612@gmail.com">ledinhduc1612@gmail.com</a></span>
+    <span class="dumuc">Ducky Books, an accounting system in daily use</span>
+  </div>
+</header>
+
+<div class="blk-lead">
+  <h1>42,655 invoices went into these books. <br>A person typed <em>93</em> of them.</h1>
+  <p class="standfirst">I did not write most of the code. I worked out the business rules it had to follow, wrote them down, and checked every answer it gave.</p>
+
+ <div class="page" style="display:grid">
+  <div style="grid-column:content">
+    <p class="kicker">Seventy two seconds</p>
+    <h2>If you would rather watch than read.</h2>
+    <p>The whole thing, from a folder of invoices to a set of books that balances. Every screen is the real product on an isolated copy, with made up data.</p>
+  </div>
+  <figure class="phim" style="grid-column:feature">
+    <video controls preload="none" playsinline poster="images/demo-poster.webp" width="1920" height="1080">
+      <source src="images/ducky-books-demo-v12.mp4" type="video/mp4" />
+      Your browser cannot play this video. It runs for 72 seconds and shows the software reading a folder of invoices, proposing accounts, and posting a set of books that balances.
+    </video>
+    <figcaption>No speech. Everything you need is written on screen. The video was measured a day earlier than the headline above it, so its counts are slightly lower: 42,618 invoices on 4 September against 42,655 on 5 September. These are live books. Music: <i>Moment of Peace</i> by MickeysCat, from Pixabay.</figcaption>
+  </figure>
+ </div>
+</div>
+
+  <div class="tomtat">
+    <dl>
+      <dt>What I did</dt><dd>Sat with the accountant and worked out the requirements: what the software had to do. Wrote them down as business rules and acceptance criteria detailed enough to build from: this input, this account, this warning, this refusal. Then checked every answer against the law and against her.</dd>
+      <dt>Who for</dt><dd>An accounting firm in Vietnam that keeps the books for 43 client businesses. My mother runs it and is the qualified chief accountant there.</dd>
+      <dt>How long</dt><dd>Three months, from 28 May 2026. In real use from the day after that.</dd>
+      <dt>What I am not</dt><dd>Not the accountant. She is. AI coding tools wrote most of the code, under my direction. Mine is the deciding: what it may do alone, and what a person must confirm.</dd>
+      <dt>Looking for</dt><dd>A graduate or junior analyst role in Auckland: business analysis, data, or process. The titles differ; the work is the work on this page.</dd>
+      <dt>If you have three minutes</dt><dd>Read <a href="bang-chung.html#loi-cua-toi">the rule where my first answer was wrong</a>, then <a href="chi-tiet.html#mine">what was mine and what was not</a>. Those two answer most of what an interview would ask; the rest is the evidence behind them.</dd>
+    </dl>
+  </div>
+  <p class="credential" style="margin-top:1.15rem"><b>Post Study Work visa, Auckland.</b> Any employer, any occupation, to July 2029.</p>
+  <p class="credential" style="margin-top:.5rem">Bachelor of Business, Information Systems major, with minors in Data Analytics for Business and Supply Chain Management. Auckland University of Technology, 2023 to 2025.</p>
+
+  <p class="credential" style="margin-top:.5rem"><b>Three other companies have bought this software under signed contracts, with me named as the supplier.</b> They came to it through my mother, so they are not strangers who found me. <a href="chi-tiet.html#khach">What that is and is not evidence of</a>.</p>
+<p class="asof">The two headline figures were counted on the working system on 5 September 2026. These are live books, so the counts rise daily. Six figures are <a href="so-lieu.html">written out with the query behind each</a>. My CV quotes the same figures, from the same reading.</p>
+
+<div class="blk">
+<h2>The chief accountant did not believe me for the first few weeks.</h2>
+<p>She did not take my word that the figures were right. She went to the tax office's own portal and reconciled against it herself. The numbers matched. Only then did she start moving companies across.</p>
+<p>What won her over was not the accuracy. It was that nobody had to type any more. Before the software, someone always had to: her own evenings, people at the practice paid to do the typing, and for a while me. I did the data entry myself, to learn the work. I felt I was learning less from it than I had hoped, and it took a great deal of time. That is the job I set out to remove.</p>
+<p><b>Twice since, the chief accountant has overruled me on my own measurements, and both times she was right.</b></p>
+<ul>
+  <li>I built something that reads the counterparty off a bank statement line. I measured it before proposing it: <b>2,466 suggestions, 18 wrong</b>. The chief accountant said do not switch it on. That was the right call, and the measurement says why: all 18 mistakes happened while the system was fully self-consistent, so no confidence threshold would have stopped the first one, and the first one is the only one that matters. I switched off the learning behind it as well, so it is not quietly collecting for a feature the person in charge has declined.</li>
+  <li>A separate measurement looked at <b>91,278</b> posted lines across 49 companies. On <b>54,367</b> of them, 59.6%, the software had already chosen the account the accountant would have chosen. She still opens every invoice and reads it once, and her reason is worth quoting: <i>"if I posted the whole batch on its suggestion and one was wrong, redoing it would cost a lot of time."</i> That is a fair reading of her own risk: my measurement covers what the software gets right, not what one wrong entry costs to unwind. I stopped trying to remove the check and started making the check faster.</li>
+</ul>
+<p class="asof">Both counted on the working system on 5 September 2026.</p>
+</div>
+
+<div class="blk-quiet">
+  <div class="callout">
+    <p><b>I did not do this on my own.</b> Nine people have worked in the system. The work is theirs as much as mine.</p>
+  </div>
+</div>
+
+<div class="blk">
+  <p class="kicker" id="worth">What this is worth to you</p>
+  <h2>None of this makes me an accountant.</h2>
+  <p>Vietnamese tax law is not New Zealand tax law, and I would not pretend otherwise. What it made me is someone who can sit between two sides: a person who knows a job inside out, and a system that must do that job correctly.</p>
+  <p>Work out the rules. Write them down so someone else can check them. Prove they hold. Be the person who gives the sign-off before it goes live. That is the role I am applying for.</p>
+  <p>I can walk you through any decision inside it, and work out any number on this page again, live, on screen. <a href="so-lieu.html">Six are already written out with their queries.</a></p>
+</div>
+
+<div class="blk-close">
+  <h2>Those 93 are the ones it still cannot read.</h2>
+  <p class="big">Someone has to sit down and do them by hand. I would like my next job to be finding the next 93.</p>
+</div>
+
+<footer>
+  <div class="lines">
+    <span><a href="mailto:ledinhduc1612@gmail.com">ledinhduc1612@gmail.com</a></span>
+    <span>Auckland, New Zealand</span>
+  </div>
+  <p class="fine">Every screen on this page uses made up data on an isolated copy. No client name, tax number or figure appears anywhere. Written and measured by me, September 2026.</p>
+</footer>
+</div>
+
+<script>
+
+(function () {
+  var thanh = document.querySelector('.mucluc');
+  if (!thanh) return;
+  var lien = Array.prototype.slice.call(thanh.querySelectorAll('a[href^="#"]'));
+  var moc = lien.map(function (a) { return document.getElementById(a.getAttribute('href').slice(1)); });
+
+  lien.forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      var dich = document.getElementById(a.getAttribute('href').slice(1));
+      if (!dich) return;
+      e.preventDefault();
+      dich.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      danhDau(dich.id);
+      history.replaceState(null, '', location.pathname + location.search);
+    });
+  });
+
+  var trongDay = thanh.querySelector('.mucluc-trong');
+  var vet = thanh.querySelector('.vet');
+  function danhDau(id) {
+    var dang = null;
+    lien.forEach(function (a) {
+      if (a.getAttribute('href') === '#' + id) { a.setAttribute('aria-current', 'true'); dang = a; }
+      else a.removeAttribute('aria-current');
+    });
+    
+    if (vet) {
+      if (dang) { vet.style.width = dang.offsetWidth + 'px'; vet.style.transform = 'translateX(' + dang.offsetLeft + 'px)'; vet.style.opacity = '1'; }
+      else { vet.style.opacity = '0'; }
+    }
+    
+    if (dang && trongDay && trongDay.scrollWidth > trongDay.clientWidth) {
+      var t = dang.offsetLeft - (trongDay.clientWidth - dang.offsetWidth) / 2;
+      trongDay.scrollTo({ left: Math.max(0, t), behavior: 'smooth' });
+    }
+  }
+
+  if (!('IntersectionObserver' in window)) return;
+
+  new IntersectionObserver(function (ds) {
+    thanh.classList.toggle('roi-dinh', ds[0].intersectionRatio < 1);
+  }, { threshold: [1], rootMargin: '-1px 0px 0px 0px' }).observe(thanh);
+
+  var dangCho = false;
+  function xetMucDangDoc() {
+    dangCho = false;
+    var chon = null;
+    for (var k = 0; k < moc.length; k++) {
+      if (moc[k] && moc[k].getBoundingClientRect().top <= 80) chon = moc[k];
+    }
+    
+    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) {
+      for (var m = moc.length - 1; m >= 0; m--) { if (moc[m]) { chon = moc[m]; break; } }
+    }
+    danhDau(chon ? chon.id : null);
+  }
+  addEventListener('scroll', function () {
+    if (!dangCho) { dangCho = true; requestAnimationFrame(xetMucDangDoc); }
+  }, { passive: true });
+  addEventListener('resize', xetMucDangDoc, { passive: true });
+  xetMucDangDoc();
+})();
+</script>
+
+<script>
+
+(function () {
+  var thanh = document.querySelector('.thanh-dinh')
+  var nut = document.querySelector('[data-len-dau]')
+  if (!thanh || !nut) return
+  var itChuyenDong = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  var cho = false
+  function xet() {
+    cho = false
+    thanh.classList.toggle('da-cuon', window.scrollY > window.innerHeight * 0.6)
+  }
+  window.addEventListener('scroll', function () {
+    if (!cho) { cho = true; window.requestAnimationFrame(xet) }
+  }, { passive: true })
+  xet()
+  nut.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: itChuyenDong ? 'auto' : 'smooth' })
+    var dau = document.querySelector('h1')
+    if (dau) { dau.setAttribute('tabindex', '-1'); dau.focus({ preventScroll: true }) }
+  })
+})()
+</script>
+</body>
+</html>
