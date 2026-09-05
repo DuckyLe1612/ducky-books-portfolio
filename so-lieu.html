@@ -149,38 +149,38 @@ a[href^="mailto:"]{color:var(--accent)}
 <div class="khung">
 
 <p class="nhom">Working · Ducky Books</p>
-<h1>Six numbers, and the query that produced each one</h1>
+<h1>Six numbers, and the query behind each one</h1>
 
-<p class="dan">The main page says its figures can be worked out again. This is that offer, honoured
-in advance. Read only, against the working database, on 5 September 2026. Nothing is sampled and
-nothing is scaled up.</p>
+<p class="dan">The main page says its figures can be worked out again. Here is the working:
+read only, against the working database, on 5 September 2026. Nothing sampled,
+nothing scaled up.</p>
 
 <div class="chan">
-  <p><b>An earlier version of this page did not balance, and that is worth saying out loud.</b>
-  It reported 42,655 invoices in the result line while the three source counts underneath it added
+  <p><b>An earlier version of this page did not balance.</b> Its result line said
+  42,655 invoices; the three source counts underneath added to 42,621. Thirty-four
   to 42,621. Thirty-four invoices, unexplained, on the page whose entire purpose is that a figure
-  should survive being checked. The portal count was stale: 10,370 where the table now holds
+  checking. The portal count was stale: 10,370 where the table now holds
   10,404.</p>
-  <p>The same version printed 415,380 recorded actions above a query that filters out the
-  software's own scheduled jobs. That figure was the unfiltered count. The query as printed
-  returns 409,668. A published number that its own published query does not produce is the exact
+  <p>The same version printed 415,380 actions above a query that filters out the
+  software's own scheduled jobs: that was the unfiltered count. The printed query
+  returns 409,668. A number its own query does not produce is the exact
   failure this page exists to prevent, and it got past me.</p>
-  <p>Both are fixed below, and every figure on this site now comes from one reading of the
-  database taken on 5 September 2026. Two identities are stated where they apply, so you can add
-  the parts up yourself rather than take the total on trust.</p>
+  <p>Both are fixed below. Every figure on this site now comes from one reading of
+  the database on 5 September 2026. Two totals are broken into their parts, so
+  you can add them up yourself.</p>
 </div>
 
 <div class="the">
-  <p><b>Why the queries and not just the answers.</b> A number in a portfolio is a claim. A number
-  with its query is a claim you can argue with. If you think a definition is wrong, you can see
-  exactly which one I used and tell me so.</p>
+  <p><b>Why the queries, not just the answers.</b> A number is a claim; a number
+  with its query is a claim you can argue with. If you think my definition is wrong,
+  you can see which one I used.</p>
   <p>The database is SQLite, encrypted at rest. Every session here opened it with
-  <code>query_only = 1</code>, so nothing here could write, even by mistake.</p>
+  <code>query_only = 1</code>, so nothing could write, even by mistake.</p>
 </div>
 
 <h2>1. Invoices: how many, which way, how they got in</h2>
 <p class="ra">Result: <b>42,655</b> invoices: <b>23,161</b> purchases, <b>19,494</b> sales.
-<b>32,158</b> read from XML, <b>10,404</b> imported from the tax portal listing, <b>93</b> typed
+<b>32,158</b> read from XML, <b>10,404</b> from the tax portal listing, <b>93</b> typed
 by a person.</p>
 <pre>SELECT direction,
        source,
@@ -191,28 +191,28 @@ by a person.</p>
  ORDER BY invoices DESC;</pre>
 
 <div class="chan">
-  <p>The headline "99.8% nobody typed" is just this: everything that is not
+  <p>The headline "99.8% nobody typed" means everything that is not
   <code>source = 'manual'</code> with an empty <code>import_source</code>. I say "nobody typed"
-  rather than "automated" because that is what the column records.</p>
-  <p>The <code>direction</code> column is in there because the first version of this query did not
-  say which way the invoices went, and I had described all of them as supplier invoices. They are
-  not all purchases. That description was wrong by about 19,000 documents.</p>
-  <p><b>Two ways of cutting the same table; both must reach the total.</b> By source:
-  32,158 + 10,404 + 93 = 42,655. By direction: 23,161 + 19,494 = 42,655. Neither sum held in the
+  rather than "automated": that is what the column records.</p>
+  <p>The <code>direction</code> column is in the query because its first version
+  did not show which way invoices went, so I had called them all supplier invoices.
+  They are not all purchases: that was wrong by about 19,000 documents.</p>
+  <p><b>Two cuts of the same table; both must reach the total.</b> By source:
+  32,158 + 10,404 + 93 = 42,655. By direction: 23,161 + 19,494 = 42,655. Neither held in the
   previous version. Writing them out is how you notice.</p>
 </div>
 
 <h2>2. The size of the ledger</h2>
-<p class="ra">Result: <b>70,320</b> journal entries, made of <b>178,197</b> lines, across
+<p class="ra">Result: <b>70,320</b> journal entries in <b>178,197</b> lines, across
 <b>43</b> client businesses.</p>
 <pre>SELECT (SELECT COUNT(*) FROM ledger_entries)                    AS entries,
        (SELECT COUNT(*) FROM ledger_entry_lines)                AS lines,
        (SELECT COUNT(DISTINCT client_id) FROM ledger_entries)   AS clients;</pre>
 
 <div class="chan">
-  <p>An entry is one transaction. A line is one side of it against one account. The two are not
-  interchangeable, and a CV that quotes one while a portfolio quotes the other looks careless. Mine
-  quoted the wrong one until someone checked, which is how I know.</p>
+  <p>An entry is one transaction. A line is one side of it against one account.
+  Quoting one on a CV and the other in a portfolio looks careless. Mine did
+  exactly that, until someone checked.</p>
 </div>
 
 <h2>3. Bank statement lines</h2>
@@ -224,14 +224,14 @@ by a person.</p>
 <div class="chan">
   <p>5.2% looks like a failure until you ask what the other 22,432 lines are: wages, tax payments,
   transfers between the company's own accounts, bank fees. None has an invoice to match. "Every
-  line" is the wrong thing to divide by; reporting 5.2% anyway, and saying so, beats quietly
+  line" is the wrong thing to divide by, but reporting 5.2% and saying so beats
   dividing by something that flatters.</p>
 </div>
 
 <h2>4. How much the software is used</h2>
-<p class="ra">Result: <b>409,668</b> actions taken by people, from <b>29 May 2026</b> to <b>5 September 2026</b>, on
-<b>94</b> of those <b>100</b> days. The table holds <b>415,759</b> rows in all: <b>40</b> from the
-software's own scheduled jobs, and <b>6,051</b> with no user recorded against them.</p>
+<p class="ra">Result: <b>409,668</b> actions by people, from <b>29 May 2026</b> to <b>5 September 2026</b>, on
+<b>94</b> of those <b>100</b> days. The table holds <b>415,759</b> rows: <b>40</b> from the
+software's own scheduled jobs, <b>6,051</b> with no user recorded.</p>
 <pre>SELECT COUNT(*)                                          AS actions,
        MIN(date(created_at))                             AS first_day,
        MAX(date(created_at))                             AS last_day,
@@ -243,16 +243,16 @@ software's own scheduled jobs, and <b>6,051</b> with no user recorded against th
 <div class="chan">
   <p>Both filters matter, unequally. <code>NOT LIKE 'script:%'</code> removes only the <b>40</b>
   scheduled-job rows. <code>user_id IS NOT NULL</code> removes <b>6,051</b> more, written before a
-  signed-in user was attached to the action. An earlier version of this page named the small
-  exclusion and left the large one unmentioned.</p>
+  signed-in user was attached to the action. An earlier version named the small
+  exclusion, not the large one.</p>
   <p>Three honest numbers, not one: <b>415,759</b> rows in the table, <b>409,668</b> traceable to a
-  person, <b>6,091</b> not. The middle one answers "how much do people use it". The first answers
+  person, <b>6,091</b> not. The middle one answers "how much do people use it"; the first,
   "how big is the log".</p>
 </div>
 
 <h2>5. Hours at the keyboard</h2>
 <p class="ra">Result: <b>105</b>, <b>181</b> and <b>236</b> hours across June, July and August,
-over <b>23</b>, <b>31</b> and <b>31</b> days with activity.</p>
+on <b>23</b>, <b>31</b> and <b>31</b> active days.</p>
 <pre>-- Gaps of five minutes or less between one person's consecutive actions
 -- are counted as time at the keyboard. A longer gap is not.
 SELECT user_id, created_at
@@ -262,15 +262,15 @@ SELECT user_id, created_at
  ORDER BY user_id, created_at;</pre>
 
 <div class="chan">
-  <p>This one is not a single query, and I will not pretend it is. The rows come out of SQL. The five minute rule is
+  <p>This one is not a single query, and I will not pretend it is. SQL returns the rows. The five minute rule is
   applied in code, because SQLite has no window function that expresses it cleanly here. The threshold is a judgement: five minutes counts as still working, six
-  counts as having stopped. Change it and the hours change. That is why the rule is written down
-  next to the figure instead of being buried.</p>
+  as stopped. Change it and the hours change. That is why the rule sits
+  next to the figure, not buried.</p>
 </div>
 
 <h2>6. What the accountant actually corrects</h2>
-<p class="ra">Result: <b>10,724</b> times a person changed the account the software had proposed.
-<b>5,734</b> of them were one account being made more specific.</p>
+<p class="ra">Result: <b>10,724</b> times a person changed the account the software proposed.
+<b>5,734</b> of them made one account more specific.</p>
 <pre>SELECT json_extract(metadata, '$.previous') AS proposed,
        json_extract(metadata, '$.next')     AS chosen,
        COUNT(*)                        AS times
@@ -280,26 +280,26 @@ SELECT user_id, created_at
  ORDER BY times DESC;</pre>
 
 <div class="chan">
-  <p>This is the query I am proudest of, and it is the one that changed a decision. The total said
-  the suggestions were being overridden ten thousand times, which reads as a broken feature. Then I grouped the same
-  rows by day. Corrections happened on 75 days. Three of those days carry 60.4% of them:
+  <p>This is the query I am proudest of, and the one that changed a decision. The total said
+  the suggestions were overridden ten thousand times, which reads as a broken feature. Grouped by
+  day, corrections fall on 75 days, and three of those carry 60.4%:
   3,377 on 18 July, 2,100 on 23 August, 1,004 on 21 August. Ten days carry 82.4%. On 26 of
   the 75 days it was under ten. The corrections were not spread out. They were a few
   sessions of one person cleaning up historical imports.</p>
-  <p>So the expensive part was never the correcting but the checking, which the log does not record:
+  <p>So the expensive part was never correcting but checking, which the log does not record:
   looking at a screen leaves no row. The fix stopped being "make the guesses better" and became
   "show the person what has already been checked".</p>
 </div>
 
 <div class="the">
-  <p><b>What this page is really for.</b> Anyone can put a number on a page. A person who does this
-  work asks three things: which rows you counted, which you left out, and whether you noticed the
+  <p><b>What this page is really for.</b> Anyone can put a number on a page. Someone who does
+  this work asks which rows you counted, which you left out, and whether you noticed the
   difference. These six answers are my case.</p>
 </div>
 
 <footer>
-  <p>Column and table names are as in the schema. No client names, tax numbers or money amounts from
-  real businesses appear here or in these queries.</p>
+  <p>Column and table names are as in the schema. No real client names, tax numbers or money
+  amounts appear here or in these queries.</p>
   <p><a href="mailto:ledinhduc1612@gmail.com">ledinhduc1612@gmail.com</a></p>
 </footer>
 

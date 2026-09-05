@@ -175,23 +175,16 @@ table.bd{border-collapse:collapse; width:100%; font-size:.93rem; margin:0}
 <p class="nhom">Working document &middot; Ducky Books</p>
 <h1>Where each figure on the VAT return comes from, and what proves it</h1>
 
-<p class="dan">One statutory return, mapped end to end: the ledger account a figure is read
-from, what happens to it on the way, the exact box it lands in, and the check that would
-catch it if the two ever stopped agreeing. This is the document I would want handed to me
-if I inherited someone else's return.</p>
+<p class="dan">One statutory return mapped end to end: where each figure is read from, what happens on the way, which box it lands in, and the check that catches ledger and return drifting apart. What I would want if I inherited someone else's return.</p>
 
 <div class="hop">
-  <p><b>Read this as a specification, not a description.</b> Every row below is implemented and
-  running. The rules were written first, in Vietnamese, with the chief accountant; the code
-  followed. Where the software deliberately refuses to fill a box, that refusal is a rule too,
-  and it is in the table.</p>
-  <p>The return is form <b>01/GTGT</b>, filed monthly or quarterly. Vietnamese tax law numbers each box, and accountants say those numbers out loud: "box 43", not "closing credit". I have kept them.</p>
+  <p><b>A specification, not a description.</b> Every row is built and running. The rules were written first, in Vietnamese, with the chief accountant; the code followed. A refusal to fill a box is a rule too, and it is in the table.</p>
+  <p>Form <b>01/GTGT</b>, filed monthly or quarterly. Vietnamese tax law numbers each box, and accountants say the number out loud: "box 43", not "closing credit". I kept them.</p>
 </div>
 
 <h2>1. The mapping</h2>
 
-<p class="ra">Sales are classified by the tax rate on each invoice line, not by the invoice.
-One invoice can land in three different boxes.</p>
+<p class="ra">Sales are classified by the tax rate on each invoice line, not by the invoice: one invoice can land in three boxes.</p>
 
 <div class="cuon">
 <table class="bd">
@@ -200,35 +193,33 @@ One invoice can land in three different boxes.</p>
   </tr></thead>
   <tbody>
     <tr><td class="o">[23]</td><td>Purchases, net of VAT</td><td class="tk">invoices, direction = input</td>
-      <td>Sum of the net amount on every purchase invoice in the period, plus the customs value in [23a].</td></tr>
+      <td>Net amount of every purchase invoice in the period, plus the customs value in [23a].</td></tr>
     <tr><td class="o">[24]</td><td>Input VAT</td><td class="tk">invoices, direction = input</td>
-      <td>Sum of VAT on the same invoices, plus import VAT in [24a].</td></tr>
+      <td>VAT on the same invoices, plus import VAT in [24a].</td></tr>
     <tr><td class="o">[23a] [24a]</td><td>Imports</td><td class="tk">typed by the accountant</td>
-      <td>From the customs declaration, which this system does not hold. Not guessed.</td></tr>
+      <td>From the customs declaration, not held by this system. Not guessed.</td></tr>
     <tr><td class="o">[25]</td><td>Input VAT actually deductible</td><td class="tk">derived from [24]</td>
-      <td>Defaults to all of [24]. Input VAT the accountant booked to an account other than 133 is subtracted here but <b>left in [24]</b>. The invoice is still declared in full; only the deduction narrows.</td></tr>
+      <td>Defaults to all of [24]. Input VAT booked outside account 133 is subtracted here but <b>left in [24]</b>: still declared in full, only the deduction narrows.</td></tr>
     <tr><td class="o">[26]</td><td>Sales not subject to VAT</td><td class="tk">invoices, direction = output</td>
-      <td>Net amount only; there is no VAT column.</td></tr>
+      <td>Net amount only, no VAT column.</td></tr>
     <tr><td class="o">[29]</td><td>Sales at 0%</td><td class="tk">invoices, direction = output</td><td>Net amount only.</td></tr>
     <tr><td class="o">[30] [31]</td><td>Sales at 5%, net and VAT</td><td class="tk">invoices, direction = output</td><td>Split per line.</td></tr>
     <tr><td class="o">[32] [33]</td><td>Sales at 10%, net and VAT</td><td class="tk">invoices, direction = output</td>
       <td>The temporarily reduced rate is declared in the 10% boxes: the form has no separate box for it. A reduction annex is required alongside, and the software says so.</td></tr>
     <tr><td class="o">[32a]</td><td>Sales not required to be declared</td><td class="tk">invoices, direction = output</td>
-      <td>Net amount, no VAT column. Still counts toward the revenue boxes below. See section 4: this one was wrong once.</td></tr>
+      <td>Net amount, no VAT column. Still counts toward the revenue boxes below. Section 4: wrong once.</td></tr>
     <tr><td class="o">[22]</td><td>Credit carried forward</td><td class="tk"><b>typed by the accountant</b></td>
-      <td>The software will not fill this. Section 3 explains why, and what it shows instead.</td></tr>
+      <td>The software will not fill this. Section 3 says why, and what it shows instead.</td></tr>
     <tr><td class="o">[37] [38] [39a] [40b] [42]</td><td>Adjustments, credits handled elsewhere, refund claimed</td>
       <td class="tk">typed by the accountant</td>
-      <td>These record decisions and correspondence, not transactions. Nothing in the ledger determines them.</td></tr>
+      <td>Decisions and correspondence, not transactions. Nothing in the ledger determines them.</td></tr>
   </tbody>
 </table>
 </div>
 
-<h2>2. The boxes the form calculates for itself</h2>
+<h2>2. Boxes the form calculates itself</h2>
 
-<p class="ra">These are not read from anywhere. They are arithmetic on the boxes above, and the
-tax office's own software computes them the same way. That is the point: if my figure and
-theirs differ, one of us has a bug, and it is worth finding out which.</p>
+<p class="ra">Not read from anywhere: arithmetic on the boxes above, and the tax office's own software computes them the same way. If my figure and theirs differ, one of us has a bug worth finding.</p>
 
 <pre>[27] = [29] + [30] + [32] + [32a]     revenue subject to VAT
 [28] = [31] + [33]                    output VAT
@@ -244,85 +235,78 @@ net  = [36] - [22] + [37] - [38] - [39a]
 [43]  = [41] - [42]                   credit carried to next period</pre>
 
 <div class="hop">
-  <h3>Two invariants that are checked, not hoped for</h3>
-  <p><b>[25] can never exceed [24].</b> Box 25 holds only VAT that qualifies for deduction, so it is a subset of box 24 by definition. The code enforces a floor at zero and a cap at [24]; a formula that could produce more deduction than tax paid files a false return.</p>
-  <p><b>[40a] and [41] cannot both be positive.</b> A period either owes VAT or carries credit forward. Both come from the same signed figure, so the form cannot say both.</p>
+  <h3>Two invariants, checked not hoped for</h3>
+  <p><b>[25] can never exceed [24].</b> Box 25 holds only the VAT that can be deducted, a subset of box 24. The code floors it at zero and caps it at [24]: deducting more than the tax paid files a false return.</p>
+  <p><b>[40a] and [41] cannot both be positive.</b> A period either owes VAT or carries credit forward, and both come from the same signed figure.</p>
 </div>
 
 <h2>3. Box [22]: the one the machine refuses to fill</h2>
 
-<p class="ra">This is the row I would defend hardest in an interview, because the correct behaviour
-is to do less.</p>
+<p class="ra">The row I would defend hardest in an interview: doing less was correct.</p>
 
-<p>Box [22] is the credit carried forward from last period. Arithmetically it should equal box [43]
-of the previous return, and a system that files returns already knows that number. Filling it in
-automatically is a two-line change.</p>
+<p>Box [22], the credit carried forward from last period, should equal box [43] of the previous return: a number this system already holds. Auto-filling it is a two-line change.</p>
 
-<p>The software does not do it. The chief accountant types it, every period.</p>
+<p>The software does not. The chief accountant types it, every period.</p>
 
 <div class="hop">
   <h3>Why</h3>
-  <p><b>The previous return may have been amended by hand after it was filed.</b> What matters is the figure as lodged with the tax office, not the one this system last calculated. Usually they match. When they do not, auto-filling would silently push a stale number into a filed document, and the person who signs it carries that.</p>
-  <p>So the software shows a <b>reference figure</b> next to the empty box: the closing debit balance of the input VAT account for the previous period. The accountant compares, then types.</p>
+  <p><b>The previous return may have been amended by hand after filing.</b> What counts is the figure lodged with the tax office, not this system's last calculation. Usually they match; when they do not, auto-filling would quietly push a stale number into a filed document, and the person who signs it carries that.</p>
+  <p>The software shows a <b>reference figure</b> beside the empty box: last period's closing debit balance on the input VAT account. The accountant compares, then types.</p>
 </div>
 
 <div class="canh">
   <h3>The reference has its own precondition. The part I am proudest of</h3>
-  <p>That balance is only meaningful if the previous period's VAT was cleared to the payable account. Without that entry, the input VAT account still carries the whole period's tax and the balance is inflated: a plausible number that is wrong.</p>
+  <p>That balance means anything only if last period's VAT was cleared to the payable account. Without that entry the input VAT account still holds the whole period's tax: the balance is inflated, plausible and wrong.</p>
   <p>So the software checks first. If the clearing entry is missing it shows <b>no figure at all</b> and says the entry is outstanding for that month or quarter. A reference that might be wrong is worse than none: the accountant cannot tell by looking.</p>
 </div>
 
 <h2>4. The control that found a real error</h2>
 
-<p class="ra">Box [32a] holds sales that do not have to be declared for VAT, so it has no tax column. That is easy to read as "does not count", and the first version did exactly that.</p>
+<p class="ra">Box [32a] holds sales that need no VAT declaration, so it has no tax column. Easy to read as "does not count", and the first version did.</p>
 
-<p>The result: the revenue totals [27] and [34] came out short by whatever sat in [32a]. Tax payable was still right, because [32a] carries no VAT. Nothing looked broken; every internal check passed.</p>
+<p>Revenue totals [27] and [34] then came out short by whatever sat in [32a]. Tax payable stayed right, because [32a] carries no VAT. Nothing looked broken; every internal check passed.</p>
 
 <div class="hop">
-  <p><b>How it was caught.</b> The chief accountant opened the tax office's own filing software,
-  typed a figure into box [32a], and watched boxes [27] and [34] increase by exactly that amount.
-  That settled it in about a minute. The formula was corrected to
-  <span class="ct">[27] = [29] + [30] + [32] + [32a]</span>.</p>
-  <p><b>Why it mattered even though the tax was right.</b> This revenue figure is cross-checked against the invoice records and the corporate income tax return. A total that is quietly short is the kind of discrepancy an audit opens with.</p>
+  <p><b>How it was caught.</b> The chief accountant opened the tax office's own filing software, typed a figure into box [32a], and watched [27] and [34] rise by exactly that amount. Settled in about a minute. The formula became <span class="ct">[27] = [29] + [30] + [32] + [32a]</span>.</p>
+  <p><b>Why it mattered even though the tax was right.</b> This revenue figure is cross-checked against the invoice records and the corporate income tax return. A quietly short total is the kind of thing an audit opens with.</p>
   <p>The lesson: <b>a check that only asks "does the return balance" cannot see this class of error.</b> The return balanced perfectly while being wrong. Only a comparison against an independent implementation of the same rules caught it.</p>
 </div>
 
-<h2>5. What happens when a figure will not classify</h2>
+<h2>5. When a figure will not classify</h2>
 
-<p class="ra">Real invoices arrive with rates that match no standard band, imported from a tax office listing that merged several rates into one row, or entered oddly.</p>
+<p class="ra">Real invoices arrive with rates matching no standard band, from a tax office listing that merged several rates into one row, or entered oddly.</p>
 
-<p>The form has no "other rate" box, so something must be decided. Three options:</p>
+<p>The form has no "other rate" box. Three options:</p>
 
 <div class="cuon">
 <table class="bd">
   <thead><tr><th>Option</th><th>Effect</th><th>Verdict</th></tr></thead>
   <tbody>
     <tr><td>Drop the line</td><td>Output VAT under-declared</td>
-      <td><b>Rejected.</b> Under-declaring tax is the one failure with a legal consequence attached.</td></tr>
-    <tr><td>Block the return</td><td>Nothing can be filed until every oddity is resolved</td>
+      <td><b>Rejected.</b> Under-declaring tax is the one failure with a legal consequence.</td></tr>
+    <tr><td>Block the return</td><td>Nothing filed until every oddity is resolved</td>
       <td><b>Rejected.</b> Deadlines are fixed. A system that cannot file is not safer, just unusable in the last week of the month.</td></tr>
     <tr><td>Group into the standard band and warn loudly</td><td>Totals stay complete; the individual box may be wrong</td>
-      <td><b>Chosen.</b> The total is never short, and the warning names the invoice number and the rate it could not read.</td></tr>
+      <td><b>Chosen.</b> The total is never short, and the warning names the invoice number and the unreadable rate.</td></tr>
   </tbody>
 </table>
 </div>
 
-<p>The rate is inferred by testing the VAT against the net amount at each standard band, accepting a match within <b>one đồng</b>. That tolerance is not decoration: invoices are rounded to whole đồng at the line, so an exact equality test fails on ordinary documents.</p>
+<p>The rate is inferred by testing the VAT against the net amount at each standard band, accepting a match within <b>one đồng</b>. Not decoration: invoices are rounded to whole đồng per line, so an exact test fails on ordinary documents.</p>
 
-<h2>6. What is deliberately not built</h2>
+<h2>6. Deliberately not built</h2>
 
-<p class="ra">A newer box exists on the current form. This software does not populate it.</p>
+<p class="ra">A newer box exists on the current form. This software leaves it empty.</p>
 
-<p>Not an oversight; the code records why: there is no verified sample of the new file format to check against, and inventing a schema for a document that goes to a government system is not a risk worth taking to close a gap. The box stays empty with the limitation stated, rather than a guess that would look complete.</p>
+<p>Not an oversight: the code records why. No verified sample of the new file format exists to check against, and inventing a schema for a document that goes to a government system is not a risk worth taking. Better an empty box with the limitation stated than a guess that looks complete.</p>
 
 <div class="hop">
-  <p><b>The pattern across this page.</b> Four times, the right answer was for the software to do less: not to fill box [22], not to show a reference it cannot vouch for, not to drop a line it cannot classify, not to populate a box it cannot verify. Four places where automation was available and was turned down, each with a named reason someone can argue with.</p>
-  <p>That is what I would bring to a role like this: not the ability to make a system do more, but
-  a defensible account of where it should stop.</p>
+  <p><b>The pattern across this page.</b> Four times the right answer was for the software to do less: not fill box [22], not show a reference it cannot vouch for, not drop a line it cannot classify, not fill a box it cannot verify. Automation was available each time and turned down, each with a named reason someone can argue with.</p>
+  <p>What I would bring to a role like this: not the ability to make a system do more, but a defensible account of where it should stop.</p>
 </div>
 
 <footer>
-  <p>Boxes and formulas read from the software's own return builder. No figures, client names or tax numbers belonging to real businesses appear on this page. Legal references are quoted as the system records them, and were verified against the signed source documents when the rules were written; I would re-check them before relying on them today rather than quote from memory.</p>
+  <p>Boxes and formulas read from the software's own return builder. No figures, client names or tax numbers of real businesses appear here. Legal references are quoted as the system records them, verified against the signed source documents when the rules were written; I would re-check them before relying on them today, not quote from memory.</p>
   <p><a href="mailto:ledinhduc1612@gmail.com">ledinhduc1612@gmail.com</a></p>
 </footer>
 

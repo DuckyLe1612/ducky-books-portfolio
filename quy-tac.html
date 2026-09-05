@@ -155,11 +155,9 @@ a[href^="mailto:"]{color:var(--accent)}
 <div class="khung">
 
 <p class="nhom">Business rule specification · Ducky Books</p>
-<h1>One rule, written out in full</h1>
+<h1>One rule, in full</h1>
 
-<p class="dan">This is the shape I write a rule in before anyone builds it. One rule is enough to
-show the shape. I picked this one because you can check every line of it against a published
-decree, and because the first version I specified was wrong in a way that is worth showing.</p>
+<p class="dan">How I write a rule before anyone builds it. I picked this one because every line can be checked against a published decree, and because my first version was wrong in a way worth showing.</p>
 
 <h2>1. The rule</h2>
 
@@ -176,7 +174,7 @@ decree, and because the first version I specified was wrong in a way that is wor
   <dd>5,000,000 dong, in force from 1 July 2025.</dd>
 
   <dt>Who it affects</dt>
-  <dd>Every company on the system that records purchase invoices. It does not apply to sales.</dd>
+  <dd>Every company on the system that records purchase invoices. Not sales.</dd>
 
   <dt>Why it matters</dt>
   <dd>Get it wrong and the company claims VAT it is not entitled to. That is found at audit, not
@@ -186,43 +184,37 @@ decree, and because the first version I specified was wrong in a way that is wor
 
 <h2>2. What triggers it</h2>
 
-<p>Every purchase invoice, just before it is posted, and again whenever the review screen is
-opened. Three conditions, all required:</p>
+<p>Every purchase invoice just before posting, and again when the review screen opens. Three conditions, all required:</p>
 
 <div class="cuon">
 <table>
   <thead><tr><th>#</th><th>Condition</th><th>Why it is written this way</th></tr></thead>
   <tbody>
-    <tr><td>T1</td><td>A purchase, not a sale.</td><td>The rule is about the buyer's right to deduct.</td></tr>
-    <tr><td>T2</td><td>Its total, VAT included, is at or above the threshold.</td><td>At or above, not over. A five million invoice is inside the rule.</td></tr>
+    <tr><td>T1</td><td>A purchase, not a sale.</td><td>About the buyer's right to deduct.</td></tr>
+    <tr><td>T2</td><td>Total, VAT included, at or above the threshold.</td><td>At or above, not over: a five million invoice is inside.</td></tr>
     <tr><td>T3</td><td>Nobody has confirmed the payment method yet.</td><td>A person's confirmation ends the check for that invoice.</td></tr>
   </tbody>
 </table>
 </div>
 
 <div class="chan">
-  <p><b>The threshold is read by the date of the invoice.</b> Not today's date. An invoice from
-  before 1 July 2025 is measured against the value that applied then. There is one function that
-  answers "what was the threshold on this date", and every part of the software calls it. The
-  number 5,000,000 is written in one place only, in a table with its start date and its decree.</p>
-  <p>That was deliberate. Write the number twice and the copies drift apart the first time the law
-  changes, and nobody finds out until a return is wrong.</p>
+  <p><b>The threshold is read by the invoice's date, not today's.</b> An invoice from before 1 July 2025 uses the value that applied then. One function answers "what was the threshold on this date", and all the software calls it; 5,000,000 is written in one place only, a table with its start date and its decree.</p>
+  <p>Deliberate: a second copy drifts apart the first time the law changes, and nobody finds out until a return is wrong.</p>
 </div>
 
 <h2>3. What the software does</h2>
 
-<p>It does not decide. It sorts each invoice into one of six groups by the strength of the
-evidence found, and shows the person what it found. The first row that matches wins.</p>
+<p>It does not decide. It sorts each invoice into one of six groups by strength of evidence and shows the person the result. First matching row wins.</p>
 
 <div class="cuon">
 <table>
   <thead><tr><th>Order</th><th>Group</th><th>What was found</th><th>What it means</th></tr></thead>
   <tbody>
-    <tr><td>1</td><td>Both</td><td>A cash payment and a bank payment.</td><td>Open it. Something is not right.</td></tr>
-    <tr><td>2</td><td>Cash present</td><td>A payment out of the cash account.</td><td>The deduction is lost.</td></tr>
-    <tr><td>3</td><td>Bank statement</td><td>A posted statement line paying the invoice in full.</td><td>Strongest evidence: the bank's own record.</td></tr>
-    <tr><td>4</td><td>Bank entry</td><td>A payment out of the bank account, no cash.</td><td>Good, but weaker than a statement line.</td></tr>
-    <tr><td>5</td><td>Not through the till</td><td>Allocated, but not through cash or bank.</td><td>Probably a debt offset. Needs a person.</td></tr>
+    <tr><td>1</td><td>Both</td><td>Cash payment and bank payment.</td><td>Open it. Something is not right.</td></tr>
+    <tr><td>2</td><td>Cash present</td><td>Paid out of the cash account.</td><td>Deduction lost.</td></tr>
+    <tr><td>3</td><td>Bank statement</td><td>Posted statement line paying it in full.</td><td>Strongest evidence: the bank's own record.</td></tr>
+    <tr><td>4</td><td>Bank entry</td><td>Paid out of the bank account, no cash.</td><td>Good, weaker than a statement line.</td></tr>
+    <tr><td>5</td><td>Not through the till</td><td>Allocated, not through cash or bank.</td><td>Probably a debt offset. Needs a person.</td></tr>
     <tr><td>6</td><td>Nothing linked</td><td>No payment document.</td><td>Unknown, not innocent. Check when the document exists.</td></tr>
   </tbody>
 </table>
@@ -234,31 +226,31 @@ evidence found, and shows the person what it found. The first row that matches w
 <table>
   <thead><tr><th>#</th><th>Given, when, then</th></tr></thead>
   <tbody>
-    <tr><td>A1</td><td>An invoice for exactly 5,000,000 dong dated after the start date, with no payment linked, appears in group 6. Not skipped.</td></tr>
-    <tr><td>A2</td><td>An invoice for 4,999,999 dong does not appear.</td></tr>
-    <tr><td>A3</td><td>An invoice dated before the start date is measured against the earlier value, even if entered today.</td></tr>
-    <tr><td>A4</td><td>An invoice paid in cash appears in group 2, and the reason names the cash account.</td></tr>
-    <tr><td>A5</td><td>Once a person confirms an invoice, it leaves the list and does not come back on its own.</td></tr>
-    <tr><td>A6</td><td>A confirmation can be undone for one invoice without touching any other.</td></tr>
-    <tr><td>A7</td><td>Only a person sets the confirmation, never the software.</td></tr>
+    <tr><td>A1</td><td>Exactly 5,000,000 dong, dated after the start date, no payment linked: group 6, not skipped.</td></tr>
+    <tr><td>A2</td><td>4,999,999 dong: does not appear.</td></tr>
+    <tr><td>A3</td><td>Dated before the start date: the earlier value applies, even if entered today.</td></tr>
+    <tr><td>A4</td><td>Paid in cash: group 2, and the reason names the cash account.</td></tr>
+    <tr><td>A5</td><td>Confirmed by a person: leaves the list and does not return on its own.</td></tr>
+    <tr><td>A6</td><td>Undo a confirmation on one invoice without touching any other.</td></tr>
+    <tr><td>A7</td><td>Only a person sets confirmation, never the software.</td></tr>
   </tbody>
 </table>
 </div>
 
 <h2>5. Edge cases, and how each was found</h2>
 
-<p>All three came from running it against real books, not from thinking about it.</p>
+<p>All three came from real books, not from thinking about it.</p>
 
 <div class="cuon">
 <table>
   <thead><tr><th>#</th><th>Case</th><th>What went wrong</th></tr></thead>
   <tbody>
-    <tr><td>E1</td><td>An invoice settled straight from the bank statement screen.</td>
-        <td>That path creates no allocation record. The check looked only at allocations, so a properly paid invoice was reported as unpaid.</td></tr>
-    <tr><td>E2</td><td>An invoice marked "pay now" in cash while it is being posted.</td>
-        <td>Its own entry credits the cash account, with no allocation. It landed in group 6 instead of group 2. The cash guard was open at the case that matters most.</td></tr>
-    <tr><td>E3</td><td>Several small purchases from one supplier on one day.</td>
-        <td>The related rule for purchases with no invoice adds up one day per supplier. This rule does not. Two rules, two rounding points, and a reader will assume they work the same way.</td></tr>
+    <tr><td>E1</td><td>Settled straight from the bank statement screen.</td>
+        <td>That path creates no allocation record. The check looked only at allocations, so a paid invoice was reported unpaid.</td></tr>
+    <tr><td>E2</td><td>Marked "pay now" in cash while being posted.</td>
+        <td>Its entry credits the cash account with no allocation, so it landed in group 6, not group 2. The cash guard was open where it matters most.</td></tr>
+    <tr><td>E3</td><td>Several small purchases, one supplier, one day.</td>
+        <td>The related rule for purchases with no invoice adds up one day per supplier. This one does not. Two rules, two rounding points, and readers assume they match.</td></tr>
   </tbody>
 </table>
 </div>
@@ -266,43 +258,33 @@ evidence found, and shows the person what it found. The first row that matches w
 <h2>6. The version that was wrong</h2>
 
 <div class="hong">
-  <p><b>The first design asked the wrong question.</b> It read warnings stored earlier instead of
-  asking each invoice its condition now. A warning never written, or written before a payment
-  changed, is no warning at all.</p>
-  <p>On the real books, that version left <b>1,341 invoices with no warning, covering 25.34 billion
-  dong</b>. Worst single company: 523 invoices inside the rule, 120 warned, <b>403 silent,
-  21.14 billion dong</b>.</p>
-  <p>The worst kind of defect, because the screen looked calm. A guard that does not fire is more
-  dangerous than no guard: people stop looking.</p>
+  <p><b>The first design asked the wrong question.</b> It read stored warnings instead of asking each invoice its condition now. A warning never written, or written before a payment changed, is no warning.</p>
+  <p>On the real books it left <b>1,341 invoices with no warning, covering 25.34 billion dong</b>. Worst company: 523 invoices inside the rule, 120 warned, <b>403 silent, 21.14 billion dong</b>.</p>
+  <p>Worst kind of defect, because the screen looked calm. A guard that does not fire is worse than no guard: people stop looking.</p>
 </div>
 
 <p><b>What replaced it.</b> The check asks the invoice's condition every time the screen opens.
 Slower. It cannot go stale.</p>
 
-<h2>7. What this rule is not allowed to do</h2>
+<h2>7. What the rule may not do</h2>
 
 <div class="chan">
-  <p>It may not mark an invoice as confirmed, post anything, or block a person from posting an
-  invoice they have decided about.</p>
-  <p>The reason is not technical. The person who signs the return carries the liability, so that
-  person decides. The software's job is to put the evidence in front of them first.</p>
+  <p>It may not confirm an invoice, post anything, or block a person from posting one they have decided about.</p>
+  <p>Not technical: whoever signs the return carries the liability, so they decide. The software only puts the evidence in front of them first.</p>
 </div>
 
 <h2>8. When this specification stops being valid</h2>
 
-<p>When the decree changes, when the threshold changes, or when a new payment path is added that
-the six groups do not cover. A new threshold does not replace the old one. It is added with its own
-start date, and older periods keep the value that applied to them.</p>
+<p>When the decree or threshold changes, or a new payment path appears that the six groups do not cover. A new threshold does not replace the old: it is added with its own start date, and older periods keep their old value.</p>
 
 <div class="the">
   <p><b>Why this page exists.</b> The rest of my portfolio is screenshots of working software: the
   output. This is the input, and the part of the work I am applying to do.</p>
-  <p>Section 1 can be checked against a published decree without asking me anything.</p>
+  <p>Section 1 can be checked against a published decree without asking me.</p>
 </div>
 
 <footer>
-  <p>Figures in section 6 are counts from the working system. Everything else is the rule as
-  specified and built. Translated from the Vietnamese working notes.</p>
+  <p>Section 6 figures are counts from the working system. The rest is the rule as specified and built. Translated from the Vietnamese working notes.</p>
   <p><a href="mailto:ledinhduc1612@gmail.com">ledinhduc1612@gmail.com</a></p>
 </footer>
 
