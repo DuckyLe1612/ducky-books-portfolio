@@ -160,7 +160,7 @@ a[href^="mailto:"]{color:var(--accent)}
 
 <p class="nhom">Working document · Ducky Books</p>
 <h1>The acceptance test script</h1>
-<p class="dan"><b>5,987 automated tests were passing, and still not enough.</b> Tests prove the software does what it was told, not that a day’s work finishes or the numbers are right. 32 steps on real books.</p>
+<p class="dan"><b>5,987 automated tests were passing, and still not enough.</b> Tests prove the software does what it was told, not that a day’s work finishes or the numbers are right. This script adds 32 steps, run on real books.</p>
 
 <p class="dan">Written on <b>2 August 2026</b>. This is the blank script itself: nobody has filled in a date, a result or a signature yet.</p>
 
@@ -171,13 +171,9 @@ a[href^="mailto:"]{color:var(--accent)}
 
 </div>
 
-<p class="dan">The software
-went into real use on 29 May, the day after I started it, growing screen by screen as she
-used it. Nine weeks later, &ldquo;she has been using
-it&rdquo; no longer answered &ldquo;does it work&rdquo;. A script written before code tests a
-guess; this one tests what was built.</p>
+<p class="dan">The software went into real use on 29 May, the day after I started it, and grew screen by screen as she used it. Nine weeks later, the fact that she had been using it was no longer proof, on its own, that it worked. A test script written before the code exists can only test a guess about how the software should behave; this one, written after nine weeks of real use, tests what was actually built.</p>
 
-<p class="dan">A signed result would show one company passing on one day.</p>
+<p class="dan">A signed result would only show one company passing on one day.</p>
 
 <h2>How steps are graded</h2>
 
@@ -195,8 +191,7 @@ guess; this one tests what was built.</p>
 </div>
 
 <div class="chan">
-  <p><b>One fail in Group A or B stops the release.</b>
-  <code>[POSTS]</code> steps change real data, so the run starts with a backup.</p>
+  <p><b>One fail in Group A or B stops the release</b>: the update does not go out until it is fixed. Steps marked <code>[POSTS]</code> file the transaction into the books, changing real data, so the run starts with a backup.</p>
 </div>
 
 <h2>Group A &middot; One invoice <span class="dan">(blocks release)</span></h2>
@@ -205,7 +200,7 @@ guess; this one tests what was built.</p>
 <table>
   <thead><tr><th>#</th><th>Task</th><th>Pass criterion</th></tr></thead>
   <tbody>
-    <tr><td>A1</td><td>Load a sales invoice XML</td><td>Listed; every amount matches PDF to the dong.</td></tr>
+    <tr><td>A1</td><td>Load a sales invoice (an XML file, the digital form it arrives in)</td><td>Listed; every amount matches the PDF copy, down to the dong (Vietnam's currency).</td></tr>
     <tr><td>A2</td><td>Load it again</td><td>Duplicate reported; <b>no</b> second invoice.</td></tr>
     <tr><td>A3</td><td>Open invoice detail</td><td>Shows number, series, date, buyer, tax number, line items, tax rate, total.</td></tr>
     <tr><td>A4</td><td>Post it <code>[POSTS]</code></td><td>Journal entry, debits equal credits, dated invoice date.</td></tr>
@@ -222,22 +217,22 @@ guess; this one tests what was built.</p>
 <table>
   <thead><tr><th>#</th><th>Task</th><th>Pass criterion</th></tr></thead>
   <tbody>
-    <tr><td>B1</td><td>Raise a cash receipt <code>[POSTS]</code></td><td>Cash book rises correctly; statutory receipt prints.</td></tr>
+    <tr><td>B1</td><td>Raise a cash receipt <code>[POSTS]</code></td><td>Cash book rises correctly; the receipt required by law prints.</td></tr>
     <tr><td>B2</td><td>Print that receipt</td><td>Activity log records the print.</td></tr>
     <tr><td>B3</td><td>Load a month of bank statement</td><td>Lines read equals lines in file; <b>no line swallowed into a zero</b>.</td></tr>
     <tr><td>B4</td><td>Match a receipt to an invoice <code>[POSTS]</code></td><td>Invoice moves to Paid; receivable falls correctly.</td></tr>
     <tr><td>B5</td><td>Open Receivables</td><td>Total equals sum of unpaid invoices; a customer opens to each invoice.</td></tr>
-    <tr><td>B6</td><td>Add a stock item</td><td>Cost-of-sales account fills from the group, still hand-editable.</td></tr>
-    <tr><td>B7</td><td>Change its group to Finished goods</td><td>Cost-of-sales account changes too, not left stale.</td></tr>
+    <tr><td>B6</td><td>Add a stock item</td><td>Cost-of-sales account fills in from its stock category, but can still be edited by hand.</td></tr>
+    <tr><td>B7</td><td>Change its stock category to Finished goods</td><td>Cost-of-sales account updates too, instead of being left outdated.</td></tr>
     <tr><td>B8</td><td>Receive stock on a purchase invoice <code>[POSTS]</code></td><td>Stock rises by the right quantity; value matches invoice.</td></tr>
     <tr><td>B9</td><td>Issue more stock than on hand</td><td>Warns immediately, not silently.</td></tr>
     <tr><td>B10</td><td>Run period-end cost transfer <code>[POSTS]</code></td><td>Cost-of-sales entry matches stock movement report.</td></tr>
-    <tr><td>B11</td><td>Try it with a stock item negative</td><td>Blocked until a written reason.</td></tr>
+    <tr><td>B11</td><td>Issue stock until an item's balance goes negative</td><td>Blocked until a written reason.</td></tr>
   </tbody>
 </table>
 </div>
 
-<p class="dan">B11 is not a technical rule: the chief accountant chose it on 31 July, from three ways of handling negative stock I put to her.</p>
+<p class="dan">B11 is not a technical rule: on 31 July I gave the chief accountant three ways to handle negative stock, and she chose this one.</p>
 
 <h2>Group C &middot; Reports and tax returns <span class="dan">(recorded, does not block)</span></h2>
 
@@ -264,8 +259,8 @@ guess; this one tests what was built.</p>
   <tbody>
     <tr><td>D1</td><td>Press Back up now</td><td>New file in backup folder, not empty.</td></tr>
     <tr><td>D2</td><td>Press Rehearse a restore</td><td>Reports a pass, with tables and rows checked.</td></tr>
-    <tr><td>D3</td><td>Switch company and back</td><td>No figures bleed across; company name always matches figures.</td></tr>
-    <tr><td>D4</td><td>Open it on a phone</td><td>Tables scroll sideways, text readable, buttons hittable.</td></tr>
+    <tr><td>D3</td><td>Switch company and back</td><td>No figures carry over from one company to the other; the company name on screen always matches the figures shown.</td></tr>
+    <tr><td>D4</td><td>Open it on a phone</td><td>Tables scroll sideways, text is readable, buttons are big enough to tap.</td></tr>
     <tr><td>D5</td><td>Pull the network cable, press a posting button</td><td>Plain message in the user's language, not an English crash screen.</td></tr>
     <tr><td>D6</td><td>Edit one item in two tabs</td><td>Second tab stopped, told to reload; first edit not silently overwritten.</td></tr>
     <tr><td>D7</td><td>Log in as staff</td><td>Only assigned clients visible. Owner-only pages refused with a reason, not a blank screen.</td></tr>
@@ -289,17 +284,16 @@ Things you want the software to do:</div>
 <h2>When this script expires</h2>
 
 <div class="chan">
-  <p>Run it again on any change to posting, inventory or tax code, database structure, a tax circular or statutory form, the machine it runs on, or a restore from backup.</p>
+  <p>Run it again on any change to posting, inventory or tax code, database structure, a tax circular (an official tax rule) or statutory form, the machine it runs on, or a restore from backup.</p>
   <p><b>A result belongs to exactly one version.</b></p>
 </div>
 
 <div class="the">
-  <p><b>Why show this, not describe it.</b> Deciding what "working" means before anyone can argue, writing it down where someone else can check, naming whose call it was: the other half of the job, the half the role is for.</p>
+  <p><b>Why show this, not describe it.</b> Before anyone could argue about it, someone had to decide what "working" means, write it down so someone else could check it, and record whose decision it was. That is the other half of the job: the half the role is for.</p>
 </div>
 
 <footer>
-  <p>Translated from the Vietnamese original. One correction: the original counts 32 steps but its record block says 25; a hiring reviewer caught it before I did. Only the total changed.
-  Numbering, grading and blocking are as committed.</p>
+  <p>Translated from the Vietnamese original. One correction: the original had 32 steps, but its record block said 25; a hiring reviewer caught the mismatch before I did. Only the total number of steps changed; the numbering, the grading scale and which groups block the release are unchanged from what was first committed.</p>
   <p><a href="mailto:ledinhduc1612@gmail.com">ledinhduc1612@gmail.com</a></p>
 </footer>
 

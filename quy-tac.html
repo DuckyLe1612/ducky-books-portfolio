@@ -157,15 +157,14 @@ a[href^="mailto:"]{color:var(--accent)}
 <p class="nhom">Business rule spec · Ducky Books</p>
 <h1>One rule, in full</h1>
 
-<p class="dan">How I write a rule before anyone builds it. I picked this one because my first version was wrong.</p>
+<p class="dan">This page shows how I turn a real accounting rule into an exact written rule, before any software gets built for it. I picked this particular rule because my first version of it was wrong.</p>
 
 <h2>1. The rule</h2>
 
 <div class="the">
 <dl>
   <dt>Rule</dt>
-  <dd>A purchase invoice at or above the threshold, VAT included, must not be paid
-  in cash, or its input VAT cannot be deducted.</dd>
+  <dd>A purchase invoice at or above the threshold (the amount is set by law: currently 5,000,000 dong, see below) must not be paid in cash. Pay it in cash, and the buyer loses the right to deduct the VAT (a tax added to the price) on that invoice: it can no longer claim that tax back from the government.</dd>
 
   <dt>Legal basis</dt>
   <dd>Decree 181/2025/ND-CP, Article 26, under VAT Law 48/2024/QH15.</dd>
@@ -174,25 +173,24 @@ a[href^="mailto:"]{color:var(--accent)}
   <dd>5,000,000 dong, in force from 1 July 2025.</dd>
 
   <dt>Who it affects</dt>
-  <dd>Every company recording purchase invoices. Not sales.</dd>
+  <dd>Every company that records purchase invoices. It does not apply to sales invoices.</dd>
 
   <dt>Why it matters</dt>
-  <dd>Get it wrong and the company claims VAT it is not entitled to. That is found at audit, not
-  in the books: they balance either way.</dd>
+  <dd>Get this wrong, and the company claims back tax it is not entitled to. Nothing about that mistake shows up in the books themselves (the books still add up correctly either way), so it is only caught if the company is audited.</dd>
 </dl>
 </div>
 
 <h2>2. What triggers it</h2>
 
-<p>Every purchase invoice, before posting and when the review screen opens. All three required:</p>
+<p>The software checks every purchase invoice twice: before posting (filing it into the books) and again whenever the review screen opens. All three conditions below must be true:</p>
 
 <div class="cuon">
 <table>
   <thead><tr><th>#</th><th>Condition</th><th>Why written this way</th></tr></thead>
   <tbody>
-    <tr><td>T1</td><td>A purchase, not a sale.</td><td>Buyer's right to deduct.</td></tr>
+    <tr><td>T1</td><td>A purchase, not a sale.</td><td>Only the buyer on a purchase invoice can deduct VAT; a sales invoice carries no such risk.</td></tr>
     <tr><td>T2</td><td>Total with VAT at or above the threshold.</td><td>At or above, not over: five million is inside.</td></tr>
-    <tr><td>T3</td><td>No confirmed payment method yet.</td><td>Confirmation ends the check.</td></tr>
+    <tr><td>T3</td><td>A person has not yet confirmed how it was paid.</td><td>Confirmation ends the check.</td></tr>
   </tbody>
 </table>
 </div>
@@ -204,23 +202,25 @@ a[href^="mailto:"]{color:var(--accent)}
 
 <h2>3. What the software does</h2>
 
-<p>Six groups by strength of evidence. First matching row wins.</p>
+<p>The software sorts each invoice into one of six groups, ordered from strongest evidence of payment to weakest, and uses the first group that matches. ("Statement line" below means one row on a bank statement: money in or out, plus the text the bank printed.)</p>
 
 <div class="cuon">
 <table>
   <thead><tr><th>Order</th><th>Group</th><th>What was found</th><th>What it means</th></tr></thead>
   <tbody>
     <tr><td>1</td><td>Both</td><td>Cash and bank payment.</td><td>Open it. Something is wrong.</td></tr>
-    <tr><td>2</td><td>Cash present</td><td>From the cash account.</td><td>Deduction lost.</td></tr>
+    <tr><td>2</td><td>Cash present</td><td>From the cash account.</td><td>VAT deduction lost.</td></tr>
     <tr><td>3</td><td>Bank statement</td><td>Statement line pays it in full.</td><td>The bank's own record.</td></tr>
     <tr><td>4</td><td>Bank entry</td><td>From the bank account, no cash.</td><td>Weaker than a statement line.</td></tr>
-    <tr><td>5</td><td>Not through the till</td><td>Allocated, not cash or bank.</td><td>Probably a debt offset. Needs a person.</td></tr>
-    <tr><td>6</td><td>Nothing linked</td><td>No payment document.</td><td>Unknown, not innocent. Check when the document exists.</td></tr>
+    <tr><td>5</td><td>Not through the till</td><td>Linked to this invoice as a payment (an "allocation"), but not an actual cash or bank payment.</td><td>Probably a debt offset. Needs a person to check.</td></tr>
+    <tr><td>6</td><td>Nothing linked</td><td>No payment document.</td><td>Unknown, not innocent. Keep checking: review it again once a payment document appears.</td></tr>
   </tbody>
 </table>
 </div>
 
 <h2>4. Acceptance criteria</h2>
+
+<p>These are the exact tests the software must pass before I call this rule finished. Each row states a starting condition, an action, and the result the software must produce.</p>
 
 <div class="cuon">
 <table>
@@ -239,18 +239,18 @@ a[href^="mailto:"]{color:var(--accent)}
 
 <h2>5. Edge cases</h2>
 
-<p>From real books, not from thought.</p>
+<p>Found in the real books, not made up.</p>
 
 <div class="cuon">
 <table>
   <thead><tr><th>#</th><th>Case</th><th>What went wrong</th></tr></thead>
   <tbody>
     <tr><td>E1</td><td>Settled from the bank statement screen.</td>
-        <td>No allocation written, and the check read only allocations: a paid invoice reported unpaid.</td></tr>
+        <td>No allocation (the link between a payment and its invoice) was written, and the check only looked at allocations, so a paid invoice was reported as unpaid.</td></tr>
     <tr><td>E2</td><td>Marked "pay now" in cash at posting.</td>
-        <td>Credits cash with no allocation: group 6, not group 2. The cash guard was open where it matters most.</td></tr>
+        <td>This reduces the cash account (a "credit") but writes no allocation, so the invoice lands in group 6 (nothing linked) instead of group 2 (cash present). The exact case this rule exists to catch was the one slipping through.</td></tr>
     <tr><td>E3</td><td>Several small purchases, one supplier, one day.</td>
-        <td>The rule for purchases with no invoice sums one day per supplier. This one does not. Two rules, two rounding points, assumed to match.</td></tr>
+        <td>A separate rule (for purchases that have no invoice at all) adds up everything bought from one supplier in a single day before comparing it to a threshold. This rule does not add anything up; it judges each invoice on its own. Nobody has confirmed the two rules agree at the edges.</td></tr>
   </tbody>
 </table>
 </div>
@@ -258,33 +258,31 @@ a[href^="mailto:"]{color:var(--accent)}
 <h2>6. The version that was wrong</h2>
 
 <div class="hong">
-  <p><b>The first design asked the wrong question.</b> It read stored warnings instead of asking the invoice its condition now.</p>
+  <p><b>The first design asked the wrong question.</b> It checked an old, saved warning instead of testing each invoice's condition fresh, every time.</p>
   <p>On the real books: <b>1,341 invoices unwarned, 25.34 billion dong</b>. Worst company: 523 inside the rule, 120 warned, <b>403 silent, 21.14 billion dong</b>.</p>
   
 </div>
 
-<p><b>What replaced it.</b> The condition is asked fresh each time.
-Slower. It cannot go stale.</p>
+<p><b>What replaced it.</b> The software now checks each invoice's condition fresh, every single time, instead of relying on a saved flag. This is slower, but the check can never become out of date.</p>
 
 <h2>7. What it may not do</h2>
 
 <div class="chan">
   <p>It may not confirm an invoice, post anything, or block a person from posting one they have decided about.</p>
-  <p>Not technical: whoever signs the return carries the liability, so they decide; the software only puts the evidence in front of them.</p>
+  <p>This is not a technical limitation: whoever signs the tax return is legally responsible for it, so that person must decide. The software's job is only to put the evidence in front of them.</p>
 </div>
 
 <h2>8. When this stops applying</h2>
 
-<p>When the decree or threshold changes, or a payment path appears the six groups do not cover.</p>
+<p>When the decree or the threshold changes, or when a payment path appears that the six groups above do not cover.</p>
 
 <div class="the">
-  <p><b>Why this page exists.</b> My other pages are screenshots of working software: the
-  output. This is the input, the work I am applying to do.</p>
-  <p>Section 1 checks against a published decree without asking me.</p>
+  <p><b>Why this page exists.</b> My other pages show screenshots of the finished software: that is the output. This page shows the input instead: the work of turning a real rule into an exact written one. That is the work I am applying to do.</p>
+  <p>Section 1 can be checked against the published decree: nobody has to take my word for it.</p>
 </div>
 
 <footer>
-  <p>Section 6 figures are counts from the working system; the rest is the rule as specified and built. Translated from Vietnamese notes.</p>
+  <p>The numbers in section 6 are measured from the real, working system. Everything else on this page is the rule itself: how it was written and how it was built. Originally written in Vietnamese, translated here.</p>
   <p><a href="mailto:ledinhduc1612@gmail.com">ledinhduc1612@gmail.com</a></p>
 </footer>
 
