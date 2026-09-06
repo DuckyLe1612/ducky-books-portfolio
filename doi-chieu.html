@@ -178,13 +178,13 @@ table.bd{border-collapse:collapse; width:100%; font-size:.93rem; margin:0}
 
 
 <div class="hop">
-  <p><b>A specification, not a description.</b> Each row states the rule for that box, not just what the software happens to do: I wrote the rule first, in Vietnamese, with the chief accountant (a role Vietnamese law requires to be separately qualified, not just a title the practice hands out), and the code was built to follow it. When the software deliberately leaves a box blank, that refusal is a rule too, decided on purpose.</p>
-  <p>The return itself is Form <b>01/GTGT</b>, Vietnam's standard return for VAT (value-added tax, a tax added to the price of most sales; New Zealand's equivalent tax is called GST), filed monthly or quarterly. Vietnamese tax law gives every box a number; accountants say "box 43", not "closing credit". I kept the numbers.</p>
+  <p><b>A specification, not a description.</b> Each row states the rule for that box, not just what the software happens to do: I wrote the rule first, in Vietnamese, with the chief accountant (a legally required, separately qualified role), and the code was built to follow it. When the software deliberately leaves a box blank, that refusal is a rule too, decided on purpose.</p>
+  <p>The return itself is Form <b>01/GTGT</b>, Vietnam's standard return for VAT (value-added tax, a tax added to the price of most sales; New Zealand's equivalent is GST), filed monthly or quarterly. Vietnamese tax law gives every box a number; accountants say "box 43", not "closing credit". I kept the numbers.</p>
 </div>
 
 <h2>1. The mapping</h2>
 
-<p class="ra">In the table below, "input" means purchase invoices and "output" means sales invoices; "net" means the price before VAT is added. Sales are classified by the tax rate on each invoice line, not by the invoice: one invoice can land in three boxes.</p>
+<p class="ra">In the table below, "input" means purchase invoices and "output" means sales invoices; "net" means the price without VAT. Sales are classified by the tax rate on each invoice line, not by the invoice: one invoice can land in three boxes.</p>
 
 <div class="cuon">
 <table class="bd">
@@ -205,9 +205,9 @@ table.bd{border-collapse:collapse; width:100%; font-size:.93rem; margin:0}
     <tr><td class="o">[29]</td><td>Sales at 0%</td><td class="tk">output invoices</td><td>Net only.</td></tr>
     <tr><td class="o">[30] [31]</td><td>Sales at 5%, net and VAT</td><td class="tk">output invoices</td><td>Each line's net amount and VAT amount are recorded separately.</td></tr>
     <tr><td class="o">[32] [33]</td><td>Sales at 10%, net and VAT</td><td class="tk">output invoices</td>
-      <td>A temporarily reduced VAT rate is still recorded in the 10% boxes, because the form has no separate box for it. Filing also needs an extra document listing which invoices used the reduced rate (a "reduction annex"); the software reminds the accountant of this.</td></tr>
+      <td>A temporarily reduced VAT rate is still recorded in the 10% boxes, because the form has no separate box for it. Filing also needs a list of the invoices that used the reduced rate (a "reduction annex"); the software reminds the accountant.</td></tr>
     <tr><td class="o">[32a]</td><td>Sales needing no declaration</td><td class="tk">output invoices</td>
-      <td>Net only, no VAT column. It still counts toward the revenue totals below; section 4 tells the story of where the first version of the software got this wrong.</td></tr>
+      <td>Net only, no VAT column. It still counts toward the revenue totals below; section 4 tells where the first version of the software got this wrong.</td></tr>
     <tr><td class="o">[22]</td><td>Credit carried forward</td><td class="tk"><b>typed by the accountant</b></td>
       <td>Left blank on purpose; section 3 explains why.</td></tr>
     <tr><td class="o">[37] [38] [39a] [40b] [42]</td><td>Adjustments, credits handled elsewhere, refund claimed</td>
@@ -236,8 +236,8 @@ net  = [36] - [22] + [37] - [38] - [39a]
 
 <div class="hop">
   <h3>Two rules that must always hold</h3>
-  <p><b>[25] can never exceed [24].</b> The code keeps [25] between zero and [24]: it will not let the deduction claim more VAT than was actually paid, because that would make the return false.</p>
-  <p><b>[40a] and [41] cannot both be positive.</b> Both are calculated from the same one number, which is either positive or negative, never both, so the two boxes can never both come out positive.</p>
+  <p><b>[25] can never exceed [24].</b> The code keeps [25] between zero and [24], so the deduction never claims more VAT than was paid: that would make the return false.</p>
+  <p><b>[40a] and [41] cannot both be positive.</b> Both come from the same one number, which is either positive or negative, never both.</p>
 </div>
 
 <h2>3. Box [22] stays empty</h2>
@@ -257,7 +257,7 @@ net  = [36] - [22] + [37] - [38] - [39a]
 <div class="canh">
   <h3>Proudest part: what has to be true first</h3>
   <p>That figure only means something if, at the end of last period, an entry moved the input VAT balance into the "tax payable" account (the account that tracks what the business owes the tax office). Skip that entry, and the input VAT account still holds the whole period's tax: the balance looks plausible but is wrong, inflated by the amount that should have been moved out.</p>
-  <p>If that clearing entry is missing, the software shows <b>no figure at all</b> instead: it names which month or quarter still needs the entry. A reference number that might be wrong is worse than no number at all, because the accountant cannot tell just by looking whether it is right.</p>
+  <p>If that clearing entry is missing, the software shows <b>no figure at all</b> instead: it names which month or quarter still needs the entry. A reference number that might be wrong is worse than none: the accountant cannot tell just by looking whether it is right.</p>
 </div>
 
 <h2>4. A real error caught</h2>
@@ -298,10 +298,10 @@ net  = [36] - [22] + [37] - [38] - [39a]
 
 <p class="ra">Box [32b], new on the form taking effect 1 July 2026, is left empty.</p>
 
-<p>The code records why, in a comment: no verified sample of the new file format exists, and guessing at the exact structure of a government document is not worth the risk of getting it wrong. An empty box that explains why is safer than one that looks complete but might be a wrong guess.</p>
+<p>The code records why, in a comment: no verified sample of the new file format exists, and guessing at a government document's exact structure risks getting it wrong. An empty box that explains why is safer than one that looks complete but might be wrong.</p>
 
 <div class="hop">
-  <p><b>The pattern.</b> Four times the right answer was to do less: not fill box [22], not show a reference it cannot vouch for, not drop a line it cannot classify, not fill a box it cannot verify. Automation was available each time, and I chose not to use it, each time for a named, arguable reason.</p>
+  <p><b>The pattern.</b> Four times the right answer was to do less: not fill box [22], not show a reference it cannot vouch for, not drop a line it cannot classify, not fill a box it cannot verify. Automation was available each time; I chose not to use it, for a named, arguable reason.</p>
   <p>What I would bring: not making a system do more, but a defensible account of where it stops.</p>
 </div>
 

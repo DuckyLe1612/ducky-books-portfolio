@@ -177,7 +177,7 @@ a[href^="mailto:"]{color:var(--accent)}
   <dd>Every company that records purchase invoices. It does not apply to sales invoices.</dd>
 
   <dt>Why it matters</dt>
-  <dd>Get this wrong, and the company claims back tax it is not entitled to. Nothing about that mistake shows up in the books themselves (the books still add up correctly either way), so it is only caught if the company is audited.</dd>
+  <dd>Get this wrong, and the company claims back tax it is not entitled to. That mistake does not show up in the books (they still add up correctly), so only an audit catches it.</dd>
 </dl>
 </div>
 
@@ -221,7 +221,7 @@ a[href^="mailto:"]{color:var(--accent)}
 
 <h2>4. Acceptance criteria</h2>
 
-<p>These are the exact tests the software must pass before I call this rule finished. Each row states a starting condition, an action, and the result the software must produce.</p>
+<p>These are the exact tests the software must pass before I call this rule finished. Each row states a starting condition, an action, and the required result.</p>
 
 <div class="cuon">
 <table>
@@ -247,7 +247,7 @@ a[href^="mailto:"]{color:var(--accent)}
   <thead><tr><th>#</th><th>Case</th><th>What went wrong</th></tr></thead>
   <tbody>
     <tr><td>E1</td><td>Settled from the bank statement screen.</td>
-        <td>No allocation (the link between a payment and its invoice) was written, and the check only looked at allocations, so a paid invoice was reported as unpaid.</td></tr>
+        <td>No allocation was written, and the check only looked at allocations, so a paid invoice was reported as unpaid.</td></tr>
     <tr><td>E2</td><td>Marked "pay now" in cash at posting.</td>
         <td>This reduces the cash account (a "credit") but writes no allocation, so the invoice lands in group 6 (nothing linked) instead of group 2 (cash present). The exact case this rule exists to catch was the one slipping through.</td></tr>
     <tr><td>E3</td><td>Several small purchases, one supplier, one day.</td>
@@ -270,7 +270,7 @@ a[href^="mailto:"]{color:var(--accent)}
 
 <div class="chan">
   <p>It may not confirm an invoice, post anything, or block a person from posting one they have decided about.</p>
-  <p>This is not a technical limitation: whoever signs the tax return is legally responsible for it, so that person must decide. The software's job is only to put the evidence in front of them.</p>
+  <p>This is not a technical limit: whoever signs the tax return is legally responsible, so only they decide. The software's job is only to put the evidence in front of them.</p>
 </div>
 
 <h2>8. When this stops applying</h2>
@@ -278,12 +278,12 @@ a[href^="mailto:"]{color:var(--accent)}
 <p>When the decree or the threshold changes, or when a payment path appears that the six groups above do not cover.</p>
 
 <div class="the">
-  <p><b>Why this page exists.</b> My other pages show screenshots of the finished software: that is the output. This page shows the input instead: the work of turning a real rule into an exact written one. That is the work I am applying to do.</p>
+  <p><b>Why this page exists.</b> My other pages show screenshots of the finished software: that is the output. This page shows the input: turning a real rule into an exact written one, the work I am applying to do.</p>
   <p>Section 1 can be checked against the published decree: nobody has to take my word for it.</p>
 </div>
 
 <footer>
-  <p>The numbers in section 6 are measured from the real, working system. Everything else on this page is the rule itself: how it was written and how it was built. Originally written in Vietnamese, translated here.</p>
+  <p>The numbers in section 6 are measured from the real, working system. Everything else on this page is the rule itself: how it was written and built. Originally written in Vietnamese, translated here.</p>
   <p><a href="mailto:ledinhduc1612@gmail.com">ledinhduc1612@gmail.com</a></p>
 </footer>
 

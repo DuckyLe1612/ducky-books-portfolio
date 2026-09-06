@@ -166,8 +166,7 @@ nothing scaled up.</p>
   scheduled jobs: the unfiltered count. The query
   returns 409,668. A number its own query does not produce,
   and it got past me.</p>
-  <p>Both mistakes are fixed below. Two of the totals on this page are also broken
-  into the parts that add up to them, so you can check the arithmetic yourself.</p>
+  <p>Both mistakes are fixed below. Two totals on this page break into the parts that add up to them, so you can check the arithmetic.</p>
   
 </div>
 
@@ -176,11 +175,7 @@ nothing scaled up.</p>
   next to each number means someone can check my own definition of what was counted,
   and argue with it if they think it is wrong.</p>
   
-  <p>The database itself is SQLite (a common, simple type of database), and it is
-  encrypted at rest, meaning the file it is stored in is scrambled and unreadable
-  without the right key. I opened it in a mode called <code>query_only = 1</code>,
-  which blocks any change: the connection used to run these queries could read the
-  books but could not write to them.</p>
+  <p>The database itself is SQLite (a common, simple type of database) and encrypted at rest (the stored file is scrambled and unreadable without the right key). I opened it in read-only mode (<code>query_only = 1</code>): the connection could read the books but not change them.</p>
 </div>
 
 <h2>1. Invoices by direction and source</h2>
@@ -196,11 +191,7 @@ by a person.</p>
  ORDER BY invoices DESC;</pre>
 
 <div class="chan">
-  <p>The headline "99.8% nobody typed" counts everything except an invoice where the
-  <code>source</code> column says <code>'manual'</code> and the <code>import_source</code>
-  column is empty, in plain terms, an invoice a person typed in with nothing attached.
-  It does not mean "automated": that is simply what these two database columns record,
-  not a claim about how much of the work ran on its own.</p>
+  <p>The headline "99.8% nobody typed" counts everything except an invoice where the <code>source</code> column says <code>'manual'</code> and the <code>import_source</code> column is empty, in plain terms, an invoice a person typed in with nothing attached. It does not mean "automated": that's just what these two columns record, not a claim about how much work ran on its own.</p>
   <p><code>direction</code> is in the query because version one omitted it
   and I called them all supplier invoices.
   Wrong by about 19,000 documents.</p>
@@ -271,11 +262,7 @@ SELECT user_id, created_at
  ORDER BY user_id, created_at;</pre>
 
 <div class="chan">
-  <p>This one is not the output of a single query, and I will not pretend it is. The
-  SQL above only returns the raw rows, one per action; the rule that a gap of five
-  minutes or less still counts as working is applied afterwards, in code, not in the
-  query itself. That rule is a judgement call: five minutes counts as still working,
-  six minutes counts as stopped. Change that threshold and the hours change.</p>
+  <p>This one is not the output of a single query: the SQL above only returns the raw rows, one per action. The rule that a gap of five minutes or less counts as working is applied afterwards, in code, not in the query itself: a judgement call. Five minutes counts as working, six minutes counts as stopped. Change that threshold and the hours change.</p>
   
 </div>
 
@@ -297,10 +284,7 @@ SELECT user_id, created_at
   3,377 on 18 July, 2,100 on 23 August, 1,004 on 21 August. Ten days carry 82.4%. On 26 of
   the 75 it was under ten. Not spread out: a few
   sessions of one person cleaning up historical imports.</p>
-  <p>The expensive part of this work was not the corrections themselves but the
-  checking, and the log cannot show that: looking at a screen does not create a row
-  in any table. Because of this, the goal of the fix changed from "make the guesses
-  better" to "show what has already been checked."</p>
+  <p>The expensive part of this work was not the corrections themselves but the checking, and the log cannot show that: looking at a screen does not create a row in any table. So the goal changed from "make the guesses better" to "show what has already been checked."</p>
 </div>
 
 <div class="the">
