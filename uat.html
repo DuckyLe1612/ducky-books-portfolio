@@ -43,6 +43,7 @@ body{
 }
 .khung{max-width:min(88ch,calc(100% - 2.5rem)); margin-inline:auto; padding:2.6rem 0 4rem}
 a{color:var(--accent)}
+::selection{background:var(--accent-soft); color:var(--ink)}
 h1{font-size:2.05rem; line-height:1.2; margin:.2rem 0 .6rem; letter-spacing:-.02em}
 h2{font-size:1.32rem; margin:2.6rem 0 .5rem; letter-spacing:-.01em}
 p{margin:0 0 1rem}
@@ -246,7 +247,7 @@ a[href^="mailto:"]{color:var(--accent)}
     <tr><td>C4</td><td>Export financial statements</td><td>Total assets equal equity plus liabilities; legal citation in footer.</td></tr>
     <tr><td>C5</td><td>Export VAT return</td><td>Figures match the invoice listing for that period.</td></tr>
     <tr><td>C6</td><td>Open it in the real government filing software</td><td>Accepted, no format error.</td></tr>
-    <tr><td>C7</td><td>Export purchase listing for company tax</td><td>Every required column present; the two forbidden ones absent.</td></tr>
+    <tr><td>C7</td><td>Export purchase listing for company tax</td><td>Every required column present; the two forbidden ones (an internal item code, and how it was paid) absent.</td></tr>
   </tbody>
 </table>
 </div>
