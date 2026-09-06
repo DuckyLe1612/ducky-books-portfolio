@@ -1,7 +1,7 @@
 # Ducky Books, work showcase
 
-A single page describing accounting software I specified, directed and verified. It is in daily
-use by a professional accounting practice, which keeps the books for 42 client businesses on it.
+Seven pages describing accounting software I specified, directed and verified. It is in daily
+use by a professional accounting practice, which keeps the books for 43 client businesses on it.
 
 **Live page:** https://duckyle1612.github.io/ducky-books-portfolio/
 
@@ -17,7 +17,7 @@ or amount appears anywhere.
 
 ## About the numbers
 
-Every figure was counted on 4 September 2026 and the page says how each one was counted. Some come
+Every figure was counted on 5 September 2026 and the page says how each one was counted. Some come
 from the running system, some from this repository, such as the number of screens and test files.
 
 One number on the page is not a measurement: the accountant's own estimate of how much typing the
