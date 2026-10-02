@@ -1,0 +1,678 @@
+<!doctype html>
+<html lang="en-NZ" data-theme="light">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="color-scheme" content="light" />
+<title>The evidence · Ducky Books</title>
+<meta name="description" content="The measurements, the method, the design decisions and what each one cost, including the rule I got wrong and what it left unwarned.">
+<meta property="og:title" content="Dinh Duc Le · Ducky Books" />
+<meta property="og:description" content="42,655 invoices went into these books. A person typed 93 of them. What was measured, and what was not." />
+<meta property="og:type" content="website" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  
+  --r-hop:14px;
+  --paper:#f1e7d3;        
+  --surface:#fffdf6;      
+  --ink:#1b140a;          
+  --muted:#4a4030;        
+  --faint:#6b5c44;
+  --rule:rgba(110,82,25,.30);   
+  --rule-strong:#978150;        
+  --accent:#965509; --chon:rgba(150,85,9,.34);             
+  --accent-fill:#965509;        
+  --accent-soft:#f7e8c8;        
+  --dot:#948a78;                
+  --shadow:0 4px 14px rgba(120,90,30,.10);  
+  --kinh-vien:rgba(255,255,255,.7);
+  --kinh-sang:rgba(255,255,255,.85);
+  --sans:"Noto Sans",ui-sans-serif,system-ui,sans-serif;   
+  --bong-logo:0 4px 12px rgba(150,85,9,.32);   
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#1c1710; --surface:#241f16; --ink:#f4ecdb; --muted:#c7bb9f; --faint:#a2937a;
+    --rule:rgba(200,170,110,.26); --rule-strong:#847651;
+    --accent:#ffce5a; --chon:rgba(255,206,90,.28); --accent-fill:#e0a552; --accent-soft:#352b18;
+    --dot:#7a7361; --shadow:0 8px 22px rgba(0,0,0,.34); --bong-logo:0 4px 12px rgba(0,0,0,.45);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#1c1710; --surface:#241f16; --ink:#f4ecdb; --muted:#c7bb9f; --faint:#a2937a;
+  --rule:rgba(200,170,110,.26); --rule-strong:#847651;
+  --accent:#ffce5a; --chon:rgba(255,206,90,.28); --accent-fill:#e0a552; --accent-soft:#352b18;
+  --dot:#7a7361; --shadow:0 8px 22px rgba(0,0,0,.34); --bong-logo:0 4px 12px rgba(0,0,0,.45);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; color:var(--ink);
+  
+  background:
+    radial-gradient(1200px 720px at 12% 4%, var(--surface) 0%, transparent 60%),
+    radial-gradient(900px 620px at 92% 42%, var(--accent-soft) 0%, transparent 55%),
+    var(--paper);
+  background-attachment:fixed;
+  font-family:var(--sans); font-size:1.1875rem; line-height:1.62;
+  font-feature-settings:"kern" 1;
+  -webkit-font-smoothing:antialiased;
+}
+
+.page{
+  --gap:clamp(1rem,3.4vw,2.5rem);
+  --content:min(88ch,100% - var(--gap) * 2);
+  --popout:minmax(0,5rem);
+  --feature:minmax(0,10rem);
+  --full:minmax(var(--gap),1fr);
+  display:grid;
+  grid-template-columns:
+    [full-start] var(--full)
+    [feature-start] var(--feature)
+    [popout-start] var(--popout)
+    [content-start] var(--content) [content-end]
+    var(--popout) [popout-end]
+    var(--feature) [feature-end]
+    var(--full) [full-end];
+}
+.page > *{grid-column:content}
+.popout{grid-column:popout}
+.feature{grid-column:feature}
+.full{grid-column:full}
+
+a{color:inherit; text-decoration:underline; text-decoration-thickness:1px; text-underline-offset:.18em; text-decoration-color:var(--accent)}
+::selection{background:var(--chon); color:var(--ink)}
+a:hover{text-decoration-thickness:2px}
+a:focus-visible{outline:2px solid var(--accent); outline-offset:3px}
+b,strong{font-weight:600}
+p{margin:0 0 1.2rem; max-width:none}
+
+.card p, .card li{max-width:none}
+li{max-width:none}
+
+html{scroll-behavior:smooth}
+.kicker{scroll-margin-top:4.75rem}
+#loi-cua-toi{scroll-margin-top:4.75rem}
+
+.mucluc{
+  position:sticky; top:0; z-index:40;
+  grid-column:full;
+  margin:-1.4rem 0 2.4rem;
+  padding:.55rem 0;
+  background:none; border:0;
+  
+  pointer-events:none;
+}
+.mucluc-trong{
+  pointer-events:auto; position:relative;
+  width:max-content; max-width:calc(100% - 2rem); margin-inline:auto;
+  display:flex; flex-wrap:nowrap;
+  padding:.35rem .5rem;
+  background:var(--surface);
+  border:1px solid var(--rule);
+  border-radius:999px;
+  
+  box-shadow:0 1px 2px rgba(120,90,30,.06), 0 4px 12px rgba(120,90,30,.05);
+  transition:box-shadow .3s ease;
+  line-height:1.45;
+}
+.mucluc.roi-dinh .mucluc-trong{box-shadow:0 1px 2px rgba(120,90,30,.08), 0 10px 28px rgba(120,90,30,.13)}
+
+.mucluc .vet{
+  position:absolute; top:50%; left:0; height:1.85em; margin-top:-0.925em;
+  border-radius:999px; background:var(--accent-soft);
+  opacity:0; transform:translateX(0); width:0;
+  transition:transform .34s cubic-bezier(.22,1,.36,1), width .34s cubic-bezier(.22,1,.36,1), opacity .2s ease;
+  pointer-events:none;
+}
+.mucluc a{position:relative}
+.mucluc a{
+  color:var(--muted); text-decoration:none;
+  font-size:.875rem; white-space:nowrap;
+  padding:.34rem .7rem; border-radius:999px;
+  transition:color .15s ease, background-color .15s ease;
+}
+
+.mucluc a:hover{color:var(--accent); background:color-mix(in srgb, var(--accent-soft) 45%, transparent)}
+.mucluc a:active{background:var(--accent-soft)}
+.mucluc a:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+
+.mucluc a[aria-current="true"]{color:var(--accent); font-weight:600}
+
+@media (max-width:1100px){
+  .mucluc{padding:.5rem 0}
+  .mucluc-trong{
+    width:auto; max-width:none; margin-inline:.75rem;
+    overflow-x:auto; scrollbar-width:none;
+    -webkit-mask-image:linear-gradient(to right, #000 calc(100% - 1.6rem), transparent);
+    mask-image:linear-gradient(to right, #000 calc(100% - 1.6rem), transparent);
+  }
+  .mucluc-trong::-webkit-scrollbar{display:none}
+}
+@media (prefers-reduced-motion:reduce){.mucluc-trong,.mucluc a,.mucluc .vet{transition:none}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+.masthead{
+  padding:.4rem 0 1.1rem; margin-bottom:3.4rem;
+  display:flex; justify-content:space-between; align-items:flex-end; gap:1.5rem 2rem;
+  flex-wrap:wrap;
+}
+.masthead .ten{
+  font-size:clamp(1.75rem,3.2vw,2.4rem); font-weight:700; letter-spacing:-.02em;
+  line-height:1.1; margin:0;
+}
+.masthead .nghe{font-size:1.1875rem; color:var(--muted); margin:.3rem 0 0; max-width:none}
+.masthead .lienhe{display:flex; flex-direction:column; align-items:flex-end; gap:.15rem; text-align:right; font-size:.9375rem; color:var(--faint); line-height:1.5}
+.masthead .lienhe .dumuc{color:var(--accent); font-weight:600}
+@media (max-width:44rem){
+  .masthead{align-items:flex-start}
+  .masthead .lienhe{align-items:flex-start; text-align:left; margin-top:.4rem}
+}
+
+.card{
+  background:color-mix(in srgb, var(--surface) 78%, transparent);
+  -webkit-backdrop-filter:blur(22px) saturate(1.35);
+  backdrop-filter:blur(22px) saturate(1.35);
+  border:1px solid var(--kinh-vien);
+  border-radius:var(--r-hop);
+  box-shadow:
+    inset 0 1px 0 var(--kinh-sang),
+    inset 0 -1px 0 rgba(150,85,9,.06),
+    var(--shadow);
+}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .card{background:var(--surface)}
+}
+
+.plate > a:has(img){
+  background:color-mix(in srgb, var(--surface) 78%, transparent);
+  -webkit-backdrop-filter:blur(22px) saturate(1.35);
+  backdrop-filter:blur(22px) saturate(1.35);
+}
+.card-chart{padding:1.6rem 1.8rem 1.8rem}
+.card-rule{padding:1.4rem 1.6rem}
+.card-table{padding:.4rem 1.4rem 1rem}
+.card-vs{padding:1.8rem 2rem 1.2rem}
+.masthead .who{font-weight:500}
+.masthead .where{color:var(--faint)}
+
+.brand{display:flex; align-items:center; gap:.7rem}
+.brand .mark{
+  width:38px; height:38px; border-radius:8px; flex:none;
+  display:flex; align-items:center; justify-content:center;
+  background:linear-gradient(135deg,#C68A33 0%,#965509 100%); color:#FFFAF0;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.4), var(--bong-logo);
+}
+.brand .nm{font-weight:700; font-size:1.0625rem; letter-spacing:-.01em; white-space:nowrap}
+.brand .sub{display:block; font-weight:400; font-size:.8rem; color:var(--faint); letter-spacing:0}
+
+h1{
+  font-weight:700; font-size:clamp(2rem,4.4vw,3rem); line-height:1.12;
+  letter-spacing:-.022em; margin:0 0 1.5rem; max-width:none; text-wrap:balance;
+}
+h1 em{font-style:normal; color:var(--accent)}
+.standfirst{font-size:clamp(1.125rem,1.9vw,1.375rem); line-height:1.5; color:var(--muted); max-width:none; margin:0 0 1.75rem}
+.credential{font-size:.9375rem; color:var(--faint); max-width:none; margin:0; line-height:1.6}
+
+h2{
+  font-weight:700; font-size:clamp(1.5rem,2.8vw,2.05rem); line-height:1.2;
+  letter-spacing:-.015em; margin:0 0 1.3rem; max-width:none;
+}
+h3{font-weight:700; font-size:1.375rem; margin:2.1rem 0 .4rem; letter-spacing:-.005em}
+.kicker{
+  font-size:1.0625rem; font-weight:600; letter-spacing:0; color:var(--accent);
+  margin:0 0 .7rem; display:flex; align-items:center; gap:.6rem;
+}
+.kicker::before{content:""; width:1.7rem; height:2px; background:var(--accent); border-radius:1px; flex:none}
+.big{font-size:1.375rem; line-height:1.55; max-width:none}
+
+.blk{padding:3.2rem 0}
+.blk-lead{padding:.6rem 0 3.6rem}
+
+.blk-lead > h1{text-align:center}
+
+.blk-lead h1{margin-inline:auto; max-width:34ch}
+@media (max-width:34rem){ .blk-lead h1 br{display:none} }
+
+@media (max-width:40rem){ .blk-lead{text-align:left} .blk-lead h1,.blk-lead > p{max-width:none} }
+.blk-turn{padding:4.4rem 0 3.2rem}
+.blk-quiet{padding:2.4rem 0}
+
+.blk-ket{padding:2.8rem 0 1rem}
+.blk-ket h2{font-size:1.18rem; margin-bottom:.5rem}
+.blk-ket p{font-size:.98rem; color:var(--muted)}
+.blk-wide{padding:4.4rem 0 3.6rem}
+.blk-close{padding:4.4rem 0 1rem}
+
+.two{display:grid; grid-template-columns:repeat(auto-fit,minmax(15rem,1fr)); gap:1.5rem 3rem; margin:2.6rem 0 1rem; align-items:start}
+.two .n{font-weight:700; font-size:clamp(1.9rem,3.8vw,2.8rem); line-height:1; letter-spacing:-.02em; font-variant-numeric:tabular-nums lining-nums; display:block; margin-bottom:.5rem}
+.two .d{font-size:.9375rem; line-height:1.45; color:var(--muted); max-width:32ch; display:block}
+.two .hi .n{color:var(--accent)}
+.asof{font-size:.9375rem; color:var(--faint); margin:1.4rem 0 0; max-width:none; line-height:1.6}
+
+.tomtat{
+  margin:2rem 0 0; padding:1.1rem 1.3rem;
+  background:var(--surface); border:1px solid var(--rule); border-radius:var(--r-hop);
+}
+.tomtat dl{display:grid; grid-template-columns:auto 1fr; gap:.5rem 1.1rem; margin:0}
+.tomtat dt{font-weight:600; color:var(--accent); white-space:nowrap}
+.tomtat dd{margin:0}
+@media (max-width:34rem){
+  .tomtat dl{grid-template-columns:1fr; gap:.15rem}
+  .tomtat dd{margin:0 0 .5rem}
+}
+
+.loi{margin:1.6rem 0 1.6rem 1.75rem; padding:0; border:0}
+.loi p{font-size:1.375rem; line-height:1.55; margin:0 0 .7rem}
+.loi p:last-of-type{margin-bottom:0}
+
+.loi .ai{
+  display:block; font-size:.9375rem; font-weight:600;
+  color:var(--accent); margin:0 0 .5rem; line-height:1.45;
+}
+
+.loi .them{
+  display:block; font-size:.9375rem; color:var(--faint); margin-top:.7rem; line-height:1.5;
+}
+
+.solieu{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(17rem,1fr));
+  gap:1.8rem 2.4rem; margin:2.2rem 0 .6rem;
+}
+
+.solieu > div{padding-top:.9rem}
+.solieu .n{
+  display:block; font-weight:700; font-size:clamp(1.6rem,3vw,2.15rem); line-height:1;
+  letter-spacing:-.02em; font-variant-numeric:tabular-nums lining-nums; color:var(--accent);
+  margin-bottom:.45rem;
+}
+.solieu .d{display:block; font-size:1rem; line-height:1.4; margin-bottom:.35rem}
+.solieu .c{display:block; font-size:.875rem; line-height:1.45; color:var(--faint)}
+
+.annotated{display:block}
+
+.annotated > .side{
+  font-size:1.1875rem; line-height:1.6; color:var(--muted); max-width:none;
+  border-left:2px solid var(--rule); padding-left:1rem; margin:1.2rem 0 0;
+}
+.annotated > .side b{color:var(--ink); font-weight:600}
+.annotated > .side b{color:var(--muted); font-weight:500; display:block; margin-bottom:.15rem}
+
+.tw{overflow-x:auto; margin:2rem 0 0}
+table{border-collapse:collapse; width:100%; min-width:42rem; font-size:1rem}
+caption{text-align:left; font-size:.8rem; color:var(--faint); padding-bottom:.7rem}
+th{text-align:left; font-weight:600; font-size:.8rem; color:var(--faint); padding:0 1.2rem .6rem 0; border-bottom:1px solid var(--rule-strong)}
+td{padding:.9rem 1.2rem .9rem 0; border-bottom:1px solid var(--rule); vertical-align:top; line-height:1.5}
+tr:last-child td{border-bottom:none}
+td.method{color:var(--faint); font-size:.8rem; line-height:1.45}
+.num{font-variant-numeric:tabular-nums lining-nums}
+
+.phim{margin:2.4rem 0 0}
+.phim video{
+  display:block; width:100%; height:auto; border-radius:var(--r-hop);
+  background:var(--surface); border:1px solid var(--rule-strong); box-shadow:var(--shadow);
+}
+.phim figcaption{font-size:1.1875rem; color:var(--muted); margin-top:.9rem; line-height:1.5}
+
+.plates{display:grid; grid-template-columns:1fr 1fr; gap:2.4rem 2rem; margin-top:2.4rem}
+@media (max-width:60rem){.plates{grid-template-columns:1fr}}
+.plate{margin:0}
+
+.plate > a:has(img){
+  display:block; text-decoration:none; padding:10px; border-radius:var(--r-hop);
+  background:var(--surface); border:1px solid var(--rule-strong); box-shadow:var(--shadow);
+}
+.plate > a:has(img):focus-visible{outline:3px solid var(--accent); outline-offset:3px}
+.plate img{display:block; width:100%; height:auto; border-radius:6px}
+.plate > a:has(img):hover{border-color:var(--accent)}
+.goi-y{font-size:.8rem; color:var(--faint); margin:0 0 .6rem; max-width:none}
+.plate figcaption{font-size:1.1875rem; color:var(--muted); margin-top:.8rem; max-width:none; line-height:1.5}
+.plate figcaption b{color:var(--ink)}
+
+.plate-lead{grid-column:1 / -1}
+.plate-lead figcaption{max-width:none}
+
+.spec{margin-top:1.8rem}
+
+.spec:not(.card){padding-top:.6rem}
+.spec dl{margin:0; font-size:1.1875rem}
+
+.spec dt{
+  font-weight:700; color:var(--accent); font-size:1.0625rem; letter-spacing:0;
+  margin:1.5rem 0 .35rem;
+}
+.spec dt:first-of-type{margin-top:0}
+.spec dd{margin:0; max-width:none}
+
+.callout{padding:0; margin:2.4rem 0; max-width:none}
+.callout p{max-width:none}
+.callout p:last-child{margin-bottom:0}
+
+.sc .khung{overflow-x:auto; -webkit-overflow-scrolling:touch}
+.sc svg{display:block; width:100%; height:auto; min-width:700px}
+.sc .cuon{font-size:.875rem; color:var(--faint); margin:.6rem 0 0}
+@media (min-width:44rem){.sc .cuon{display:none}}
+.sc .ten{font-size:19px; font-weight:600; fill:var(--ink)}
+.sc .truc{font-size:16px; fill:var(--faint)}
+.sc .truc text{font-size:16px; fill:var(--faint)}
+.sc .luoi{stroke:var(--rule); stroke-width:1}
+.sc .moc{font-size:19px; font-weight:700; fill:var(--ink)}
+.sc .net{fill:none; stroke-width:2.5}
+.sc .a.net{stroke:var(--accent-fill)}
+.sc .b.net{stroke:var(--dot)}
+.sc .vung{stroke:none}
+.sc .a.vung{fill:var(--accent-fill); opacity:.13}
+.sc .b.vung{fill:var(--dot); opacity:.13}
+.sc .cham{stroke:var(--surface); stroke-width:2}
+.sc .a.cham{fill:var(--accent-fill)}
+.sc .b.cham{fill:var(--dot)}
+
+.chart{margin:2.4rem 0 0}
+.chart .ct{font-size:1.375rem; font-weight:600; line-height:1.4; margin:0 0 .35rem; max-width:none}
+.chart .cs{font-size:.9375rem; color:var(--faint); margin:0 0 1.4rem; max-width:none; line-height:1.5}
+.chart svg{display:block; width:100%; height:auto}
+
+.chart .legend{display:flex; flex-wrap:wrap; gap:.5rem 2rem; margin-top:1.1rem; font-size:.8rem; color:var(--muted)}
+.chart .legend span{display:inline-flex; align-items:center; gap:.55rem}
+.chart .legend i{width:.75rem; height:.75rem; border-radius:2px; display:inline-block; flex:none}
+.chart .note{font-size:1.1875rem; color:var(--muted); margin-top:1.2rem; max-width:none}
+.chart .note b{color:var(--ink)}
+.bars{display:grid; gap:1.5rem; margin:.5rem 0 0}
+.bar .lab{display:flex; justify-content:space-between; align-items:baseline; gap:1rem; margin-bottom:.45rem}
+.bar .lab .what{font-size:1.1875rem; line-height:1.35}
+.bar .lab .pct{font-weight:700; font-size:1.375rem; font-variant-numeric:tabular-nums lining-nums; white-space:nowrap}
+.bar .track{height:.6rem; background:var(--accent-soft); border-radius:3px; overflow:hidden}
+.bar .fill{height:100%; background:var(--accent-fill); border-radius:3px}
+.bar .of{font-size:.9375rem; color:var(--faint); margin:.4rem 0 0; line-height:1.5; max-width:none}
+
+.vs{display:grid; grid-template-columns:1fr 1fr; gap:0 2.5rem; margin-top:2rem}
+@media (max-width:56rem){.vs{grid-template-columns:1fr; gap:0}}
+.vs .col{padding:.2rem 0 0}
+.vs .col + .col{border-left:1px solid var(--rule); padding-left:2.5rem}
+@media (max-width:56rem){.vs .col + .col{border-left:none; padding-left:0; border-top:1px solid var(--rule); margin-top:1.4rem}}
+.vs h3{margin:0 0 1rem; font-weight:700; font-size:1.1875rem; letter-spacing:0; color:var(--accent)}
+.vs p{font-size:1.1875rem; margin:0 0 1rem; max-width:none}
+.vs p b{color:var(--ink)}
+
+footer{padding:3rem 0 5rem; font-size:1.1875rem}
+footer .lines{display:flex; flex-wrap:wrap; gap:.4rem 2rem; margin-bottom:1.3rem}
+footer .fine{color:var(--faint); font-size:.9375rem; max-width:none; line-height:1.55}
+
+.thanh-dinh{
+  position:sticky; top:0; z-index:50;
+  
+  background:var(--surface);
+  border-bottom:1px solid var(--rule);
+  margin:0 0 2rem;
+}
+
+.thanh-trong{
+  position:relative;
+  max-width:min(92ch,calc(100% - 2.5rem)); margin-inline:auto;
+  display:flex; align-items:center; justify-content:center; gap:.35rem 1.1rem; flex-wrap:wrap;
+  padding:.55rem 0;
+}
+.thanh-ten{
+  font-weight:700; font-size:.95rem; letter-spacing:-.01em;
+  color:var(--ink); text-decoration:none; margin-right:.4rem; white-space:nowrap;
+}
+.thanh-ten:hover{color:var(--accent)}
+.thanh-nhan{
+  font-size:.72rem; font-weight:700; letter-spacing:.11em; text-transform:uppercase;
+  color:var(--faint); white-space:nowrap; margin-right:.15rem;
+}
+@media (max-width:46rem){ .thanh-nhan{display:none} }
+.thanh-lk{display:flex; flex-wrap:wrap; gap:.2rem .3rem; align-items:center}
+.thanh-lk a{
+  font-size:.88rem; text-decoration:none; color:var(--muted);
+  padding:.3rem .62rem; border-radius:999px; white-space:nowrap; line-height:1.35;
+}
+.thanh-lk a:hover{color:var(--accent); background:var(--accent-soft)}
+.thanh-lk a[aria-current="page"]{
+  background:var(--accent); color:var(--surface); font-weight:600;
+}
+@media (max-width:40rem){
+  .thanh-trong{padding:.45rem 0}
+  .thanh-ten{font-size:.9rem; width:100%; margin-bottom:.15rem}
+  .thanh-lk{width:100%; flex-wrap:nowrap; overflow-x:auto; scrollbar-width:none}
+  .thanh-lk::-webkit-scrollbar{display:none}
+}
+
+.thanh-len{
+  position:absolute; right:0; top:50%; transform:translateY(-50%); display:inline-flex; align-items:center; gap:.32rem;
+  font-size:.84rem; font-weight:600; color:var(--muted);
+  background:none; border:1px solid transparent; border-radius:999px;
+  padding:.28rem .6rem; cursor:pointer; white-space:nowrap;
+  opacity:0; visibility:hidden; transition:opacity .18s ease, color .18s ease, background .18s ease;
+}
+.thanh-dinh.da-cuon .thanh-len{opacity:1; visibility:visible}
+.thanh-len:hover{color:var(--accent); background:var(--accent-soft)}
+.thanh-len:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+.thanh-len svg{width:.95em; height:.95em}
+@media (max-width:40rem){
+  .thanh-len{margin-left:0; order:-1; align-self:flex-end; position:absolute; right:0; top:.4rem}
+  .thanh-trong{position:relative}
+}
+@media (prefers-reduced-motion:reduce){ .thanh-len{transition:none} }
+
+a[href^="mailto:"]{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="thanh-dinh">
+  <div class="thanh-trong">
+    <span class="thanh-nhan" aria-hidden="true">Portfolio</span>
+    <nav class="thanh-lk" aria-label="Pages of this portfolio">
+      <a href="index.html" title="The main argument">Main page</a>
+      <a href="chi-tiet.html" title="The rest of the main argument: measurements, screens, and what was not mine">The detail</a>
+      <a href="bang-chung.html" aria-current="page" title="You are on this page: Measurements and method">The evidence</a>
+      <a href="quy-tac.html" title="One business rule, specified">A rule</a>
+      <a href="uat.html" title="User acceptance test">The test script</a>
+      <a href="so-lieu.html" title="Every figure with its SQL">Six numbers</a>
+      <a href="doi-chieu.html" title="Source to target mapping">The VAT return</a>
+    </nav>
+    <button type="button" class="thanh-len" data-len-dau>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 19V5M5 12l7-7 7 7"/>
+      </svg>Top
+    </button>
+  </div>
+</div>
+
+<div class="page">
+
+<header class="masthead">
+  <div class="danh">
+    <p class="ten">Dinh Duc Le</p>
+    <p class="nghe">Business Analyst · Data Analyst</p>
+  </div>
+  <div class="lienhe">
+    <span>Auckland, New Zealand</span>
+    <span><a href="mailto:ledinhduc1612@gmail.com">ledinhduc1612@gmail.com</a></span>
+    <span class="dumuc">Ducky Books, accounting software used on most working days</span>
+  </div>
+</header>
+
+<div class="blk-lead">
+  <p class="kicker">The evidence</p>
+  <h1>The evidence behind the software.</h1>
+  <p class="standfirst">Why Vietnamese bookkeeping was harder, how one rule was pinned down, and five design decisions with their costs.</p>
+</div>
+
+<div class="blk">
+  <p class="kicker" id="vietnam">Why this was not simple</p>
+  <h2>Two ways to keep books.</h2>
+  
+
+  <div class="vs card card-vs">
+    <div class="col">
+      <h3>New Zealand</h3>
+      <p><b>You choose your own accounts.</b> The <a href="https://standards.xrb.govt.nz/standards-navigator/nz-ias-1/" rel="noopener">reporting standard</a> sets the minimum lines but "does not prescribe the order or format". Smaller companies have no set list.</p>
+      <p><b>An invoice is between you and your customer.</b> Since April 2023 Inland Revenue no longer requires a "tax invoice". You keep records and give them to a GST-registered buyer who asks.</p>
+      <p><b>E-invoicing is optional.</b> Large government agencies must accept them, and from 2027 will require them from their biggest suppliers.</p>
+      <p><b>GST is 15%.</b> Register at $60,000 turnover. Returns due the 28th of the following month, except March (7 May) and November (15 January).</p>
+    </div>
+    <div class="col">
+      <h3>Vietnam</h3>
+      <p><b>The government writes the list of accounts.</b> Cash 111, revenue 511, cost of goods sold 632. Almost every company uses it unchanged. Since January 2026 changes need written internal rules.</p>
+      <p><b>The tax office sees the invoice first.</b> Since July 2022 almost every business issues signed electronic invoices. Often the tax office must add a code before the invoice is valid.</p>
+      <p><b>A named person carries the risk.</b> Most companies must appoint a chief accountant whose qualifications are set by law. Criminal charges for tax evasion normally start at 100 million dong, roughly NZ$6,500.</p>
+      <p><b>The rules move mid year.</b> In 2025 and 2026 Vietnam replaced its company tax law, personal income tax law, tax administration law, accounting rules and invoice rules.</p>
+    </div>
+  </div>
+
+  <figure class="plate feature" style="margin:2.4rem 0 0">
+    <a href="images/05-chart-of-accounts.webp"><img src="images/05-chart-of-accounts.webp" width="2200" height="1375" loading="lazy" alt="Chart of accounts screen listing 191 accounts, each marked Standard per Circular" /></a>
+    <figcaption>191 accounts, each marked <b>Standard (per Circular)</b>, from the government document.</figcaption>
+  </figure>
+
+  <p style="margin-top:2rem"><b>If you work in New Zealand, none of this sounds hard.</b> Xero and MYOB have read bank feeds and supplier invoices for years. The hard part is choosing the account. Put a reading in the wrong account and the books still balance. They are just wrong, and someone signs them anyway.</p>
+
+  <p style="margin-top:2rem">Neither way is better. Research groups countries by who funds companies. Where investors do, the rules answer to investors: New Zealand, Australia, the UK, the US. Where the state and banks do, the rules answer to them: France, Germany, China, Vietnam. Even then it varies: France sets a national list of accounts, Germany does not.</p>
+  <p>One 2026 tracker counts 52 countries requiring e-invoicing between businesses. The EU will require it across borders from July 2030 and within each country by 2035.</p>
+  <p>New Zealand has set no date. I am not saying it is heading that way, only that I have worked where the tax office sees every invoice before it counts.</p>
+</div>
+
+<div class="blk">
+  <p class="kicker" id="hard">The hard part</p>
+  <h2>Agreeing what counts as correct.</h2>
+  
+
+  <div class="annotated">
+    <div class="spec card card-rule">
+      <dl>
+        <dt>The rule</dt>
+        <dd>VAT (Vietnam's version of GST) is reclaimable on a purchase above a threshold only if paid by bank transfer, not cash.</dd>
+        <dt>The law</dt>
+        <dd>Decree 181/2025, Article 26, under VAT Law 48/2024. Threshold 5,000,000 dong including VAT, roughly NZ$330, in force from 1 July 2025.</dd>
+        <dt>What was hard</dt>
+        <dd>Not the arithmetic. The threshold changes with the law, so it cannot be a fixed number in the code. A report for an earlier period must use the rule of that time.</dd>
+        <dt>What I decided</dt>
+        <dd>Every legal value is stored as data, with its start date and source document. The software picks the version for the period being reported. Counted the same day: 63 records, 41 values.</dd>
+        <dt>How it is held</dt>
+        <dd>Automated tests pin each threshold to its date, so changing one rule cannot quietly move another.</dd>
+      </dl>
+    </div>
+    <p class="side"><b>Why cite the decree, not the law itself.</b> The law sets the principle, the decree sets the number, and the number moves more often.</p>
+    <p class="side"><b>One thing I have not settled.</b> A separate rule, for purchases without an invoice, adds up a supplier's whole day. This rule checks each invoice alone. Whether the day total applies here too, I have not settled, so I claim nothing.</p>
+  </div>
+
+  <figure class="plate popout" style="margin:2rem 0 2.6rem">
+    <a href="images/06-legal-parameters.webp"><img src="images/06-legal-parameters.webp" width="2200" height="1375" loading="lazy" alt="Legal parameters screen showing each value with the decree it comes from and the date it took effect" /></a>
+    <figcaption><b>One rule, as the software holds it.</b> The screen is English, but the rule text stays Vietnamese: a translated tax threshold is not something to rely on. The second rule notes that its decree was replaced on 1 July 2026 while the number stayed the same.</figcaption>
+  </figure>
+
+  <h3>New Zealand has it too</h3>
+  <p>New Zealand tax thresholds changed on 31 July 2024, partway through a tax year, so that year used blended "composite" rates. Payroll providers got an extra month. Minimum wage changes every 1 April; ACC levies have their own cycle.</p>
+  <p>Tax, insurance, banking, health and construction all have that shape.</p>
+
+  <h3 id="loi-cua-toi">Where I was wrong</h3>
+  <p>Vietnamese company tax lets a business deduct money put into a science and technology fund, up to <b>20% of taxable income</b>, raised from 10% by Law 67/2025. My software calculated the deduction but never checked it against the ceiling. Nothing looked wrong: the books balanced, no warning fired. A return built on it would have declared too little tax.</p>
+  <p>Sources disagreed on whether the ceiling applies to pre-tax profit or taxable income. The date was a trap too: the law took force on 1 October 2025 but covers the whole 2025 tax year.</p>
+
+  <p><b>How it was caught.</b> No figure looked wrong; I found it while reading the law to write the rule. The rule now carries the ceiling, its start date and its source, and a test checks that each date gets the right ceiling.</p>
+
+  <p>Whether a return was already filed on the old logic, I cannot tell you. That is for the accountant who signs them; I will not guess.</p>
+</div>
+
+<div class="blk-wide">
+  <p class="kicker" id="built">How it is built</p>
+  <h2>Five decisions and their costs.</h2>
+  
+
+  <h3>Money as whole units</h3>
+  <p>Computers store most decimals approximately, and the tiny gaps add up across thousands of lines until the books stop balancing. So every amount is a whole number of dong. <b>Cost:</b> every rate and percentage needs its own written, tested rounding rule.</p>
+
+  <h3>One encrypted file, on site</h3>
+  <p>These are other people's financial records. Keeping them on the practice's own hardware was easier to defend than a hosted service. <b>Cost:</b> no managed backups, so backup and restore had to be built and tested.</p>
+
+  <h3>Tax rules as dated data</h3>
+  <p>The rules changed twice during the build. <b>Cost:</b> more moving parts, and a real risk of the wrong version if the date logic is wrong. Hence the <b>56 test files</b> below.</p>
+
+  <h3>Software suggests, person confirms</h3>
+  <p>Saving entries automatically was possible. I chose not to for anything touching money. <b>Cost:</b> a person checks every entry, so less time is saved.</p>
+  <blockquote class="loi">
+    <span class="ai">The chief accountant, asked what she would tell a caller checking the software is really used</span>
+    <p>It helps a lot with the data entry. It cuts out about 50 to 60 per cent of the typing that did not need doing. As for the accounting itself, every entry needs someone qualified to look at it and approve it against the law.</p>
+    <span class="them">These numbers do not disagree. <b>99.8%</b> of invoices were never typed. <b>50 to 60 per cent</b> is her estimate of typing removed, and typing is only part of her day. <b>Hours went up</b>, 4.6 to 7.6 a day, because companies with entries went from 13 to 43. Less work per company, more companies.</span>
+  </blockquote>
+
+  <h3>A log that shows edits</h3>
+  <p>Each record carries a fingerprint of the one before, so editing a past entry visibly breaks the chain. Someone with full access could still rewrite the whole chain; stopping that needs a copy they cannot reach. <b>Cost:</b> the log only grows: 415,759 rows, 409,668 of them actions by a person.</p>
+
+  <figure class="plate feature" style="margin:2.4rem 0 3rem">
+    <a href="images/07-audit-log.webp"><img src="images/07-audit-log.webp" width="2200" height="1375" loading="lazy" alt="Audit log listing recorded actions with who did them and when" /></a>
+    <figcaption><b>The log.</b> Every action, who did it and when. Demo data, so only 63 rows. The green strip is the chain check; it turns red if a row was altered. The amber strip is the system recording its own action, a spare copy of the recovery key, instead of doing it quietly.</figcaption>
+  </figure>
+
+  <figure class="plate feature" style="margin:2.4rem 0 3rem">
+    <a href="images/08-financial-statements.webp"><img src="images/08-financial-statements.webp" width="2200" height="1375" loading="lazy" alt="Financial statements screen: upload a trial balance from Bravo, or build the statements from entries posted in the app" /></a>
+    <figcaption><p><b>It works next to the software the firm already had.</b> This screen builds the statutory statements from a trial balance exported from Bravo, the practice's old package, or from entries posted here. A practice with live clients cannot switch systems in a weekend, so it had to be useful before it was complete.</p><p>The key line: <i>Figures are kept exactly as they stand in the ledger; nothing is recalculated</i>. So the statement cannot quietly disagree with the books.</p></figcaption>
+  </figure>
+
+  <h3>Stopping it being wrong</h3>
+  <p>Counting tests proves little: AI wrote most of the code and could write a thousand tests in an afternoon. These numbers show where the checking is aimed, not how much there is. Counted 5 September 2026.</p>
+
+  <div class="solieu">
+    <div><span class="n">56</span><span class="d">test files checking that a legal number, like a tax rate, is right for the date</span><span class="c">A report can add up perfectly with last year's rate and still break the law. Eight of the 56 click through the screens in a real browser.</span></div>
+    <div><span class="n">94</span><span class="d">checks that stop a new version going out, not warnings nobody reads</span><span class="c">Each blocks a whole kind of mistake, not one case: money that can quietly round wrong, a screen nobody can reach, a real client's name left in the code.</span></div>
+    <div><span class="n">12</span><span class="d">government documents kept as signed originals, not just a summary</span><span class="c">Every legal number links to the exact page it came from, so you can check the original instead of taking my word.</span></div>
+  </div>
+  <p class="asof">The last check is a person, not a machine. That is why the software is allowed near real books.</p>
+
+</div>
+
+<div class="blk-quiet">
+  <p class="kicker" id="method">How these numbers were counted</p>
+  <div class="spec">
+    <dl>
+      <dt>What</dt>
+      <dd>Counts of records in the working database and of user actions in its audit log.</dd>
+      <dt>When</dt>
+      <dd>Read only, 5 September 2026. Activity period: 29 May 2026, when the software went live, to that date.</dd>
+      <dt>How</dt>
+      <dd>Database queries that count every row. Nothing sampled, estimated or scaled up.</dd>
+      <dt>Weaknesses</dt>
+      <dd>"43 businesses" means companies with at least one entry, not every profile. "94 of 100 days" means used at least once that day, not all day. The invoice split shows how each invoice was first entered, not later corrections.</dd>
+      <dt>Provenance</dt>
+      <dd>Six counts show their query on the <a href="so-lieu.html">Six numbers</a> page. Outside facts, such as tax thresholds, GST rules and the country count, are cited by document number or link.</dd>
+    </dl>
+  </div>
+</div>
+
+  <div class="blk blk-ket">
+    <h2>That is the evidence.</h2>
+    <p><a href="mailto:ledinhduc1612@gmail.com">ledinhduc1612@gmail.com</a></p>
+  </div>
+</div>
+
+<script>
+
+(function () {
+  var thanh = document.querySelector('.thanh-dinh')
+  var nut = document.querySelector('[data-len-dau]')
+  if (!thanh || !nut) return
+  var itChuyenDong = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  var cho = false
+  function xet() {
+    cho = false
+    thanh.classList.toggle('da-cuon', window.scrollY > window.innerHeight * 0.6)
+  }
+  window.addEventListener('scroll', function () {
+    if (!cho) { cho = true; window.requestAnimationFrame(xet) }
+  }, { passive: true })
+  xet()
+  nut.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: itChuyenDong ? 'auto' : 'smooth' })
+    var dau = document.querySelector('h1')
+    if (dau) { dau.setAttribute('tabindex', '-1'); dau.focus({ preventScroll: true }) }
+  })
+})()
+</script>
+</body>
+</html>

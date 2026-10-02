@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en-NZ" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The test script · Ducky Books</title>
+<meta name="description" content="The acceptance test script for Ducky Books: 32 steps, measurable pass criteria, and a failure in the first two groups stops the release.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  
+  --r-hop:14px;
+  --paper:#f1e7d3; --surface:#fffdf6; --ink:#1b140a; --muted:#4a4030; --faint:#6b5c44;
+  --rule:rgba(110,82,25,.30); --rule-strong:#978150;
+  --accent:#965509; --chon:rgba(150,85,9,.34); --accent-soft:#f7e8c8;
+  --shadow:0 4px 14px rgba(120,90,30,.10);
+  --sans:"Noto Sans",ui-sans-serif,system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#1c1710; --surface:#241f16; --ink:#f4ecdb; --muted:#c7bb9f; --faint:#a2937a;
+    --rule:rgba(200,170,110,.26); --rule-strong:#847651;
+    --accent:#ffce5a; --chon:rgba(255,206,90,.28); --accent-soft:#352b18; --shadow:0 8px 22px rgba(0,0,0,.34);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#1c1710; --surface:#241f16; --ink:#f4ecdb; --muted:#c7bb9f; --faint:#a2937a;
+  --rule:rgba(200,170,110,.26); --rule-strong:#847651;
+  --accent:#ffce5a; --chon:rgba(255,206,90,.28); --accent-soft:#352b18; --shadow:0 8px 22px rgba(0,0,0,.34);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; color:var(--ink);
+  background:
+    radial-gradient(1200px 720px at 12% 4%, var(--surface) 0%, transparent 60%),
+    radial-gradient(900px 620px at 92% 42%, var(--accent-soft) 0%, transparent 55%),
+    var(--paper);
+  background-attachment:fixed;
+  font-family:var(--sans); font-size:1.1875rem; line-height:1.62;
+}
+.khung{max-width:min(88ch,calc(100% - 2.5rem)); margin-inline:auto; padding:2.6rem 0 4rem}
+a{color:var(--accent)}
+::selection{background:var(--chon); color:var(--ink)}
+h1{font-size:2.05rem; line-height:1.2; margin:.2rem 0 .6rem; letter-spacing:-.02em}
+h2{font-size:1.32rem; margin:2.6rem 0 .5rem; letter-spacing:-.01em}
+p{margin:0 0 1rem}
+.quay-lai{display:inline-block; font-size:.95rem; margin-bottom:1.5rem; text-decoration:none}
+.quay-lai:hover{text-decoration:underline}
+.dan{color:var(--muted); font-size:1.03rem}
+.the{
+  background:var(--surface); border:1px solid var(--rule); border-radius:var(--r-hop);
+  padding:1.1rem 1.25rem; margin:1.4rem 0; box-shadow:var(--shadow);
+}
+.the p:last-child{margin-bottom:0}
+.the b{color:var(--ink)}
+.cuon{overflow-x:auto; margin:1rem 0 1.6rem; border:1px solid var(--rule); border-radius:var(--r-hop); background:var(--surface)}
+table{border-collapse:collapse; width:100%; font-size:.98rem}
+th,td{text-align:left; padding:.62rem .8rem; border-bottom:1px solid var(--rule); vertical-align:top}
+th{font-weight:600; color:var(--faint); font-size:.9rem; white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td:first-child{white-space:nowrap; font-weight:600; color:var(--accent); width:1%}
+.nhom{font-size:.88rem; color:var(--faint); margin:.2rem 0 .1rem; font-weight:600}
+.chan{margin:1.2rem 0; color:var(--muted)}
+.ky{
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.9rem; line-height:1.9;
+  background:var(--surface); border:1px solid var(--rule); border-radius:var(--r-hop);
+  padding:1rem 1.2rem; overflow-x:auto; white-space:pre; color:var(--muted);
+}
+footer{margin-top:3.6rem; padding-top:1.4rem; color:var(--faint); font-size:.95rem}
+@media (max-width:40rem){ body{font-size:1.0625rem} h1{font-size:1.65rem} .khung{padding-top:1.8rem} }
+
+.thanh-dinh{
+  position:sticky; top:0; z-index:50;
+  
+  background:var(--surface);
+  border-bottom:1px solid var(--rule);
+  margin:0 0 2rem;
+}
+
+.thanh-trong{
+  position:relative;
+  max-width:min(92ch,calc(100% - 2.5rem)); margin-inline:auto;
+  display:flex; align-items:center; justify-content:center; gap:.35rem 1.1rem; flex-wrap:wrap;
+  padding:.55rem 0;
+}
+.thanh-ten{
+  font-weight:700; font-size:.95rem; letter-spacing:-.01em;
+  color:var(--ink); text-decoration:none; margin-right:.4rem; white-space:nowrap;
+}
+.thanh-ten:hover{color:var(--accent)}
+.thanh-nhan{
+  font-size:.72rem; font-weight:700; letter-spacing:.11em; text-transform:uppercase;
+  color:var(--faint); white-space:nowrap; margin-right:.15rem;
+}
+@media (max-width:46rem){ .thanh-nhan{display:none} }
+.thanh-lk{display:flex; flex-wrap:wrap; gap:.2rem .3rem; align-items:center}
+.thanh-lk a{
+  font-size:.88rem; text-decoration:none; color:var(--muted);
+  padding:.3rem .62rem; border-radius:999px; white-space:nowrap; line-height:1.35;
+}
+.thanh-lk a:hover{color:var(--accent); background:var(--accent-soft)}
+.thanh-lk a[aria-current="page"]{
+  background:var(--accent); color:var(--surface); font-weight:600;
+}
+@media (max-width:40rem){
+  .thanh-trong{padding:.45rem 0}
+  .thanh-ten{font-size:.9rem; width:100%; margin-bottom:.15rem}
+  .thanh-lk{width:100%; flex-wrap:nowrap; overflow-x:auto; scrollbar-width:none}
+  .thanh-lk::-webkit-scrollbar{display:none}
+}
+
+.thanh-len{
+  position:absolute; right:0; top:50%; transform:translateY(-50%); display:inline-flex; align-items:center; gap:.32rem;
+  font-size:.84rem; font-weight:600; color:var(--muted);
+  background:none; border:1px solid transparent; border-radius:999px;
+  padding:.28rem .6rem; cursor:pointer; white-space:nowrap;
+  opacity:0; visibility:hidden; transition:opacity .18s ease, color .18s ease, background .18s ease;
+}
+.thanh-dinh.da-cuon .thanh-len{opacity:1; visibility:visible}
+.thanh-len:hover{color:var(--accent); background:var(--accent-soft)}
+.thanh-len:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+.thanh-len svg{width:.95em; height:.95em}
+@media (max-width:40rem){
+  .thanh-len{margin-left:0; order:-1; align-self:flex-end; position:absolute; right:0; top:.4rem}
+  .thanh-trong{position:relative}
+}
+@media (prefers-reduced-motion:reduce){ .thanh-len{transition:none} }
+
+a[href^="mailto:"]{color:var(--accent)}
+
+.cuon th:first-child, .cuon td:first-child{padding-left:1rem}
+.cuon th:last-child,  .cuon td:last-child{padding-right:1rem}
+</style>
+</head>
+<body>
+<div class="thanh-dinh">
+  <div class="thanh-trong">
+    <span class="thanh-nhan" aria-hidden="true">Portfolio</span>
+    <nav class="thanh-lk" aria-label="Pages of this portfolio">
+      <a href="index.html" title="The main argument">Main page</a>
+      <a href="chi-tiet.html" title="The rest of the main argument: measurements, screens, and what was not mine">The detail</a>
+      <a href="bang-chung.html" title="Measurements and method">The evidence</a>
+      <a href="quy-tac.html" title="One business rule, specified">A rule</a>
+      <a href="uat.html" aria-current="page" title="You are on this page: User acceptance test">The test script</a>
+      <a href="so-lieu.html" title="Every figure with its SQL">Six numbers</a>
+      <a href="doi-chieu.html" title="Source to target mapping">The VAT return</a>
+    </nav>
+    <button type="button" class="thanh-len" data-len-dau>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 19V5M5 12l7-7 7 7"/>
+      </svg>Top
+    </button>
+  </div>
+</div>
+
+<div class="khung">
+
+<p class="nhom">Working document · Ducky Books</p>
+<h1>The acceptance test script</h1>
+<p class="dan"><b>5,987 automated tests were passing, and still not enough.</b> They prove the software does what it was told, not that a day’s work finishes with the right numbers. This script adds 32 steps on real books.</p>
+
+<p class="dan">Written on <b>2 August 2026</b>. This is the blank script: no date, result or signature filled in yet.</p>
+
+<div class="the">
+
+  <p><b>Who runs it.</b> The chief accountant, on a client's real books.
+  <b>Not me:</b> the builder should be the last to judge whether it works.</p>
+
+</div>
+
+<p class="dan">The software went live on 29 May and grew as she used it. After nine weeks, her using it no longer proved it worked. Written after real use, this script tests what was actually built, not a guess.</p>
+
+<p class="dan">A signed result would show one company passing on one day, nothing more.</p>
+
+<h2>How steps are graded</h2>
+
+
+
+<div class="cuon">
+<table>
+  <thead><tr><th>Grade</th><th>Means</th></tr></thead>
+  <tbody>
+    <tr><td>Pass</td><td>Finished, figures match, no help needed.</td></tr>
+    <tr><td>Pass with friction</td><td>Finished, but hard, slow or confusing. Say which.</td></tr>
+    <tr><td>Fail</td><td>Not done, figures wrong, or help needed.</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="chan">
+  <p><b>One fail in Group A or B stops the release</b> until it is fixed. Steps marked <code>[POSTS]</code> change real books, so the run starts with a backup.</p>
+</div>
+
+<h2>Group A &middot; One invoice <span class="dan">(blocks release)</span></h2>
+
+<div class="cuon">
+<table>
+  <thead><tr><th>#</th><th>Task</th><th>Pass criterion</th></tr></thead>
+  <tbody>
+    <tr><td>A1</td><td>Load a sales invoice: it arrives as both an XML file (the structured data) and a PDF a person can read</td><td>Listed; every amount matches the PDF copy, down to the dong (Vietnam's currency).</td></tr>
+    <tr><td>A2</td><td>Load it again</td><td>Duplicate reported; <b>no</b> second invoice.</td></tr>
+    <tr><td>A3</td><td>Open invoice detail</td><td>Shows number, series, date, buyer, tax number, line items, tax rate, total.</td></tr>
+    <tr><td>A4</td><td>Post it <code>[POSTS]</code></td><td>Journal entry, debits equal credits, dated invoice date.</td></tr>
+    <tr><td>A5</td><td>Press Post again</td><td>No second entry.</td></tr>
+    <tr><td>A6</td><td>Undo that entry <code>[POSTS]</code></td><td>Entry gone, invoice unposted. Activity log records both.</td></tr>
+    <tr><td>A7</td><td>Repost against a project <code>[POSTS]</code></td><td>Project costing shows revenue and cost.</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>Group B &middot; Cash, receivables, inventory <span class="dan">(blocks release)</span></h2>
+
+<div class="cuon">
+<table>
+  <thead><tr><th>#</th><th>Task</th><th>Pass criterion</th></tr></thead>
+  <tbody>
+    <tr><td>B1</td><td>Raise a cash receipt <code>[POSTS]</code></td><td>Cash book rises correctly; the receipt required by law prints.</td></tr>
+    <tr><td>B2</td><td>Print that receipt</td><td>Activity log records the print.</td></tr>
+    <tr><td>B3</td><td>Load a month of bank statement</td><td>Lines read equals lines in file; <b>no line swallowed into a zero</b>.</td></tr>
+    <tr><td>B4</td><td>Match a receipt to an invoice <code>[POSTS]</code></td><td>Invoice moves to Paid; receivable falls correctly.</td></tr>
+    <tr><td>B5</td><td>Open Receivables</td><td>Total equals sum of unpaid invoices; a customer opens to each invoice.</td></tr>
+    <tr><td>B6</td><td>Add a stock item</td><td>Cost-of-sales account fills in from its stock category, but can still be edited by hand.</td></tr>
+    <tr><td>B7</td><td>Change its stock category to Finished goods</td><td>Cost-of-sales account updates too, instead of being left outdated.</td></tr>
+    <tr><td>B8</td><td>Receive stock on a purchase invoice <code>[POSTS]</code></td><td>Stock rises by the right quantity; value matches invoice.</td></tr>
+    <tr><td>B9</td><td>Issue more stock than on hand</td><td>Warns immediately, not silently.</td></tr>
+    <tr><td>B10</td><td>Run period-end cost transfer <code>[POSTS]</code></td><td>Cost-of-sales entry matches stock movement report.</td></tr>
+    <tr><td>B11</td><td>Issue stock until an item's balance goes negative</td><td>Blocked until a written reason.</td></tr>
+  </tbody>
+</table>
+</div>
+
+<p class="dan">B11 is not a technical rule: on 31 July I gave the chief accountant three ways to handle negative stock, and she chose this one.</p>
+
+<h2>Group C &middot; Reports and tax returns <span class="dan">(recorded, does not block)</span></h2>
+
+<div class="cuon">
+<table>
+  <thead><tr><th>#</th><th>Task</th><th>Pass criterion</th></tr></thead>
+  <tbody>
+    <tr><td>C1</td><td>Open Overview</td><td>Five figures within two seconds. Amber reminder if cost transfer not run.</td></tr>
+    <tr><td>C2</td><td>Open trial balance</td><td>Debits equal credits; opening balances match last year's close.</td></tr>
+    <tr><td>C3</td><td>Export general ledger to Excel</td><td>File opens; activity log records which report.</td></tr>
+    <tr><td>C4</td><td>Export financial statements</td><td>Total assets equal equity plus liabilities; legal citation in footer.</td></tr>
+    <tr><td>C5</td><td>Export VAT return</td><td>Figures match the invoice listing for that period.</td></tr>
+    <tr><td>C6</td><td>Open it in the real government filing software</td><td>Accepted, no format error.</td></tr>
+    <tr><td>C7</td><td>Export purchase listing for company tax</td><td>Every required column present; the two forbidden ones (an internal item code, and how it was paid) absent.</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>Group D &middot; Running it, and failures <span class="dan">(recorded, does not block)</span></h2>
+
+<div class="cuon">
+<table>
+  <thead><tr><th>#</th><th>Task</th><th>Pass criterion</th></tr></thead>
+  <tbody>
+    <tr><td>D1</td><td>Press Back up now</td><td>New file in backup folder, not empty.</td></tr>
+    <tr><td>D2</td><td>Press Rehearse a restore</td><td>Reports a pass, with tables and rows checked.</td></tr>
+    <tr><td>D3</td><td>Switch company and back</td><td>No figures carry over from one company to the other; the company name on screen always matches the figures shown.</td></tr>
+    <tr><td>D4</td><td>Open it on a phone</td><td>Tables scroll sideways, text is readable, buttons are big enough to tap.</td></tr>
+    <tr><td>D5</td><td>Pull the network cable, press a posting button</td><td>Plain message in the user's language, not an English crash screen.</td></tr>
+    <tr><td>D6</td><td>Edit one item in two tabs</td><td>Second tab stopped, told to reload; first edit not silently overwritten.</td></tr>
+    <tr><td>D7</td><td>Log in as staff</td><td>Only assigned clients visible. Owner-only pages refused with a reason, not a blank screen.</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>What gets written down</h2>
+
+<div class="ky">Date run     : ...../...../2026      Run by: ......................
+Company used : ..............................   Version: c1b6441
+
+Pass ...../32     Pass with friction ...../32     Fail ...../32
+
+Every failed step (number, what happened, how wrong the figure was):
+
+Anything hard to use, slow, or confusing:
+
+Things you want the software to do:</div>
+
+<h2>When this script expires</h2>
+
+<div class="chan">
+  <p>Run it again after any change to posting, stock or tax code, the database structure, a tax rule or statutory form, the machine, or after a restore.</p>
+  <p><b>A result belongs to exactly one version.</b></p>
+</div>
+
+<div class="the">
+  <p><b>Why show this.</b> Someone had to decide what "working" means, write it down so others could check it, and record whose decision it was. That is the other half of the job.</p>
+</div>
+
+<footer>
+  <p>Translated from the Vietnamese original. One correction: the record block said 25 steps instead of 32, and someone screening my application caught it before I did. Nothing else changed.</p>
+  <p><a href="mailto:ledinhduc1612@gmail.com">ledinhduc1612@gmail.com</a></p>
+</footer>
+
+</div>
+
+<script>
+
+(function () {
+  var thanh = document.querySelector('.thanh-dinh')
+  var nut = document.querySelector('[data-len-dau]')
+  if (!thanh || !nut) return
+  var itChuyenDong = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  var cho = false
+  function xet() {
+    cho = false
+    thanh.classList.toggle('da-cuon', window.scrollY > window.innerHeight * 0.6)
+  }
+  window.addEventListener('scroll', function () {
+    if (!cho) { cho = true; window.requestAnimationFrame(xet) }
+  }, { passive: true })
+  xet()
+  nut.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: itChuyenDong ? 'auto' : 'smooth' })
+    var dau = document.querySelector('h1')
+    if (dau) { dau.setAttribute('tabindex', '-1'); dau.focus({ preventScroll: true }) }
+  })
+})()
+</script>
+</body>
+</html>

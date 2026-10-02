@@ -1,0 +1,22 @@
+# This repository is public. Nothing here may contain working notes, local
+# paths, private data, or anything not written for a reader.
+
+# Data and secrets
+*.db
+*.db-*
+.dbkey
+*.env
+.env*
+*.log
+node_modules/
+
+# Local tooling and working files, kept on the machine only
+kiem-*.mjs
+BAN-GIAO.md
+
+# Unprocessed and superseded screenshots
+**/raw-*
+**/*-raw.*
+.anh-chua-dung/
+.anh-tat-ca/
+images/.cu*/

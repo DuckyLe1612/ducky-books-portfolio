@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en-NZ" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Six numbers · Ducky Books</title>
+<meta name="description" content="Every figure with the SQL that produced it, so anyone can check the working.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  
+  --r-hop:14px;
+  --paper:#f1e7d3; --surface:#fffdf6; --ink:#1b140a; --muted:#4a4030; --faint:#6b5c44;
+  --rule:rgba(110,82,25,.30); --rule-strong:#978150;
+  --accent:#965509; --chon:rgba(150,85,9,.34); --accent-soft:#f7e8c8;
+  --shadow:0 4px 14px rgba(120,90,30,.10);
+  --sans:"Noto Sans",ui-sans-serif,system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#1c1710; --surface:#241f16; --ink:#f4ecdb; --muted:#c7bb9f; --faint:#a2937a;
+    --rule:rgba(200,170,110,.26); --rule-strong:#847651;
+    --accent:#ffce5a; --chon:rgba(255,206,90,.28); --accent-soft:#352b18; --shadow:0 8px 22px rgba(0,0,0,.34);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#1c1710; --surface:#241f16; --ink:#f4ecdb; --muted:#c7bb9f; --faint:#a2937a;
+  --rule:rgba(200,170,110,.26); --rule-strong:#847651;
+  --accent:#ffce5a; --chon:rgba(255,206,90,.28); --accent-soft:#352b18; --shadow:0 8px 22px rgba(0,0,0,.34);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; color:var(--ink);
+  background:
+    radial-gradient(1200px 720px at 12% 4%, var(--surface) 0%, transparent 60%),
+    radial-gradient(900px 620px at 92% 42%, var(--accent-soft) 0%, transparent 55%),
+    var(--paper);
+  background-attachment:fixed;
+  font-family:var(--sans); font-size:1.1875rem; line-height:1.62;
+}
+.khung{max-width:min(88ch,calc(100% - 2.5rem)); margin-inline:auto; padding:2.6rem 0 4rem}
+a{color:var(--accent)}
+::selection{background:var(--chon); color:var(--ink)}
+h1{font-size:2.05rem; line-height:1.2; margin:.2rem 0 .6rem; letter-spacing:-.02em}
+h2{font-size:1.32rem; margin:2.4rem 0 .3rem; letter-spacing:-.01em}
+p{margin:0 0 1rem}
+.quay-lai{display:inline-block; font-size:.95rem; margin-bottom:1.5rem; text-decoration:none}
+.quay-lai:hover{text-decoration:underline}
+.dan{color:var(--muted); font-size:1.03rem}
+.nhom{font-size:.88rem; color:var(--faint); margin:.2rem 0 .1rem; font-weight:600}
+.the{background:var(--surface); border:1px solid var(--rule); border-radius:var(--r-hop);
+     padding:1.1rem 1.25rem; margin:1.4rem 0; box-shadow:var(--shadow)}
+.the p:last-child{margin-bottom:0}
+.ra{font-size:1.02rem; color:var(--muted); margin:.1rem 0 .7rem}
+.ra b{color:var(--accent); font-variant-numeric:tabular-nums}
+pre{
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.86rem; line-height:1.62;
+  background:var(--surface); border-radius:var(--r-hop);
+  padding:.9rem 1.1rem; overflow-x:auto; margin:0 0 1.5rem; color:var(--ink);
+}
+.chan{margin:1.2rem 0; color:var(--muted)}
+footer{margin-top:3.6rem; padding-top:1.4rem; color:var(--faint); font-size:.95rem}
+@media (max-width:40rem){ body{font-size:1.0625rem} h1{font-size:1.6rem} pre{font-size:.8rem} }
+
+.thanh-dinh{
+  position:sticky; top:0; z-index:50;
+  
+  background:var(--surface);
+  border-bottom:1px solid var(--rule);
+  margin:0 0 2rem;
+}
+
+.thanh-trong{
+  position:relative;
+  max-width:min(92ch,calc(100% - 2.5rem)); margin-inline:auto;
+  display:flex; align-items:center; justify-content:center; gap:.35rem 1.1rem; flex-wrap:wrap;
+  padding:.55rem 0;
+}
+.thanh-ten{
+  font-weight:700; font-size:.95rem; letter-spacing:-.01em;
+  color:var(--ink); text-decoration:none; margin-right:.4rem; white-space:nowrap;
+}
+.thanh-ten:hover{color:var(--accent)}
+.thanh-nhan{
+  font-size:.72rem; font-weight:700; letter-spacing:.11em; text-transform:uppercase;
+  color:var(--faint); white-space:nowrap; margin-right:.15rem;
+}
+@media (max-width:46rem){ .thanh-nhan{display:none} }
+.thanh-lk{display:flex; flex-wrap:wrap; gap:.2rem .3rem; align-items:center}
+.thanh-lk a{
+  font-size:.88rem; text-decoration:none; color:var(--muted);
+  padding:.3rem .62rem; border-radius:999px; white-space:nowrap; line-height:1.35;
+}
+.thanh-lk a:hover{color:var(--accent); background:var(--accent-soft)}
+.thanh-lk a[aria-current="page"]{
+  background:var(--accent); color:var(--surface); font-weight:600;
+}
+@media (max-width:40rem){
+  .thanh-trong{padding:.45rem 0}
+  .thanh-ten{font-size:.9rem; width:100%; margin-bottom:.15rem}
+  .thanh-lk{width:100%; flex-wrap:nowrap; overflow-x:auto; scrollbar-width:none}
+  .thanh-lk::-webkit-scrollbar{display:none}
+}
+
+.thanh-len{
+  position:absolute; right:0; top:50%; transform:translateY(-50%); display:inline-flex; align-items:center; gap:.32rem;
+  font-size:.84rem; font-weight:600; color:var(--muted);
+  background:none; border:1px solid transparent; border-radius:999px;
+  padding:.28rem .6rem; cursor:pointer; white-space:nowrap;
+  opacity:0; visibility:hidden; transition:opacity .18s ease, color .18s ease, background .18s ease;
+}
+.thanh-dinh.da-cuon .thanh-len{opacity:1; visibility:visible}
+.thanh-len:hover{color:var(--accent); background:var(--accent-soft)}
+.thanh-len:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+.thanh-len svg{width:.95em; height:.95em}
+@media (max-width:40rem){
+  .thanh-len{margin-left:0; order:-1; align-self:flex-end; position:absolute; right:0; top:.4rem}
+  .thanh-trong{position:relative}
+}
+@media (prefers-reduced-motion:reduce){ .thanh-len{transition:none} }
+
+a[href^="mailto:"]{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="thanh-dinh">
+  <div class="thanh-trong">
+    <span class="thanh-nhan" aria-hidden="true">Portfolio</span>
+    <nav class="thanh-lk" aria-label="Pages of this portfolio">
+      <a href="index.html" title="The main argument">Main page</a>
+      <a href="chi-tiet.html" title="The rest of the main argument: measurements, screens, and what was not mine">The detail</a>
+      <a href="bang-chung.html" title="Measurements and method">The evidence</a>
+      <a href="quy-tac.html" title="One business rule, specified">A rule</a>
+      <a href="uat.html" title="User acceptance test">The test script</a>
+      <a href="so-lieu.html" aria-current="page" title="You are on this page: Every figure with its SQL">Six numbers</a>
+      <a href="doi-chieu.html" title="Source to target mapping">The VAT return</a>
+    </nav>
+    <button type="button" class="thanh-len" data-len-dau>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 19V5M5 12l7-7 7 7"/>
+      </svg>Top
+    </button>
+  </div>
+</div>
+
+<div class="khung">
+
+<p class="nhom">Working · Ducky Books</p>
+<h1>Six numbers, six queries</h1>
+
+<p class="dan">
+Read only, against the working database, 5 September 2026. Nothing sampled,
+nothing scaled up.</p>
+
+<div class="chan">
+  <p><b>An earlier version did not add up.</b> It said 42,655 invoices, but the parts underneath came to 42,621 because one count was stale. It also printed 415,380 actions above a query that returns 409,668. That got past me.</p>
+  <p>Both are fixed below, and two totals now break into parts you can add up yourself.</p>
+  
+</div>
+
+<div class="the">
+  <p><b>Why show the queries.</b> So you can check what I counted, and argue with it.</p>
+  
+  <p>The database is SQLite, encrypted on disk. I opened it read only (<code>query_only = 1</code>), so the connection could not change the books.</p>
+</div>
+
+<h2>1. Invoices by direction and source</h2>
+<p class="ra">Result: <b>42,655</b> invoices: <b>23,161</b> purchases, <b>19,494</b> sales.
+<b>32,158</b> from XML, <b>10,404</b> from the tax portal listing, <b>93</b> typed
+by a person.</p>
+<pre>SELECT direction,
+       source,
+       import_source,
+       COUNT(*) AS invoices
+  FROM invoices
+ GROUP BY direction, source, import_source
+ ORDER BY invoices DESC;</pre>
+
+<div class="chan">
+  <p>"99.8% nobody typed" counts every invoice except those with <code>source</code> = <code>'manual'</code> and no <code>import_source</code>: typed in by a person with nothing attached. It does not mean the work ran on its own.</p>
+  <p><code>direction</code> is there because version one left it out and called them all supplier invoices, wrong by about 19,000.</p>
+  <p><b>Two cuts, one total.</b> Source: 32,158 + 10,404 + 93 = 42,655. Direction: 23,161 + 19,494 = 42,655.</p>
+</div>
+
+<h2>2. Ledger size</h2>
+<p class="ra">Result: <b>70,320</b> journal entries in <b>178,197</b> lines, across
+<b>43</b> client businesses.</p>
+<pre>SELECT (SELECT COUNT(*) FROM ledger_entries)                    AS entries,
+       (SELECT COUNT(*) FROM ledger_entry_lines)                AS lines,
+       (SELECT COUNT(DISTINCT client_id) FROM ledger_entries)   AS clients;</pre>
+
+<div class="chan">
+  <p>An entry is one transaction with two or more lines. I once quoted entries in one place and lines in another as if they were the same number, until someone caught it.</p>
+</div>
+
+<h2>3. Bank statement lines</h2>
+<p class="ra">Result: <b>23,671</b> statement lines. <b>1,239</b> of them matched to an invoice.</p>
+<pre>SELECT COUNT(*)                                              AS statement_lines,
+       SUM(CASE WHEN settle_invoice_id IS NOT NULL THEN 1 END) AS matched_to_invoice
+  FROM bank_entries;</pre>
+
+<div class="chan">
+  <p>The other 22,432 lines are wages, tax payments, transfers between the company's own accounts and bank fees, with no invoice to match. I report 5.2% rather than pick a flattering denominator.</p>
+</div>
+
+<h2>4. Use of the software</h2>
+<p class="ra">Result: <b>409,668</b> actions by people, <b>29 May 2026</b> to <b>5 September 2026</b>, on
+<b>94</b> of those <b>100</b> days. The table holds <b>415,759</b> rows: <b>40</b> from
+scheduled jobs, <b>6,051</b> with no user recorded.</p>
+<pre>SELECT COUNT(*)                                          AS actions,
+       MIN(date(created_at))                             AS first_day,
+       MAX(date(created_at))                             AS last_day,
+       COUNT(DISTINCT date(created_at))                  AS days_with_activity
+  FROM audit_logs
+ WHERE user_id IS NOT NULL
+   AND user_id NOT LIKE 'script:%';</pre>
+
+<div class="chan">
+  <p><code>NOT LIKE 'script:%'</code> removes the <b>40</b> scheduled-job rows. <code>user_id IS NOT NULL</code> removes <b>6,051</b> more, written before a signed-in user was attached.</p>
+  <p>So: <b>415,759</b> rows in the table, <b>409,668</b> traceable to a person, <b>6,091</b> not.</p>
+  
+</div>
+
+<h2>5. Hours at the keyboard</h2>
+<p class="ra">Result: <b>105</b> hours in June (<b>23</b> active days), <b>181</b>
+hours in July (<b>30</b> active days), and <b>236</b> hours in August (<b>31</b> active
+days).</p>
+<pre>-- Gaps of five minutes or less between one person's consecutive actions
+-- are counted as time at the keyboard. A longer gap is not.
+SELECT user_id, created_at
+  FROM audit_logs
+ WHERE user_id IS NOT NULL
+   AND user_id NOT LIKE 'script:%'
+ ORDER BY user_id, created_at;</pre>
+
+<div class="chan">
+  <p>The query only returns raw rows. The five minute rule is applied afterwards in code, and it is a judgement call: change the threshold and the hours change.</p>
+  
+</div>
+
+<h2>6. What the accountant corrects</h2>
+<p class="ra">Result: <b>10,724</b> times a person changed the account the software proposed.
+<b>5,734</b> of them made one account more specific.</p>
+<pre>SELECT json_extract(metadata, '$.previous') AS proposed,
+       json_extract(metadata, '$.next')     AS chosen,
+       COUNT(*)                        AS times
+  FROM audit_logs
+ WHERE action = 'ledger.line.account_edit'
+ GROUP BY proposed, chosen
+ ORDER BY times DESC;</pre>
+
+<div class="chan">
+  <p>Ten thousand overrides sounds like a broken feature. By day, three days carry 60.4%: 3,377 on 18 July, 2,100 on 23 August, 1,004 on 21 August. Ten days carry 82.4%. These were a few sessions of one person cleaning up old imports, not everyday corrections.</p>
+  <p>The costly part is the checking, and the log cannot show it: looking at a screen writes no row. So the goal changed from "better guesses" to "show what has already been checked."</p>
+</div>
+
+<div class="the">
+  <p><b>What this page is for.</b> In this work, someone asks which rows you counted, which you left out, and whether you noticed the difference.</p>
+</div>
+
+<footer>
+  <p>Column and table names are as the database defines them. No client names, tax numbers or money amounts appear here.</p>
+  <p><a href="mailto:ledinhduc1612@gmail.com">ledinhduc1612@gmail.com</a></p>
+</footer>
+
+</div>
+
+<script>
+
+(function () {
+  var thanh = document.querySelector('.thanh-dinh')
+  var nut = document.querySelector('[data-len-dau]')
+  if (!thanh || !nut) return
+  var itChuyenDong = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  var cho = false
+  function xet() {
+    cho = false
+    thanh.classList.toggle('da-cuon', window.scrollY > window.innerHeight * 0.6)
+  }
+  window.addEventListener('scroll', function () {
+    if (!cho) { cho = true; window.requestAnimationFrame(xet) }
+  }, { passive: true })
+  xet()
+  nut.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: itChuyenDong ? 'auto' : 'smooth' })
+    var dau = document.querySelector('h1')
+    if (dau) { dau.setAttribute('tabindex', '-1'); dau.focus({ preventScroll: true }) }
+  })
+})()
+</script>
+</body>
+</html>
