@@ -524,7 +524,7 @@ a[href^="mailto:"]{color:var(--accent)}
     <dl>
       <dt>What I did</dt><dd>Wrote the rules the software follows: which account each invoice goes to, when to warn, when to refuse. Checked every answer against the law and with the accountant.</dd>
       <dt>Who for</dt><dd>An accounting practice in Vietnam that keeps the books for 43 businesses. My mother runs it as chief accountant, a role Vietnamese law requires.</dd>
-      <dt>How long</dt><dd>Three months from 28 May 2026.</dd>
+      <dt>How long</dt><dd id="how-long">Since 28 May 2026, and still in daily use.</dd>
       <dt>What I am not</dt><dd>Not the accountant; she is. AI tools wrote most of the code under my direction. My part was deciding what the software may do alone, and what a person must check.</dd>
       <dt>Looking for</dt><dd>A graduate or junior analyst role in Auckland: business, data or process.</dd>
       <dt>Three minutes</dt><dd>Read <a href="bang-chung.html#loi-cua-toi">the rule I first got wrong</a>, then <a href="chi-tiet.html#mine">what was mine and what was not</a>.</dd>
@@ -662,6 +662,21 @@ a[href^="mailto:"]{color:var(--accent)}
     var dau = document.querySelector('h1')
     if (dau) { dau.setAttribute('tabindex', '-1'); dau.focus({ preventScroll: true }) }
   })
+})()
+</script>
+
+<script>
+
+(function () {
+  var el = document.getElementById('how-long')
+  if (!el) return
+  var start = new Date(2026, 4, 28)
+  var now = new Date()
+  var months = (now.getFullYear() - start.getFullYear()) * 12 + (now.getMonth() - start.getMonth()) - (now.getDate() < start.getDate() ? 1 : 0)
+  if (months < 1) return
+  var words = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve']
+  var count = months <= 12 ? words[months - 1] : String(months)
+  el.textContent = 'Since 28 May 2026, ' + count + (months === 1 ? ' month' : ' months') + ' so far, and still in daily use.'
 })()
 </script>
 </body>
